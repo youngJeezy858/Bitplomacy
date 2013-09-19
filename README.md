@@ -10,11 +10,11 @@ build will not work for developement on Windows and Mac environments.
 
 Contributors:
 
-Wisam Al-malack
-Kyle Frank
-Anthony Glitzner
-Joe Perks
-Travis Moore
+Wisam Al-malack  
+Kyle Frank  
+Anthony Glitzner  
+Joe Perks  
+Travis Moore  
 
 Sponser:
 Llyod Hoffman
