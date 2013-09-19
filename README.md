@@ -1,4 +1,4 @@
-Biplomacy
+Bitplomacy
 =========
 
 This is our Senior Design project for EE/CS/CPE 481.  It is a slightly different version of the game "Diplomacy".  
