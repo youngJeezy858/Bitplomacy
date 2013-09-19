@@ -13,8 +13,8 @@ Contributors:
 Wisam Al-malack  
 Kyle Frank  
 Anthony Glitzner  
-Joe Perks  
 Travis Moore  
+Joe Perks  
 
 Sponser:
 Llyod Hoffman
