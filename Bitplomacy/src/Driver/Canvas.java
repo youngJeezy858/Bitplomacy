@@ -40,6 +40,7 @@ public class Canvas extends ECanvas{
 	private Image IonianSea;
 	private Image AdriaticSea;
 	public Image MasterMap;
+	private Image AegeanSea;
 	
 	public Canvas(int ID) {
 		super(ID);
