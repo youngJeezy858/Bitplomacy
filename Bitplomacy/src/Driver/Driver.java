@@ -12,7 +12,7 @@ public class Driver extends EGame{
 
 	public static void main(String[] args){
 		Driver d = new Driver();
-		
+		d.setTargetFPS(60);
 		d.start(d, 1380, 831, false);
 	}
 	
