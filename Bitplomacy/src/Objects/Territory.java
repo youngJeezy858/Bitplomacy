@@ -16,8 +16,6 @@ public class Territory extends ImageEntity {
 	String name;
 	Color color;
 	Canvas canvas;
-	
-	
 	final int MOUSEOVER = 1;
 	int state;
 	
