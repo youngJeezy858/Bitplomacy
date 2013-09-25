@@ -110,7 +110,7 @@ public class Canvas extends ECanvas{
 	public void createTerritories(GameContainer gc){
 		
 		
-		territories = new Territory[52];
+		territories = new Territory[72];
 		/* Oceans first */
 		territories[4] = new Territory(gc, NorthAtlantic, "North Atlantic Ocean", this, false, 180, 205, 229);
 		territories[4].setX(0);
@@ -185,6 +185,24 @@ public class Canvas extends ECanvas{
 		territories[21].setY(315);
 		
 		/* IMAGES STILL NEED UPLOADED */
+		territories[42] = new Territory(gc, Linova, "Tunis", this, true, 75, 75, 75);
+		territories[42].setX(690);
+		territories[42].setY(315);
+		
+		/* RUSSIA */
+		territories[55] = new Territory(gc, Linova, "Trieste", this, true, 196, 196, 196);
+		territories[55].setX(690);
+		territories[55].setY(315);
+		territories[56] = new Territory(gc, Linova, "Moscow", this, true, 194, 194, 194);
+		territories[56].setX(690);
+		territories[56].setY(315);
+		territories[57] = new Territory(gc, Linova, "Ukraine", this, true, 193, 193, 193);
+		territories[57].setX(690);
+		territories[57].setY(315);
+		territories[58] = new Territory(gc, Linova, "Sevastopal", this, true, 192, 192, 192);
+		territories[58].setX(690);
+		territories[58].setY(315);
+		
 		territories[22] = new Territory(gc, Linova, "Portugal", this, true, 185, 185, 185);
 		territories[22].setX(690);
 		territories[22].setY(315);
@@ -260,9 +278,6 @@ public class Canvas extends ECanvas{
 		territories[41].setX(690);
 		territories[41].setY(315);
 		
-		territories[42] = new Territory(gc, Linova, "Tunis", this, true, 75, 75, 75);
-		territories[42].setX(690);
-		territories[42].setY(315);
 		
 		/* GERMANY */
 		territories[43] = new Territory(gc, Linova, "Ruhr", this, true, 70, 70, 70);
@@ -292,10 +307,66 @@ public class Canvas extends ECanvas{
 		territories[50] = new Territory(gc, Linova, "Bohmeia", this, true, 35, 35, 35);
 		territories[50].setX(690);
 		territories[50].setY(315);
-		territories[51] = new Territory(gc, Linova, "Tunis", this, true, 75, 75, 75);
+		territories[51] = new Territory(gc, Linova, "Tyrol", this, true, 30, 30, 30);
 		territories[51].setX(690);
 		territories[51].setY(315);
+		territories[52] = new Territory(gc, Linova, "Vienna", this, true, 205, 205, 205);
+		territories[52].setX(690);
+		territories[52].setY(315);
+		territories[53] = new Territory(gc, Linova, "Galicia", this, true, 199, 199, 199);
+		territories[53].setX(690);
+		territories[53].setY(315);
+		territories[54] = new Territory(gc, Linova, "Budapest", this, true, 198, 198, 198);
+		territories[54].setX(690);
+		territories[54].setY(315);
+		territories[55] = new Territory(gc, Linova, "Trieste", this, true, 197, 197, 197);
+		territories[55].setX(690);
+		territories[55].setY(315);
+		
+		/* TURKEY */
+		territories[59] = new Territory(gc, Linova, "Armenia", this, true, 191, 191, 191);
+		territories[59].setX(690);
+		territories[59].setY(315);
+		territories[60] = new Territory(gc, Linova, "Ankara", this, true, 189, 189, 189);
+		territories[60].setX(690);
+		territories[60].setY(315);
+		territories[61] = new Territory(gc, Linova, "Con", this, true, 188, 188, 188);
+		territories[61].setX(690);
+		territories[61].setY(315);
+		territories[62] = new Territory(gc, Linova, "Smyrna", this, true, 187, 187, 187);
+		territories[62].setX(690);
+		territories[62].setY(315);
+		territories[63] = new Territory(gc, Linova, "Syria", this, true, 186, 186, 186);
+		territories[63].setX(690);
+		territories[63].setY(315);
+		
+		
+		territories[64] = new Territory(gc, Linova, "Rumania", this, true, 184, 184, 184);
+		territories[64].setX(690);
+		territories[64].setY(315);
+		territories[65] = new Territory(gc, Linova, "Serbia", this, true, 183, 183, 183);
+		territories[65].setX(690);
+		territories[65].setY(315);
+		territories[66] = new Territory(gc, Linova, "Alb", this, true, 182, 182, 182);
+		territories[66].setX(690);
+		territories[66].setY(315);
+		territories[67] = new Territory(gc, Linova, "Bulgaria", this, true, 181, 181, 181);
+		territories[67].setX(690);
+		territories[67].setY(315);
+		territories[68] = new Territory(gc, Linova, "Greece", this, true, 179, 179, 179);
+		territories[68].setX(690);
+		territories[68].setY(315);
+		territories[69] = new Territory(gc, Linova, "Finland", this, true, 178, 178, 178);
+		territories[69].setX(690);
+		territories[69].setY(315);
+		territories[70] = new Territory(gc, Linova, "Sweden", this, true, 177, 177, 177);
+		territories[70].setX(690);
+		territories[70].setY(315);
+		territories[71] = new Territory(gc, Linova, "Norway", this, true, 176, 176, 176);
+		territories[71].setX(690);
+		territories[71].setY(315);
 		/* Land territories completed */
+		
 	}
 	
 }
