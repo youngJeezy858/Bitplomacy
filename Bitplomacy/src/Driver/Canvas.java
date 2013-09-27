@@ -4,7 +4,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import Objects.Territory;
@@ -15,14 +14,24 @@ import com.erebos.engine.graphics.EAnimation;
 
 public class Canvas extends ECanvas{
 
-	/* Oceans */
 	Territory[] territories;
 	Graphics g;
-	public int state;
-	public String tName;
+	private String tName;
+	private int state;
+
+	/* Singleton variable for the Canvas */
+	private static Canvas c = null;
+	
 	final int NORM = 0;
 	final int DIS_TERR = 1;
-	public Image MasterMap;
+	
+	/* MasterMap contains the color keys for the individual territories.  It is 
+	 * referenced in the Territory */
+	private Image MasterMap;
+	private Image Borders;
+	
+	/* Converting all these images to spritesheets to handle different team colors.  
+	 * These Images will need to be remade into SpriteSheets as seen below.        */
 	private Image NorthAfrica;
 	private Image MidAtlantic;
 	private Image NorthAtlantic;
@@ -41,14 +50,12 @@ public class Canvas extends ECanvas{
 	private Image GulfLyon;
 	private Image TyrrhenianSea;
 	private Image IonianSea;
-	private Image Borders;
 	private Image EasternMed;
 	private Image BlackSea;
 	private Image Tunis;
 	private Image Warsaw;
 	private Image Moscow;
 	private Image Ukraine;
-	
 	private Image Sevastopal;
 	private Image Marseilles;
 	private Image Brest;
@@ -95,28 +102,44 @@ public class Canvas extends ECanvas{
 	private Image Portugal;
 	private Image Spain;
 	private Image Belgium;
+	/* Handy dandy SpriteSheets for territories. */
 	private SpriteSheet AdriaticSea;
 	private SpriteSheet AegeanSea;
 	private SpriteSheet Albania;
 	private SpriteSheet Ankara;
 	private SpriteSheet Apu;
 
-	public Canvas(int ID) {
-		super(ID);
-		tName = "";
+	private Canvas(){
+		super(1);
+	}
+	
+	public static Canvas getC() {
+		if (c == null)
+			c = new Canvas();
+		return c;
 	}
 
 	@Override
 	public void eInit(GameContainer gc, EGame eg) {	
 				
+		defineSS();
+	    createTerritories();
+	}
+
+	/*
+	 * Defines all the SpriteSheet variables
+	 */
+	private void defineSS() {
 		MasterMap=EAnimation.loadImage("/images/MasterMap.png");
 		Borders=EAnimation.loadImage("/images/Borders.png");
-		AdriaticSea = new SpriteSheet(EAnimation.loadImage("/images/AdriaticSea.png"), 109, 116);
-	    AegeanSea=new SpriteSheet(EAnimation.loadImage("/images/AegeanSea.png"), 70, 102);
-	    Albania=new SpriteSheet(EAnimation.loadImage("/images/Albania.png"), 23, 54);
-	    Ankara=new SpriteSheet(EAnimation.loadImage("/images/Ankara.png"), 173, 82);
-	    Apu=new SpriteSheet(EAnimation.loadImage("/images/Apu.png"), 78, 47);
+		
+		AdriaticSea=SSFactory("/images/AdriaticSea.png");
+	    AegeanSea=SSFactory("/images/AegeanSea.png");
+	    Albania=SSFactory("/images/Albania.png");
+	    Ankara=SSFactory("/images/Ankara.png");
+	    Apu=SSFactory("/images/Apu.png");
 
+	    /* Need to convert below images to SpriteSheets like above */
 		MidAtlantic=EAnimation.loadImage("/images/MidAtlantic.png");
 	    NorthAtlantic=EAnimation.loadImage("/images/NorthAtlantic.png");
 	    NorwegianSea=EAnimation.loadImage("/images/NorwegianSea.png");
@@ -134,7 +157,6 @@ public class Canvas extends ECanvas{
 	    IonianSea=EAnimation.loadImage("/images/IonianSea.png");
 	    EasternMed=EAnimation.loadImage("/images/EasternMed.png");
 	    BlackSea=EAnimation.loadImage("/images/BlackSea.png");
-	    /* LAND */
 	    NorthAfrica=EAnimation.loadImage("/images/NAfrica.png");
 	    Tunis=EAnimation.loadImage("/images/Tunis.png");
 	    Linova=EAnimation.loadImage("/images/Linova.png");
@@ -188,9 +210,17 @@ public class Canvas extends ECanvas{
 	    Portugal=EAnimation.loadImage("/images/Portugal.png");
 	    Spain=EAnimation.loadImage("/images/Spain.png");
 	    Belgium=EAnimation.loadImage("/images/Belgium.png");
-
-	    
-	    createTerritories(gc);
+	}
+	
+	/*
+	 * Used to generate a SpriteSheet of a territory.  Assumes that your SpriteSheet has 8 sprites.
+	 * @param String location -> the file path of the image
+	 * @returns -> a Spritesheet of the image
+	 */
+	private SpriteSheet SSFactory(String location){
+		Image temp = EAnimation.loadImage(location);
+		SpriteSheet ss = new SpriteSheet(temp, temp.getWidth()/8, temp.getHeight());
+		return ss;
 	}
 
 	@Override
@@ -216,29 +246,35 @@ public class Canvas extends ECanvas{
 
 	@Override
 	public void eUpdate(GameContainer gc, EGame eg, int delta) {		
-		updateGame(delta);
+		updateGame();
 	}
 
-	private void updateGame(int delta) {
+	/*
+	 * Updates the game on for the current frame. Game is set to run at 60 frames per second so this fires 60 times a second.
+	 */
+	private void updateGame() {
 		for (Territory t: territories){
 			int mx = Mouse.getX();
 			int my = Math.abs(Mouse.getY() - 831);
 			if (mx >= t.getX() && mx <= t.getWidth()+t.getX() && my >= t.getY() && my <= t.getHeight()+t.getY())
-				t.update(delta);
+				t.update();
 		}
 	}
 
-	public void createTerritories(GameContainer gc){
-		
+	/*
+	 * As the name says.  Used when initializing the game.
+	 */
+	public void createTerritories(){
 		
 		territories = new Territory[5];
-		TFactory(AdriaticSea, "Adriatic Sea", false, 0, new Color(105, 205, 229), 569, 607);
-		TFactory(AegeanSea, "Aegean Sea", false, 1, new Color(100, 205, 229), 738, 716);
-		TFactory(Albania, "Albania", true, 2, new Color(182, 182, 182), 677, 674);
-		TFactory(Ankara, "Ankara", true, 3, new Color(189, 189, 189), 872, 663);
-		TFactory(Apu, "Apu", true, 4, new Color(85, 85, 85), 584, 683);
+		TFactory(AdriaticSea, "Adriatic Sea", false, false, 0, new Color(105, 205, 229), 569, 607);
+		TFactory(AegeanSea, "Aegean Sea", false, false, 1, new Color(100, 205, 229), 738, 716);
+		TFactory(Albania, "Albania", true, false, 2, new Color(182, 182, 182), 677, 674);
+		TFactory(Ankara, "Ankara", true, true, 3, new Color(189, 189, 189), 872, 663);
+		TFactory(Apu, "Apu", true, false, 4, new Color(85, 85, 85), 584, 683);
 
-
+		/* Below still needs to be converted to spritesheets and Tfactory method calls. */
+		
 		/* Oceans first 
 		territories[0] = new Territory(gc, NorwegianSea, "Norwegian Sea", this, false, 165, 205, 229);
 		territories[0].setX(239);
@@ -483,9 +519,48 @@ public class Canvas extends ECanvas{
 		
 	}
 	
-	private void TFactory(SpriteSheet ss, String name, boolean isLand, int pos, Color color, int x, int y){
-		territories[pos] = new Territory(ss, name, this, isLand, color);
+	/*
+	 * Creates a Territory in the territories array and sets its position on the map.
+	 * 
+	 * @param ss -> the Spitesheet containing the territories images
+	 * @param name -> the name to be displayed when the country is selected
+	 * @param isLand -> boolean value to determine is territory is land or water
+	 * @param hasSC -> boolean value to determine if the territory contains a supply center or not
+	 * @param pos -> the position in the territories array as an int value
+	 * @param color -> the color of the territory on the master map that will act as it's key value
+	 * @param x -> the x position of the territory on the map
+	 * @param y -> the y position of the territory on the map
+	 */
+	private void TFactory(SpriteSheet ss, String name, boolean isLand, boolean hasSC, int pos, Color color, int x, int y){
+		territories[pos] = new Territory(ss, name, isLand, hasSC, color);
 		territories[pos].setX(x);
 		territories[pos].setY(y);
+	}
+	
+	/*
+	 * Gets the Color from the current mouse location.  Used to access color keys.
+	 * 
+	 * @returns Color -> the Color at the current mouse position
+	 */
+	public Color getCurrentColor(){
+		return new Color(MasterMap.getColor(Mouse.getX(), Math.abs(Mouse.getY()-831)));
+	}
+	
+	/*
+	 * Sets the Territory name to be displayed
+	 * 
+	 * @param name -> the name of the territory 
+	 */
+	public void setTName(String name){
+		tName = name;
+	}
+	
+	/*
+	 * Sets the current state of the game.  Used for updating the game.
+	 * 
+	 * @param s -> the state of the game as an int value.  See class fields for state descriptions
+	 */
+	public void setState(int s){
+		state = s;
 	}
 }

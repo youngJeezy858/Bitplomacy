@@ -7,7 +7,7 @@ public class Driver extends EGame{
 	public Driver() {
 		super("Bitplomacy");
 		setShowFPS(true);
-		addCanvas(new Canvas(1));
+		addCanvas(Canvas.getC());
 	}
 
 	public static void main(String[] args){
