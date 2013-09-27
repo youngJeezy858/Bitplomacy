@@ -4,6 +4,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 import Objects.Territory;
 
@@ -39,8 +41,6 @@ public class Canvas extends ECanvas{
 	private Image GulfLyon;
 	private Image TyrrhenianSea;
 	private Image IonianSea;
-	private Image AdriaticSea;
-	private Image AegeanSea;
 	private Image Borders;
 	private Image EasternMed;
 	private Image BlackSea;
@@ -55,7 +55,7 @@ public class Canvas extends ECanvas{
 	private Image Paris;
 	private Image Bur;
 	private Image Pic;
-	private Image Gas;
+	private Image Gascony;
 	private Image Wa;
 	private Image London;
 	private Image Liverpool;
@@ -63,7 +63,6 @@ public class Canvas extends ECanvas{
 	private Image York;
 	private Image Cly;
 	private Image Rome;
-	private Image Apu;
 	private Image Naples;
 	private Image Pie;
 	private Image Venice;
@@ -83,13 +82,11 @@ public class Canvas extends ECanvas{
 	private Image Smyrna;
 	private Image Syria;
 	private Image Armenia;
-	private Image Ankara;
 	private Image Constantinople;
 	private Image Holand;
 	private Image Denmark;
 	private Image Rumania;
 	private Image Serbia;
-	private Image Albania;
 	private Image Bulgaria;
 	private Image Greece;
 	private Image Finland;
@@ -98,7 +95,12 @@ public class Canvas extends ECanvas{
 	private Image Portugal;
 	private Image Spain;
 	private Image Belgium;
-	
+	private SpriteSheet AdriaticSea;
+	private SpriteSheet AegeanSea;
+	private SpriteSheet Albania;
+	private SpriteSheet Ankara;
+	private SpriteSheet Apu;
+
 	public Canvas(int ID) {
 		super(ID);
 		tName = "";
@@ -106,10 +108,15 @@ public class Canvas extends ECanvas{
 
 	@Override
 	public void eInit(GameContainer gc, EGame eg) {	
-		
+				
 		MasterMap=EAnimation.loadImage("/images/MasterMap.png");
 		Borders=EAnimation.loadImage("/images/Borders.png");
-		/* OCEANS */
+		AdriaticSea = new SpriteSheet(EAnimation.loadImage("/images/AdriaticSea.png"), 109, 116);
+	    AegeanSea=new SpriteSheet(EAnimation.loadImage("/images/AegeanSea.png"), 70, 102);
+	    Albania=new SpriteSheet(EAnimation.loadImage("/images/Albania.png"), 23, 54);
+	    Ankara=new SpriteSheet(EAnimation.loadImage("/images/Ankara.png"), 173, 82);
+	    Apu=new SpriteSheet(EAnimation.loadImage("/images/Apu.png"), 78, 47);
+
 		MidAtlantic=EAnimation.loadImage("/images/MidAtlantic.png");
 	    NorthAtlantic=EAnimation.loadImage("/images/NorthAtlantic.png");
 	    NorwegianSea=EAnimation.loadImage("/images/NorwegianSea.png");
@@ -125,8 +132,6 @@ public class Canvas extends ECanvas{
 	    GulfLyon=EAnimation.loadImage("/images/GulfLyon.png");
 	    TyrrhenianSea=EAnimation.loadImage("/images/TyrrhenianSea.png");
 	    IonianSea=EAnimation.loadImage("/images/IonianSea.png");
-	    AdriaticSea=EAnimation.loadImage("/images/AdriaticSea.png");
-	    AegeanSea=EAnimation.loadImage("/images/AegeanSea.png");
 	    EasternMed=EAnimation.loadImage("/images/EasternMed.png");
 	    BlackSea=EAnimation.loadImage("/images/BlackSea.png");
 	    /* LAND */
@@ -143,7 +148,7 @@ public class Canvas extends ECanvas{
 	    Paris=EAnimation.loadImage("/images/Paris.png");
 	    Bur=EAnimation.loadImage("/images/Bur.png");
 	    Pic=EAnimation.loadImage("/images/Pic.png");
-	    Gas=EAnimation.loadImage("/images/Gas.png");
+	    Gascony=EAnimation.loadImage("/images/Gascony.png");
 	    Kiel=EAnimation.loadImage("/images/Kiel.png");
 	    Wa=EAnimation.loadImage("/images/Wa.png");
 	    London=EAnimation.loadImage("/images/London.png");
@@ -152,7 +157,6 @@ public class Canvas extends ECanvas{
 	    York=EAnimation.loadImage("/images/York.png");
 	    Cly=EAnimation.loadImage("/images/Cly.png");
 	    Rome=EAnimation.loadImage("/images/Rome.png");
-	    Apu=EAnimation.loadImage("/images/Apu.png");
 	    Naples=EAnimation.loadImage("/images/Naples.png");
 	    Pie=EAnimation.loadImage("/images/Pie.png");
 	    Venice=EAnimation.loadImage("/images/Venice.png");
@@ -171,13 +175,11 @@ public class Canvas extends ECanvas{
 	    Smyrna=EAnimation.loadImage("/images/Smyrna.png");
 	    Syria=EAnimation.loadImage("/images/Syria.png");
 	    Armenia=EAnimation.loadImage("/images/Armenia.png");
-	    Ankara=EAnimation.loadImage("/images/Ankara.png");
 	    Constantinople=EAnimation.loadImage("/images/Constantinople.png");
 	    Holand=EAnimation.loadImage("/images/Holand.png");
 	    Denmark=EAnimation.loadImage("/images/Denmark.png");
 	    Rumania=EAnimation.loadImage("/images/Rumania.png");
 	    Serbia=EAnimation.loadImage("/images/Serbia.png");
-	    Albania=EAnimation.loadImage("/images/Albania.png");
 	    Bulgaria=EAnimation.loadImage("/images/Bulgaria.png");
 	    Greece=EAnimation.loadImage("/images/Greece.png");
 	    Finland=EAnimation.loadImage("/images/Finland.png");
@@ -187,6 +189,7 @@ public class Canvas extends ECanvas{
 	    Spain=EAnimation.loadImage("/images/Spain.png");
 	    Belgium=EAnimation.loadImage("/images/Belgium.png");
 
+	    
 	    createTerritories(gc);
 	}
 
@@ -201,7 +204,7 @@ public class Canvas extends ECanvas{
 		g.drawString("Country:", 1190, 50);
 		g.drawImage(MasterMap, 0, 0);
 		for (Territory t: territories)
-			g.drawImage(t.animation().getImage(0),t.getX(),t.getY());
+			t.eDraw();
 		g.drawImage(Borders, 0, 0);
 		
 		switch (state){
@@ -228,9 +231,15 @@ public class Canvas extends ECanvas{
 	public void createTerritories(GameContainer gc){
 		
 		
-		territories = new Territory[75];
-		
-		/* Oceans first */
+		territories = new Territory[5];
+		TFactory(AdriaticSea, "Adriatic Sea", false, 0, new Color(105, 205, 229), 569, 607);
+		TFactory(AegeanSea, "Aegean Sea", false, 1, new Color(100, 205, 229), 738, 716);
+		TFactory(Albania, "Albania", true, 2, new Color(182, 182, 182), 677, 674);
+		TFactory(Ankara, "Ankara", true, 3, new Color(189, 189, 189), 872, 663);
+		TFactory(Apu, "Apu", true, 4, new Color(85, 85, 85), 584, 683);
+
+
+		/* Oceans first 
 		territories[0] = new Territory(gc, NorwegianSea, "Norwegian Sea", this, false, 165, 205, 229);
 		territories[0].setX(239);
 		territories[0].setY(0);
@@ -292,7 +301,7 @@ public class Canvas extends ECanvas{
 		
 		
 		/* Land Second */
-		/* AFRICA */
+		/* AFRICA 
 		territories[19] = new Territory(gc, NorthAfrica, "North Africa", this, true, 200, 200, 200);
 		territories[19].setX(113);
 		territories[19].setY(750);
@@ -300,7 +309,7 @@ public class Canvas extends ECanvas{
 		territories[20].setX(480);
 		territories[20].setY(785);
 		
-		/* RUSSIA */
+		/* RUSSIA 
 		territories[21] = new Territory(gc, StPetersburgh, "St. Petersburgh", this, true, 195, 195, 195);
 		territories[21].setX(723);
 		territories[21].setY(0);
@@ -320,7 +329,7 @@ public class Canvas extends ECanvas{
 		territories[26].setX(832);
 		territories[26].setY(424);
 		
-		/* FRANCE */
+		/* FRANCE 
 		territories[27] = new Territory(gc, Marseilles, "Marseilles", this, true, 160, 160, 160);
 		territories[27].setX(389);
 		territories[27].setY(571);
@@ -330,7 +339,7 @@ public class Canvas extends ECanvas{
 		territories[29] = new Territory(gc, Pic, "Pic", this, true, 150, 150, 150);
 		territories[29].setX(398);
 		territories[29].setY(473);
-		territories[30] = new Territory(gc, Gas, "Gas", this, true, 175, 175, 175);
+		territories[30] = new Territory(gc, Gascony, "Gascony", this, true, 175, 175, 175);
 		territories[30].setX(345);
 		territories[30].setY(557);
 		territories[31] = new Territory(gc, Brest, "Brest", this, true, 170, 170, 170);
@@ -340,7 +349,7 @@ public class Canvas extends ECanvas{
 		territories[32].setX(392);
 		territories[32].setY(508);
 		
-		/* ENGLAND */
+		/* ENGLAND 
 		territories[33] = new Territory(gc, Wa, "Wa", this, true, 135, 135, 135);
 		territories[33].setX(327);
 		territories[33].setY(383);
@@ -360,14 +369,12 @@ public class Canvas extends ECanvas{
 		territories[38].setX(398);
 		territories[38].setY(261);
 		
-		/* ITALY */
+		/* ITALY 
 		territories[39] = new Territory(gc, Rome, "Rome", this, true, 90, 90, 90);
 		territories[39].setX(551);
 		territories[39].setY(675);
-		territories[40] = new Territory(gc, Apu, "Apu", this, true, 85, 85, 85);
-		territories[40].setX(584);
-		territories[40].setY(683);
-		territories[41] = new Territory(gc, Naples, "Naples", this, true, 80, 80, 80);
+		
+		territories[41] = new Territory(gc, Naples,x "Naples", this, true, 80, 80, 80);
 		territories[41].setX(588);
 		territories[41].setY(716);
 		territories[42] = new Territory(gc, Pie, "Pie", this, true, 105, 105, 105);
@@ -380,7 +387,7 @@ public class Canvas extends ECanvas{
 		territories[44].setX(525);
 		territories[44].setY(637);
 		
-		/* GERMANY */
+		/* GERMANY 
 		territories[45] = new Territory(gc, Kiel, "Kiel", this, true, 60, 60, 60);
 		territories[45].setX(504);
 		territories[45].setY(375);
@@ -400,7 +407,7 @@ public class Canvas extends ECanvas{
 		territories[50].setX(488);
 		territories[50].setY(460);
 		
-		/* AUSTRIA-HUNGARY */
+		/* AUSTRIA-HUNGARY 
 		territories[51] = new Territory(gc, Tyrol, "Tyrol", this, true, 30, 30, 30);
 		territories[51].setX(532);
 		territories[51].setY(541);
@@ -420,7 +427,7 @@ public class Canvas extends ECanvas{
 		territories[56].setX(576);
 		territories[56].setY(486);
 		
-		/* TURKEY */
+		/* TURKEY 
 		territories[57] = new Territory(gc, Smyrna, "Smyrna", this, true, 187, 187, 187);
 		territories[57].setX(803);
 		territories[57].setY(708);
@@ -430,14 +437,12 @@ public class Canvas extends ECanvas{
 		territories[59] = new Territory(gc, Armenia, "Armenia", this, true, 191, 191, 191);
 		territories[59].setX(1021);
 		territories[59].setY(664);
-		territories[60] = new Territory(gc, Ankara, "Ankara", this, true, 189, 189, 189);
-		territories[60].setX(872);
-		territories[60].setY(663);
+		
 		territories[61] = new Territory(gc, Constantinople, "Constantinople", this, true, 188, 188, 188);
 		territories[61].setX(793);
 		territories[61].setY(689);
 		
-		/* RANDOM */
+		/* RANDOM 
 		territories[62] = new Territory(gc, Holand, "Holand", this, true, 140, 140, 140);
 		territories[62].setX(472);
 		territories[62].setY(418);
@@ -450,9 +455,6 @@ public class Canvas extends ECanvas{
 		territories[65] = new Territory(gc, Serbia, "Serbia", this, true, 183, 183, 183);
 		territories[65].setX(679);
 		territories[65].setY(625);
-		territories[66] = new Territory(gc, Albania, "Albania", this, true, 182, 182, 182);
-		territories[66].setX(677);
-		territories[66].setY(674);
 		territories[67] = new Territory(gc, Bulgaria, "Bulgaria", this, true, 181, 181, 181);
 		territories[67].setX(729);
 		territories[67].setY(646);
@@ -481,4 +483,9 @@ public class Canvas extends ECanvas{
 		
 	}
 	
+	private void TFactory(SpriteSheet ss, String name, boolean isLand, int pos, Color color, int x, int y){
+		territories[pos] = new Territory(ss, name, this, isLand, color);
+		territories[pos].setX(x);
+		territories[pos].setY(y);
+	}
 }
