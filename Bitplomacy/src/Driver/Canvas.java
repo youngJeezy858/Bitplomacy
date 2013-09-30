@@ -30,8 +30,7 @@ public class Canvas extends ECanvas{
 	private Image MasterMap;
 	private Image Borders;
 	
-	/* Converting all these images to spritesheets to handle different team colors.  
-	 * These Images will need to be remade into SpriteSheets as seen below.        */
+	/* Handy dandy SpriteSheets for territories. */
 	private SpriteSheet NorthAfrica;
 	private SpriteSheet MidAtlantic;
 	private SpriteSheet NorthAtlantic;
@@ -101,7 +100,6 @@ public class Canvas extends ECanvas{
 	private SpriteSheet Portugal;
 	private SpriteSheet Spain;
 	private SpriteSheet Belgium;
-	/* Handy dandy SpriteSheets for territories. */
 	private SpriteSheet AdriaticSea;
 	private SpriteSheet AegeanSea;
 	private SpriteSheet Albania;
@@ -264,7 +262,7 @@ public class Canvas extends ECanvas{
 	 */
 	public void createTerritories(){
 		
-		territories = new Territory[24];
+		territories = new Territory[75];
 		TFactory(AdriaticSea, "Adriatic Sea", false, false, 0, new Color(105, 205, 229), 569, 607);
 		TFactory(AegeanSea, "Aegean Sea", false, false, 1, new Color(100, 205, 229), 738, 716);
 		TFactory(Albania, "Albania", true, false, 2, new Color(182, 182, 182), 677, 674);
@@ -284,263 +282,62 @@ public class Canvas extends ECanvas{
 		TFactory(Cly, "Cly", true, false, 16, new Color(110, 110, 110), 374, 268);
 		TFactory(Constantinople, "Constantinople", true, true, 17, new Color(188, 188, 188), 793, 689);
 		TFactory(Denmark, "Denmark", true, true, 18, new Color(40, 40, 40), 552, 323);
-		TFactory(EasternMed, "EasternMed", false, false, 19, new Color(95, 205, 229), 743, 783);
+		TFactory(EasternMed, "Eastern Medditerian Sea", false, false, 19, new Color(95, 205, 229), 743, 783);
 		TFactory(Edinburgh, "Edinburgh", true, true, 20, new Color(115, 115, 115), 398, 261);	
-		TFactory(EnglishChannel, "EnglishChannel", false, false, 21, new Color(150, 205, 229), 303, 435);	
+		TFactory(EnglishChannel, "English Channel", false, false, 21, new Color(150, 205, 229), 303, 435);	
 		TFactory(Finland, "Finland", true, true, 22, new Color(178, 178, 178), 693, 58);		
+		TFactory(Galicia, "Galicia", true, false, 74, new Color(199, 199, 199), 671, 490);		
 		TFactory(Gascony, "Gascony", true, false, 23, new Color(175, 175, 175), 345, 557);
-/*
-		TFactory(Budapest, "Budapest", true, true, 24, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 25, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 26, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 27, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 28, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 29, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 30, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 31, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 32, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 33, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 34, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 35, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 36, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 37, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 38, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 39, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 40, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 41, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 42, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 43, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 44, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 45, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 46, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 47, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 48, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 49, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 50, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 51, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 52, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 53, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 54, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 55, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 56, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 57, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 58, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 59, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 60, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 61, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 62, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 63, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 64, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 65, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 66, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 67, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 68, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 69, new Color(198, 198, 198), 637, 547);
-		TFactory(Budapest, "Budapest", true, true, 70, new Color(198, 198, 198), 637, 547);
-
-		/* Below still needs to be converted to spritesheets and Tfactory method calls. */
-		
-		/* Oceans first 
-		territories[0] = new Territory(gc, NorwegianSea, "Norwegian Sea", this, false, 165, 205, 229);
-		territories[0].setX(239);
-		territories[0].setY(0);
-		territories[1] = new Territory(gc, IrishSea, "Irish Sea", this, false, 160, 205, 229);
-		territories[1].setX(258);
-		territories[1].setY(329);
-		territories[2] = new Territory(gc, MidAtlantic, "Mid Atlantic Ocean", this, false, 175, 205, 229);
-		territories[2].setX(0);
-		territories[2].setY(467);
-		
-		territories[4] = new Territory(gc, NorthAtlantic, "North Atlantic Ocean", this, false, 180, 205, 229);
-		territories[4].setX(0);
-		territories[4].setY(0);
-
-		territories[6] = new Territory(gc, NorthSea, "North Sea", this, false, 145, 205, 229);
-		territories[6].setX(427);
-		territories[6].setY(230);
-		territories[7] = new Territory(gc, Hel, "Hel", this, false, 140, 205, 229);
-		territories[7].setX(505);
-		territories[7].setY(353);
-		territories[8] = new Territory(gc, Ska, "Ska", this, false, 135, 205, 229);
-		territories[8].setX(535);
-		territories[8].setY(303);
-		
-		territories[10] = new Territory(gc, GulfBothnia, "Gulf of Bothnia", this, false, 125, 205, 229);
-		territories[10].setX(654);
-		territories[10].setY(156);
-		territories[11] = new Territory(gc, WestMed, "Western Medditerian Sea", this, false, 170, 205, 229);
-		territories[11].setX(231);
-		territories[11].setY(694);
-		territories[12] = new Territory(gc, GulfLyon, "Gulf of Lyon", this, false, 120, 205, 229);
-		territories[12].setX(353);
-		territories[12].setY(630);
-		territories[13] = new Territory(gc, TyrrhenianSea, "Tyrrhenian Sea", this, false, 115, 205, 229);
-		territories[13].setX(503);
-		territories[13].setY(673);
-		territories[14] = new Territory(gc, IonianSea, "Ionian Sea", this, false, 110, 205, 229);
-		territories[14].setX(529);
-		territories[14].setY(719);
-		territories[15] = new Territory(gc, AdriaticSea, "Adriatic Sea", this, false, 105, 205, 229);
-		territories[15].setX(569);
-		territories[15].setY(607);
-		territories[16] = new Territory(gc, AegeanSea, "Aegean Sea", this, false, 100, 205, 229);
-		territories[16].setX(738);
-		territories[16].setY(716);
-
-		
-		/* Water territories completed */
-		
-		
-		/* Land Second */
-		/* AFRICA 
-		territories[19] = new Territory(gc, NorthAfrica, "North Africa", this, true, 200, 200, 200);
-		territories[19].setX(113);
-		territories[19].setY(750);
-		territories[20] = new Territory(gc, Tunis, "Tunis", this, true, 75, 75, 75);
-		territories[20].setX(480);
-		territories[20].setY(785);
-		
-		/* RUSSIA 
-		territories[21] = new Territory(gc, StPetersburgh, "St. Petersburgh", this, true, 195, 195, 195);
-		territories[21].setX(723);
-		territories[21].setY(0);
-		territories[22] = new Territory(gc, Linova, "Linova", this, true, 190, 190, 190);
-		territories[22].setX(698);
-		territories[22].setY(320);
-		territories[23] = new Territory(gc, Warsaw, "Warsaw", this, true, 196, 196, 196);
-		territories[23].setX(674);
-		territories[23].setY(432);
-		territories[24] = new Territory(gc, Moscow, "Moscow", this, true, 194, 194, 194);
-		territories[24].setX(765);
-		territories[24].setY(289);
-		territories[25] = new Territory(gc, Ukraine, "Ukraine", this, true, 193, 193, 193);
-		territories[25].setX(772);
-		territories[25].setY(440);
-		territories[26] = new Territory(gc, Sevastopal, "Sevastopal", this, true, 192, 192, 192);
-		territories[26].setX(832);
-		territories[26].setY(424);
-		
-		/* FRANCE 
-		territories[27] = new Territory(gc, Marseilles, "Marseilles", this, true, 160, 160, 160);
-		territories[27].setX(389);
-		territories[27].setY(571);
-
-		territories[29] = new Territory(gc, Pic, "Pic", this, true, 150, 150, 150);
-		territories[29].setX(398);
-		territories[29].setY(473);
-
-		
-		territories[32] = new Territory(gc, Paris, "Paris", this, true, 165, 165, 165);
-		territories[32].setX(392);
-		territories[32].setY(508);
-		
-		/* ENGLAND 
-		territories[33] = new Territory(gc, Wa, "Wa", this, true, 135, 135, 135);
-		territories[33].setX(327);
-		territories[33].setY(383);
-		territories[34] = new Territory(gc, London, "London", this, true, 130, 130, 130);
-		territories[34].setX(397);
-		territories[34].setY(395);
-		
-		territories[36] = new Territory(gc, York, "York", this, true, 125, 125, 125);
-		territories[36].setX(409);
-		territories[36].setY(329);
-		territories[37] = new Territory(gc, Liverpool, "Liverpool", this, true, 120, 120, 120);
-		territories[37].setX(378);
-		territories[37].setY(320);
-
-		
-		/* ITALY 
-		territories[39] = new Territory(gc, Rome, "Rome", this, true, 90, 90, 90);
-		territories[39].setX(551);
-		territories[39].setY(675);
-		
-		territories[41] = new Territory(gc, Naples,x "Naples", this, true, 80, 80, 80);
-		territories[41].setX(588);
-		territories[41].setY(716);
-		territories[42] = new Territory(gc, Pie, "Pie", this, true, 105, 105, 105);
-		territories[42].setX(483);
-		territories[42].setY(588);
-		territories[43] = new Territory(gc, Venice, "Venice", this, true, 100, 100, 100);
-		territories[43].setX(535);
-		territories[43].setY(583);
-		territories[44] = new Territory(gc, Tus, "Tus", this, true, 95, 95, 95);
-		territories[44].setX(525);
-		territories[44].setY(637);
-		
-		/* GERMANY 
-		territories[45] = new Territory(gc, Kiel, "Kiel", this, true, 60, 60, 60);
-		territories[45].setX(504);
-		territories[45].setY(375);
-		
-		territories[47] = new Territory(gc, Prussia, "Prussia", this, true, 50, 50, 50);
-		territories[47].setX(619);
-		territories[47].setY(374);
-		territories[48] = new Territory(gc, Silesia, "Silesia", this, true, 45, 45, 45);
-		territories[48].setX(572);
-		territories[48].setY(449);
-		territories[49] = new Territory(gc, Ruhr, "Ruhr", this, true, 70, 70, 70);
-		territories[49].setX(486);
-		territories[49].setY(443);
-		territories[50] = new Territory(gc, Munich, "Munich", this, true, 65, 65, 65);
-		territories[50].setX(488);
-		territories[50].setY(460);
-		
-		/* AUSTRIA-HUNGARY 
-		territories[51] = new Territory(gc, Tyrol, "Tyrol", this, true, 30, 30, 30);
-		territories[51].setX(532);
-		territories[51].setY(541);
-		territories[52] = new Territory(gc, Vienna, "Vienna", this, true, 205, 205, 205);
-		territories[52].setX(610);
-		territories[52].setY(531);
-
-
-		territories[55] = new Territory(gc, Trieste, "Trieste", this, true, 197, 197, 197);
-		territories[55].setX(586);
-		territories[55].setY(576);
-		
-		
-		/* TURKEY 
-		territories[57] = new Territory(gc, Smyrna, "Smyrna", this, true, 187, 187, 187);
-		territories[57].setX(803);
-		territories[57].setY(708);
-		territories[58] = new Territory(gc, Syria, "Syria", this, true, 186, 186, 186);
-		territories[58].setX(943);
-		territories[58].setY(771);
-		
-		
-	
-		
-		/* RANDOM 
-		territories[62] = new Territory(gc, Holand, "Holand", this, true, 140, 140, 140);
-		territories[62].setX(472);
-		territories[62].setY(418);
-		
-		territories[64] = new Territory(gc, Rumania, "Rumania", this, true, 184, 184, 184);
-		territories[64].setX(743);
-		territories[64].setY(553);
-		territories[65] = new Territory(gc, Serbia, "Serbia", this, true, 183, 183, 183);
-		territories[65].setX(679);
-		territories[65].setY(625);
-
-		territories[68] = new Territory(gc, Greece, "Greece", this, true, 179, 179, 179);
-		territories[68].setX(691);
-		territories[68].setY(694);
-
-		territories[70] = new Territory(gc, Sweden, "Sweden", this, true, 177, 177, 177);
-		territories[70].setX(589);
-		territories[70].setY(80);
-		territories[71] = new Territory(gc, Norway, "Norway", this, true, 176, 176, 176);
-		territories[71].setX(523);
-		territories[71].setY(36);
-		territories[72] = new Territory(gc, Portugal, "Portugal", this, true, 185, 185, 185);
-		territories[72].setX(181);
-		territories[72].setY(611);
-		territories[73] = new Territory(gc, Spain, "Spain", this, true, 180, 180, 180);
-		territories[73].setX(206);
-		territories[73].setY(574);
-		
-		/* Land territories completed */
+		TFactory(Greece, "Greece", true, true, 24, new Color(179, 179, 179), 691, 694);
+		TFactory(GulfBothnia, "Gulf of Bothnia", false, false, 25, new Color(125, 205, 229), 654, 156);
+		TFactory(GulfLyon, "Gulf of Lyon", false, false, 26, new Color(120, 205, 229), 353, 630);
+		TFactory(Hel, "Hel", false, false, 27, new Color(140, 205, 229), 505, 353);
+		TFactory(Holand, "Holand", true, true, 28, new Color(140, 140, 140), 472, 418);
+		TFactory(IonianSea, "Ionian Sea", false, false, 29, new Color(110, 205, 229), 529, 719);
+		TFactory(IrishSea, "Irish Sea", false, false, 30, new Color(160, 205, 229), 258, 329);
+		TFactory(Kiel, "Kiel", true, true, 31, new Color(60, 60, 60), 504, 375);
+		TFactory(Linova, "Linova", true, false, 32, new Color(190, 190, 190), 698, 320);
+		TFactory(Liverpool, "Liverpool", true, true, 33, new Color(120, 120, 120), 378, 320);
+		TFactory(London, "London", true, true, 34, new Color(130, 130, 130), 397, 395);
+		TFactory(Marseilles, "Marseilles", true, true, 35, new Color(160, 160, 160), 389, 571);
+		TFactory(MidAtlantic, "Mid Atlantic Ocean", false, false, 36, new Color(175, 205, 229), 0, 467);
+		TFactory(Moscow, "Moscow", true, true, 37, new Color(194, 194, 194), 765, 289);
+		TFactory(Munich, "Munich", true, true, 38, new Color(65, 65, 65), 488, 460);
+		TFactory(NorthAfrica, "North Africa", true, false, 39, new Color(200, 200, 200), 113, 750);
+		TFactory(Naples, "Naples", true, true, 40, new Color(80, 80, 80), 588, 716);
+		TFactory(NorthAtlantic, "North Atlantic Ocean", false, false, 41, new Color(180, 205, 229), 0, 0);
+		TFactory(NorthSea, "North Sea", false, false, 42, new Color(145, 205, 229), 427, 230);
+		TFactory(Norway, "Norway", true, true, 43, new Color(176, 176, 176), 523, 36);
+		TFactory(NorwegianSea, "Norwegian Sea", false, false, 44, new Color(165, 205, 229), 239, 0);
+		TFactory(Paris, "Paris", true, true, 45, new Color(165, 165, 165), 392, 508);
+		TFactory(Pic, "Pic", true, false, 46, new Color(150, 150, 150), 398, 473);
+		TFactory(Pie, "Pie", true, false, 47, new Color(105, 105, 105), 483, 588);
+		TFactory(Portugal, "Portugal", true, true, 48, new Color(185, 185, 185), 181, 611);
+		TFactory(Prussia, "Prussia", true, false, 49, new Color(50, 50, 50), 619, 374);
+		TFactory(Rome, "Rome", true, true, 50, new Color(90, 90, 90), 551, 675);
+		TFactory(Ruhr, "Ruhr", true, false, 51, new Color(70, 70, 70), 486, 443);
+		TFactory(Rumania, "Rumania", true, true, 52, new Color(184, 184, 184), 743, 553);
+		TFactory(Serbia, "Serbia", true, true, 53, new Color(183, 183, 183), 679, 625);
+		TFactory(Sevastopal, "Sevastopal", true, true, 54, new Color(192, 192, 192), 832, 424);
+		TFactory(Silesia, "Silesia", true, false, 55, new Color(45, 45, 45), 572, 449);
+		TFactory(Ska, "Ska", false, false, 56, new Color(135, 205, 229), 535, 303);
+		TFactory(Smyrna, "Smyrna", true, true, 57, new Color(187, 187, 187), 803, 708);
+		TFactory(Spain, "Spain", true, true, 58, new Color(180, 180, 180), 206, 574);
+		TFactory(StPetersburgh, "St. Petersburgh", true, true, 59, new Color(195, 195, 195), 723, 0);
+		TFactory(Sweden, "Sweden", true, true, 60, new Color(177, 177, 177), 589, 80);
+		TFactory(Syria, "Syria", true, false, 61, new Color(186, 186, 186), 943, 771);
+		TFactory(Trieste, "Trieste", true, true, 62, new Color(197, 197, 197), 586, 576);
+		TFactory(Tunis, "Tunis", true, true, 63, new Color(75, 75, 75), 480, 785);
+		TFactory(Tus, "Tus", true, false, 64, new Color(95, 95, 95), 525, 637);
+		TFactory(Tyrol, "Tyrol", true, false, 65, new Color(30, 30, 30), 532, 541);
+		TFactory(TyrrhenianSea, "Tyrrhenian Sea", false, false, 66, new Color(115, 205, 229), 503, 673);
+		TFactory(Ukraine, "Ukraine", true, false, 67, new Color(193, 193, 193), 772, 440);
+		TFactory(Venice, "Venice", true, true, 68, new Color(100, 100, 100), 535, 583);
+		TFactory(Vienna, "Vienna", true, true, 69, new Color(205, 205, 205), 610, 531);
+		TFactory(Wa, "Wa", true, true, 70, new Color(135, 135, 135), 327, 383);
+		TFactory(Warsaw, "Warsaw", true, true, 71, new Color(196, 196, 196), 674, 432);
+		TFactory(WestMed, "Western Medditerian Sea", false, false, 72, new Color(170, 205, 229), 231, 694);
+		TFactory(York, "York", true, false, 73, new Color(125, 125, 125), 409, 329);
 		
 	}
 	
