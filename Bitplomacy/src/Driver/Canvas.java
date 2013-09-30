@@ -32,82 +32,82 @@ public class Canvas extends ECanvas{
 	
 	/* Converting all these images to spritesheets to handle different team colors.  
 	 * These Images will need to be remade into SpriteSheets as seen below.        */
-	private Image NorthAfrica;
-	private Image MidAtlantic;
-	private Image NorthAtlantic;
-	private Image NorwegianSea;
-	private Image BarentSea;
-	private Image StPetersburgh;
-	private Image Linova;
-	private Image IrishSea;
-	private Image EnglishChannel;
-	private Image NorthSea;
-	private Image Hel;
-	private Image Ska;
-	private Image BalticSea;
-	private Image GulfBothnia;
-	private Image WestMed;
-	private Image GulfLyon;
-	private Image TyrrhenianSea;
-	private Image IonianSea;
-	private Image EasternMed;
-	private Image BlackSea;
-	private Image Tunis;
-	private Image Warsaw;
-	private Image Moscow;
-	private Image Ukraine;
-	private Image Sevastopal;
-	private Image Marseilles;
-	private Image Brest;
-	private Image Paris;
-	private Image Bur;
-	private Image Pic;
-	private Image Gascony;
-	private Image Wa;
-	private Image London;
-	private Image Liverpool;
-	private Image Edinburgh;
-	private Image York;
-	private Image Cly;
-	private Image Rome;
-	private Image Naples;
-	private Image Pie;
-	private Image Venice;
-	private Image Tus;
-	private Image Kiel;
-	private Image Berlin;
-	private Image Prussia;
-	private Image Silesia;
-	private Image Ruhr;
-	private Image Munich;
-	private Image Tyrol;
-	private Image Vienna;
-	private Image Galicia;
-	private Image Budapest;
-	private Image Trieste;
-	private Image Bohmeia;
-	private Image Smyrna;
-	private Image Syria;
-	private Image Armenia;
-	private Image Constantinople;
-	private Image Holand;
-	private Image Denmark;
-	private Image Rumania;
-	private Image Serbia;
-	private Image Bulgaria;
-	private Image Greece;
-	private Image Finland;
-	private Image Sweden;
-	private Image Norway;
-	private Image Portugal;
-	private Image Spain;
-	private Image Belgium;
+	private SpriteSheet NorthAfrica;
+	private SpriteSheet MidAtlantic;
+	private SpriteSheet NorthAtlantic;
+	private SpriteSheet NorwegianSea;
+	private SpriteSheet BarentSea;
+	private SpriteSheet StPetersburgh;
+	private SpriteSheet Linova;
+	private SpriteSheet IrishSea;
+	private SpriteSheet EnglishChannel;
+	private SpriteSheet NorthSea;
+	private SpriteSheet Hel;
+	private SpriteSheet Ska;
+	private SpriteSheet BalticSea;
+	private SpriteSheet GulfBothnia;
+	private SpriteSheet WestMed;
+	private SpriteSheet GulfLyon;
+	private SpriteSheet TyrrhenianSea;
+	private SpriteSheet IonianSea;
+	private SpriteSheet EasternMed;
+	private SpriteSheet BlackSea;
+	private SpriteSheet Tunis;
+	private SpriteSheet Warsaw;
+	private SpriteSheet Moscow;
+	private SpriteSheet Ukraine;
+	private SpriteSheet Sevastopal;
+	private SpriteSheet Marseilles;
+	private SpriteSheet Brest;
+	private SpriteSheet Paris;
+	private SpriteSheet Bur;
+	private SpriteSheet Pic;
+	private SpriteSheet Gascony;
+	private SpriteSheet Wa;
+	private SpriteSheet London;
+	private SpriteSheet Liverpool;
+	private SpriteSheet Edinburgh;
+	private SpriteSheet York;
+	private SpriteSheet Cly;
+	private SpriteSheet Rome;
+	private SpriteSheet Naples;
+	private SpriteSheet Pie;
+	private SpriteSheet Venice;
+	private SpriteSheet Tus;
+	private SpriteSheet Kiel;
+	private SpriteSheet Berlin;
+	private SpriteSheet Prussia;
+	private SpriteSheet Silesia;
+	private SpriteSheet Ruhr;
+	private SpriteSheet Munich;
+	private SpriteSheet Tyrol;
+	private SpriteSheet Vienna;
+	private SpriteSheet Galicia;
+	private SpriteSheet Budapest;
+	private SpriteSheet Trieste;
+	private SpriteSheet Bohmeia;
+	private SpriteSheet Smyrna;
+	private SpriteSheet Syria;
+	private SpriteSheet Constantinople;
+	private SpriteSheet Holand;
+	private SpriteSheet Denmark;
+	private SpriteSheet Rumania;
+	private SpriteSheet Serbia;
+	private SpriteSheet Bulgaria;
+	private SpriteSheet Greece;
+	private SpriteSheet Finland;
+	private SpriteSheet Sweden;
+	private SpriteSheet Norway;
+	private SpriteSheet Portugal;
+	private SpriteSheet Spain;
+	private SpriteSheet Belgium;
 	/* Handy dandy SpriteSheets for territories. */
 	private SpriteSheet AdriaticSea;
 	private SpriteSheet AegeanSea;
 	private SpriteSheet Albania;
 	private SpriteSheet Ankara;
 	private SpriteSheet Apu;
+	private SpriteSheet Armenia;
 
 	private Canvas(){
 		super(1);
@@ -138,78 +138,76 @@ public class Canvas extends ECanvas{
 	    Albania=SSFactory("/images/Albania.png");
 	    Ankara=SSFactory("/images/Ankara.png");
 	    Apu=SSFactory("/images/Apu.png");
-
-	    /* Need to convert below images to SpriteSheets like above */
-		MidAtlantic=EAnimation.loadImage("/images/MidAtlantic.png");
-	    NorthAtlantic=EAnimation.loadImage("/images/NorthAtlantic.png");
-	    NorwegianSea=EAnimation.loadImage("/images/NorwegianSea.png");
-	    BarentSea=EAnimation.loadImage("/images/BarentSea.png");
-	    IrishSea=EAnimation.loadImage("/images/IrishSea.png");
-	    EnglishChannel=EAnimation.loadImage("/images/EnglishChannel.png");
-	    NorthSea=EAnimation.loadImage("/images/NorthSea.png");
-	    Hel=EAnimation.loadImage("/images/Hel.png");
-	    Ska=EAnimation.loadImage("/images/Ska.png");
-	    BalticSea=EAnimation.loadImage("/images/BalticSea.png");
-	    GulfBothnia=EAnimation.loadImage("/images/GulfBothnia.png");
-	    WestMed=EAnimation.loadImage("/images/WestMed.png");
-	    GulfLyon=EAnimation.loadImage("/images/GulfLyon.png");
-	    TyrrhenianSea=EAnimation.loadImage("/images/TyrrhenianSea.png");
-	    IonianSea=EAnimation.loadImage("/images/IonianSea.png");
-	    EasternMed=EAnimation.loadImage("/images/EasternMed.png");
-	    BlackSea=EAnimation.loadImage("/images/BlackSea.png");
-	    NorthAfrica=EAnimation.loadImage("/images/NAfrica.png");
-	    Tunis=EAnimation.loadImage("/images/Tunis.png");
-	    Linova=EAnimation.loadImage("/images/Linova.png");
-	    StPetersburgh=EAnimation.loadImage("/images/StPetersburgh.png");
-	    Warsaw=EAnimation.loadImage("/images/Warsaw.png");
-	    Moscow=EAnimation.loadImage("/images/Moscow.png");
-	    Ukraine=EAnimation.loadImage("/images/Ukraine.png");
-	    Sevastopal=EAnimation.loadImage("/images/Sevastopal.png");
-	    Marseilles=EAnimation.loadImage("/images/Marseilles.png");
-	    Brest=EAnimation.loadImage("/images/Brest.png");
-	    Paris=EAnimation.loadImage("/images/Paris.png");
-	    Bur=EAnimation.loadImage("/images/Bur.png");
-	    Pic=EAnimation.loadImage("/images/Pic.png");
-	    Gascony=EAnimation.loadImage("/images/Gascony.png");
-	    Kiel=EAnimation.loadImage("/images/Kiel.png");
-	    Wa=EAnimation.loadImage("/images/Wa.png");
-	    London=EAnimation.loadImage("/images/London.png");
-	    Liverpool=EAnimation.loadImage("/images/Liverpool.png");
-	    Edinburgh=EAnimation.loadImage("/images/Edinburgh.png");
-	    York=EAnimation.loadImage("/images/York.png");
-	    Cly=EAnimation.loadImage("/images/Cly.png");
-	    Rome=EAnimation.loadImage("/images/Rome.png");
-	    Naples=EAnimation.loadImage("/images/Naples.png");
-	    Pie=EAnimation.loadImage("/images/Pie.png");
-	    Venice=EAnimation.loadImage("/images/Venice.png");
-	    Tus=EAnimation.loadImage("/images/Tus.png");
-	    Berlin=EAnimation.loadImage("/images/Berlin.png");
-	    Prussia=EAnimation.loadImage("/images/Prussia.png");
-	    Silesia=EAnimation.loadImage("/images/Silesia.png");
-	    Ruhr=EAnimation.loadImage("/images/Ruhr.png");
-	    Munich=EAnimation.loadImage("/images/Munich.png");
-	    Tyrol=EAnimation.loadImage("/images/Tyrol.png");
-	    Vienna=EAnimation.loadImage("/images/Vienna.png");
-	    Galicia=EAnimation.loadImage("/images/Galicia.png");
-	    Budapest=EAnimation.loadImage("/images/Budapest.png");
-	    Trieste=EAnimation.loadImage("/images/Trieste.png");
-	    Bohmeia=EAnimation.loadImage("/images/Bohmeia.png");
-	    Smyrna=EAnimation.loadImage("/images/Smyrna.png");
-	    Syria=EAnimation.loadImage("/images/Syria.png");
-	    Armenia=EAnimation.loadImage("/images/Armenia.png");
-	    Constantinople=EAnimation.loadImage("/images/Constantinople.png");
-	    Holand=EAnimation.loadImage("/images/Holand.png");
-	    Denmark=EAnimation.loadImage("/images/Denmark.png");
-	    Rumania=EAnimation.loadImage("/images/Rumania.png");
-	    Serbia=EAnimation.loadImage("/images/Serbia.png");
-	    Bulgaria=EAnimation.loadImage("/images/Bulgaria.png");
-	    Greece=EAnimation.loadImage("/images/Greece.png");
-	    Finland=EAnimation.loadImage("/images/Finland.png");
-	    Sweden=EAnimation.loadImage("/images/Sweden.png");
-	    Norway=EAnimation.loadImage("/images/Norway.png");
-	    Portugal=EAnimation.loadImage("/images/Portugal.png");
-	    Spain=EAnimation.loadImage("/images/Spain.png");
-	    Belgium=EAnimation.loadImage("/images/Belgium.png");
+	    Armenia=SSFactory("/images/Armenia.png");
+	    BalticSea=SSFactory("/images/BalticSea.png");
+	    BarentSea=SSFactory("/images/BarentSea.png");
+	    Belgium=SSFactory("/images/Belgium.png");
+	    Berlin=SSFactory("/images/Berlin.png");
+	    BlackSea=SSFactory("/images/BlackSea.png");
+	    Brest=SSFactory("/images/Brest.png");
+	    Bur=SSFactory("/images/Bur.png");
+	    Denmark=SSFactory("/images/Denmark.png");
+	    EasternMed=SSFactory("/images/EasternMed.png");
+	    Edinburgh=SSFactory("/images/Edinburgh.png");
+	    EnglishChannel=SSFactory("/images/EnglishChannel.png");
+	    GulfBothnia=SSFactory("/images/GulfBothnia.png");
+	    GulfLyon=SSFactory("/images/GulfLyon.png");
+	    Hel=SSFactory("/images/Hel.png");
+	    IonianSea=SSFactory("/images/IonianSea.png");
+	    IrishSea=SSFactory("/images/IrishSea.png");
+	    Kiel=SSFactory("/images/Kiel.png");
+	    Linova=SSFactory("/images/Linova.png");
+	    Liverpool=SSFactory("/images/Liverpool.png");
+	    London=SSFactory("/images/London.png");
+	    Marseilles=SSFactory("/images/Marseilles.png");
+		MidAtlantic=SSFactory("/images/MidAtlantic.png");
+	    Moscow=SSFactory("/images/Moscow.png");
+	    Munich=SSFactory("/images/Munich.png");
+	    Naples=SSFactory("/images/Naples.png");
+	    NorthAfrica=SSFactory("/images/NAfrica.png");
+	    NorthAtlantic=SSFactory("/images/NorthAtlantic.png");
+	    NorthSea=SSFactory("/images/NorthSea.png");
+	    NorwegianSea=SSFactory("/images/NorwegianSea.png");
+	    Paris=SSFactory("/images/Paris.png");
+	    Pic=SSFactory("/images/Pic.png");
+	    Sevastopal=SSFactory("/images/Sevastopal.png");
+	    Ska=SSFactory("/images/Ska.png");
+	    StPetersburgh=SSFactory("/images/StPetersburgh.png");
+	    Tunis=SSFactory("/images/Tunis.png");
+	    TyrrhenianSea=SSFactory("/images/TyrrhenianSea.png");
+	    Wa=SSFactory("/images/Wa.png");
+	    Warsaw=SSFactory("/images/Warsaw.png");
+	    WestMed=SSFactory("/images/WestMed.png");
+	    Ukraine=SSFactory("/images/Ukraine.png");
+	    Gascony=SSFactory("/images/Gascony.png");
+	    York=SSFactory("/images/York.png");
+	    Cly=SSFactory("/images/Cly.png");
+	    Rome=SSFactory("/images/Rome.png");
+	    Pie=SSFactory("/images/Pie.png");
+	    Venice=SSFactory("/images/Venice.png");
+	    Tus=SSFactory("/images/Tus.png");
+	    Prussia=SSFactory("/images/Prussia.png");
+	    Silesia=SSFactory("/images/Silesia.png");
+	    Ruhr=SSFactory("/images/Ruhr.png");
+	    Tyrol=SSFactory("/images/Tyrol.png");
+	    Vienna=SSFactory("/images/Vienna.png");
+	    Galicia=SSFactory("/images/Galicia.png");
+	    Budapest=SSFactory("/images/Budapest.png");
+	    Trieste=SSFactory("/images/Trieste.png");
+	    Bohmeia=SSFactory("/images/Bohmeia.png");
+	    Smyrna=SSFactory("/images/Smyrna.png");
+	    Syria=SSFactory("/images/Syria.png");
+	    Constantinople=SSFactory("/images/Constantinople.png");
+	    Holand=SSFactory("/images/Holand.png");
+	    Rumania=SSFactory("/images/Rumania.png");
+	    Serbia=SSFactory("/images/Serbia.png");
+	    Bulgaria=SSFactory("/images/Bulgaria.png");
+	    Greece=SSFactory("/images/Greece.png");
+	    Finland=SSFactory("/images/Finland.png");
+	    Sweden=SSFactory("/images/Sweden.png");
+	    Norway=SSFactory("/images/Norway.png");
+	    Portugal=SSFactory("/images/Portugal.png");
+	    Spain=SSFactory("/images/Spain.png");
 	}
 	
 	/*
@@ -266,12 +264,79 @@ public class Canvas extends ECanvas{
 	 */
 	public void createTerritories(){
 		
-		territories = new Territory[5];
+		territories = new Territory[24];
 		TFactory(AdriaticSea, "Adriatic Sea", false, false, 0, new Color(105, 205, 229), 569, 607);
 		TFactory(AegeanSea, "Aegean Sea", false, false, 1, new Color(100, 205, 229), 738, 716);
 		TFactory(Albania, "Albania", true, false, 2, new Color(182, 182, 182), 677, 674);
 		TFactory(Ankara, "Ankara", true, true, 3, new Color(189, 189, 189), 872, 663);
 		TFactory(Apu, "Apu", true, false, 4, new Color(85, 85, 85), 584, 683);
+		TFactory(Armenia, "Armenia", true, false, 5, new Color(191, 191, 191), 1021, 664);
+		TFactory(BalticSea, "Baltic Sea", false, false, 6, new Color(130, 205, 229), 574, 315);
+		TFactory(BarentSea, "Barent Sea", false, false, 7, new Color(155, 205, 229), 716, 0);
+		TFactory(Belgium, "Belgium", true, true, 8, new Color(145, 145, 145), 432, 450);
+		TFactory(Berlin, "Berlin", true, true, 9, new Color(55, 55, 55), 564, 400);
+		TFactory(BlackSea, "Black Sea", false, false, 10, new Color(90, 205, 229), 826, 542);
+		TFactory(Bohmeia, "Bohmeia", true, false, 11, new Color(35, 35, 35), 576, 486);
+		TFactory(Brest, "Brest", true, true, 12, new Color(170, 170, 170), 326, 475);
+		TFactory(Budapest, "Budapest", true, true, 13, new Color(198, 198, 198), 637, 547);
+		TFactory(Bulgaria, "Bulgaria", true, true, 14, new Color(181, 181, 181), 729, 646);
+		TFactory(Bur, "Bur", true, false, 15, new Color(155, 155, 155), 411, 490);
+		TFactory(Cly, "Cly", true, false, 16, new Color(110, 110, 110), 374, 268);
+		TFactory(Constantinople, "Constantinople", true, true, 17, new Color(188, 188, 188), 793, 689);
+		TFactory(Denmark, "Denmark", true, true, 18, new Color(40, 40, 40), 552, 323);
+		TFactory(EasternMed, "EasternMed", false, false, 19, new Color(95, 205, 229), 743, 783);
+		TFactory(Edinburgh, "Edinburgh", true, true, 20, new Color(115, 115, 115), 398, 261);	
+		TFactory(EnglishChannel, "EnglishChannel", false, false, 21, new Color(150, 205, 229), 303, 435);	
+		TFactory(Finland, "Finland", true, true, 22, new Color(178, 178, 178), 693, 58);		
+		TFactory(Gascony, "Gascony", true, false, 23, new Color(175, 175, 175), 345, 557);
+/*
+		TFactory(Budapest, "Budapest", true, true, 24, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 25, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 26, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 27, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 28, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 29, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 30, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 31, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 32, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 33, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 34, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 35, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 36, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 37, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 38, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 39, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 40, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 41, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 42, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 43, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 44, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 45, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 46, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 47, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 48, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 49, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 50, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 51, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 52, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 53, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 54, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 55, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 56, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 57, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 58, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 59, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 60, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 61, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 62, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 63, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 64, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 65, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 66, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 67, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 68, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 69, new Color(198, 198, 198), 637, 547);
+		TFactory(Budapest, "Budapest", true, true, 70, new Color(198, 198, 198), 637, 547);
 
 		/* Below still needs to be converted to spritesheets and Tfactory method calls. */
 		
@@ -285,15 +350,11 @@ public class Canvas extends ECanvas{
 		territories[2] = new Territory(gc, MidAtlantic, "Mid Atlantic Ocean", this, false, 175, 205, 229);
 		territories[2].setX(0);
 		territories[2].setY(467);
-		territories[3] = new Territory(gc, BarentSea, "Barent's Sea", this, false, 155, 205, 229);
-		territories[3].setX(716);
-		territories[3].setY(0);
+		
 		territories[4] = new Territory(gc, NorthAtlantic, "North Atlantic Ocean", this, false, 180, 205, 229);
 		territories[4].setX(0);
 		territories[4].setY(0);
-		territories[5] = new Territory(gc, EnglishChannel, "English Channel", this, false, 150, 205, 229);
-		territories[5].setX(303);
-		territories[5].setY(435);
+
 		territories[6] = new Territory(gc, NorthSea, "North Sea", this, false, 145, 205, 229);
 		territories[6].setX(427);
 		territories[6].setY(230);
@@ -303,9 +364,7 @@ public class Canvas extends ECanvas{
 		territories[8] = new Territory(gc, Ska, "Ska", this, false, 135, 205, 229);
 		territories[8].setX(535);
 		territories[8].setY(303);
-		territories[9] = new Territory(gc, BalticSea, "Baltic Sea", this, false, 130, 205, 229);
-		territories[9].setX(574);
-		territories[9].setY(315);
+		
 		territories[10] = new Territory(gc, GulfBothnia, "Gulf of Bothnia", this, false, 125, 205, 229);
 		territories[10].setX(654);
 		territories[10].setY(156);
@@ -327,12 +386,8 @@ public class Canvas extends ECanvas{
 		territories[16] = new Territory(gc, AegeanSea, "Aegean Sea", this, false, 100, 205, 229);
 		territories[16].setX(738);
 		territories[16].setY(716);
-		territories[17] = new Territory(gc, EasternMed, "Eastern Medditerian Sea", this, false, 95, 205, 229);
-		territories[17].setX(743);
-		territories[17].setY(783);
-		territories[18] = new Territory(gc, BlackSea, "Black Sea", this, false, 90, 205, 229);
-		territories[18].setX(826);
-		territories[18].setY(542);
+
+		
 		/* Water territories completed */
 		
 		
@@ -369,18 +424,12 @@ public class Canvas extends ECanvas{
 		territories[27] = new Territory(gc, Marseilles, "Marseilles", this, true, 160, 160, 160);
 		territories[27].setX(389);
 		territories[27].setY(571);
-		territories[28] = new Territory(gc, Bur, "Bur", this, true, 155, 155, 155);
-		territories[28].setX(411);
-		territories[28].setY(490);
+
 		territories[29] = new Territory(gc, Pic, "Pic", this, true, 150, 150, 150);
 		territories[29].setX(398);
 		territories[29].setY(473);
-		territories[30] = new Territory(gc, Gascony, "Gascony", this, true, 175, 175, 175);
-		territories[30].setX(345);
-		territories[30].setY(557);
-		territories[31] = new Territory(gc, Brest, "Brest", this, true, 170, 170, 170);
-		territories[31].setX(326);
-		territories[31].setY(475);
+
+		
 		territories[32] = new Territory(gc, Paris, "Paris", this, true, 165, 165, 165);
 		territories[32].setX(392);
 		territories[32].setY(508);
@@ -392,18 +441,14 @@ public class Canvas extends ECanvas{
 		territories[34] = new Territory(gc, London, "London", this, true, 130, 130, 130);
 		territories[34].setX(397);
 		territories[34].setY(395);
-		territories[35] = new Territory(gc, Cly, "Cly", this, true, 110, 110, 110);
-		territories[35].setX(374);
-		territories[35].setY(268);
+		
 		territories[36] = new Territory(gc, York, "York", this, true, 125, 125, 125);
 		territories[36].setX(409);
 		territories[36].setY(329);
 		territories[37] = new Territory(gc, Liverpool, "Liverpool", this, true, 120, 120, 120);
 		territories[37].setX(378);
 		territories[37].setY(320);
-		territories[38] = new Territory(gc, Edinburgh, "Edinburgh", this, true, 115, 115, 115);
-		territories[38].setX(398);
-		territories[38].setY(261);
+
 		
 		/* ITALY 
 		territories[39] = new Territory(gc, Rome, "Rome", this, true, 90, 90, 90);
@@ -427,9 +472,7 @@ public class Canvas extends ECanvas{
 		territories[45] = new Territory(gc, Kiel, "Kiel", this, true, 60, 60, 60);
 		territories[45].setX(504);
 		territories[45].setY(375);
-		territories[46] = new Territory(gc, Berlin, "Berlin", this, true, 55, 55, 55);
-		territories[46].setX(564);
-		territories[46].setY(400);
+		
 		territories[47] = new Territory(gc, Prussia, "Prussia", this, true, 50, 50, 50);
 		territories[47].setX(619);
 		territories[47].setY(374);
@@ -450,18 +493,12 @@ public class Canvas extends ECanvas{
 		territories[52] = new Territory(gc, Vienna, "Vienna", this, true, 205, 205, 205);
 		territories[52].setX(610);
 		territories[52].setY(531);
-		territories[53] = new Territory(gc, Galicia, "Galicia", this, true, 199, 199, 199);
-		territories[53].setX(671);
-		territories[53].setY(490);
-		territories[54] = new Territory(gc, Budapest, "Budapest", this, true, 198, 198, 198);
-		territories[54].setX(637);
-		territories[54].setY(547);
+
+
 		territories[55] = new Territory(gc, Trieste, "Trieste", this, true, 197, 197, 197);
 		territories[55].setX(586);
 		territories[55].setY(576);
-		territories[56] = new Territory(gc, Bohmeia, "Bohmeia", this, true, 35, 35, 35);
-		territories[56].setX(576);
-		territories[56].setY(486);
+		
 		
 		/* TURKEY 
 		territories[57] = new Territory(gc, Smyrna, "Smyrna", this, true, 187, 187, 187);
@@ -470,36 +507,26 @@ public class Canvas extends ECanvas{
 		territories[58] = new Territory(gc, Syria, "Syria", this, true, 186, 186, 186);
 		territories[58].setX(943);
 		territories[58].setY(771);
-		territories[59] = new Territory(gc, Armenia, "Armenia", this, true, 191, 191, 191);
-		territories[59].setX(1021);
-		territories[59].setY(664);
 		
-		territories[61] = new Territory(gc, Constantinople, "Constantinople", this, true, 188, 188, 188);
-		territories[61].setX(793);
-		territories[61].setY(689);
+		
+	
 		
 		/* RANDOM 
 		territories[62] = new Territory(gc, Holand, "Holand", this, true, 140, 140, 140);
 		territories[62].setX(472);
 		territories[62].setY(418);
-		territories[63] = new Territory(gc, Denmark, "Denmark", this, true, 40, 40, 40);
-		territories[63].setX(552);
-		territories[63].setY(323);	
+		
 		territories[64] = new Territory(gc, Rumania, "Rumania", this, true, 184, 184, 184);
 		territories[64].setX(743);
 		territories[64].setY(553);
 		territories[65] = new Territory(gc, Serbia, "Serbia", this, true, 183, 183, 183);
 		territories[65].setX(679);
 		territories[65].setY(625);
-		territories[67] = new Territory(gc, Bulgaria, "Bulgaria", this, true, 181, 181, 181);
-		territories[67].setX(729);
-		territories[67].setY(646);
+
 		territories[68] = new Territory(gc, Greece, "Greece", this, true, 179, 179, 179);
 		territories[68].setX(691);
 		territories[68].setY(694);
-		territories[69] = new Territory(gc, Finland, "Finland", this, true, 178, 178, 178);
-		territories[69].setX(693);
-		territories[69].setY(58);
+
 		territories[70] = new Territory(gc, Sweden, "Sweden", this, true, 177, 177, 177);
 		territories[70].setX(589);
 		territories[70].setY(80);
@@ -512,9 +539,7 @@ public class Canvas extends ECanvas{
 		territories[73] = new Territory(gc, Spain, "Spain", this, true, 180, 180, 180);
 		territories[73].setX(206);
 		territories[73].setY(574);
-		territories[74] = new Territory(gc, Belgium, "Belgium", this, true, 145, 145, 145);
-		territories[74].setX(432);
-		territories[74].setY(450);
+		
 		/* Land territories completed */
 		
 	}
