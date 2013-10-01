@@ -10,21 +10,21 @@ import com.erebos.engine.graphics.EAnimation;
 public class Territory extends ImageEntity {
 
 	private EAnimation terr;
+	private SpriteSheet ss;
 	private String name;
 	private Color colorKey;
-	Canvas canvas;
 	private boolean supplyCenter;
 	private boolean land;
 	
 	private int owner;
-	private final int NETURAL = 0;
-	private final int ENGLAND = 1;
-	private final int AUSTRIA_HUNGARY = 2;
-	private final int ITALY = 3;
-	private final int TURKEY = 4;
-	private final int FRANCE = 5;
-	private final int RUSSIA = 6;
-	private final int GERMANY = 7;
+	public static final int NEUTRAL = 0;
+	public static final int ENGLAND = 1;
+	public static final int AUSTRIA_HUNGARY = 2;
+	public static final int ITALY = 3;
+	public static final int TURKEY = 4;
+	public static final int FRANCE = 5;
+	public static final int RUSSIA = 6;
+	public static final int GERMANY = 7;
 	
 
 	/*
@@ -38,7 +38,8 @@ public class Territory extends ImageEntity {
 	 */
 	public Territory(SpriteSheet terr, String name, boolean isLand, boolean hasSC, Color color){
 		super(terr);
-		owner = TURKEY;
+		ss = terr;
+		owner = NEUTRAL;
 		this.terr = new EAnimation(terr.getSprite(owner, 0));
 		this.name = name;
 		colorKey = color;
@@ -56,8 +57,8 @@ public class Territory extends ImageEntity {
 			c = Canvas.getC().getCurrentColor();
 			if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen()){
 				System.out.println(name + " hey I work!!!!");
-				Canvas.getC().setTName(name);
-				Canvas.getC().setState(1);
+				Canvas.getC().setDisTerr(this);
+				Canvas.getC().setState(Canvas.DIS_TERR );
 			}
 			else
 				System.out.println(name + "\n" + c.getRed() + " " + c.getBlue() + " " + c.getGreen() + "\n" + colorKey.getRed() + " " + colorKey.getBlue() + " " + colorKey.getGreen());
@@ -82,5 +83,39 @@ public class Territory extends ImageEntity {
 	 */
 	public void setOwner(int owner){
 		this.owner = owner;
+		terr = new EAnimation(ss.getSprite(owner, 0));
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public String getOwner(){
+		String s = null;
+		if (owner == 0)
+			s = "Neutral";
+		else if (owner == 1)
+			s = "England";
+		else if (owner == 2)
+			s = "Austria-Hungary";
+		else if (owner == 3)
+			s = "Italy";
+		else if (owner == 4)
+			s = "Turkey";
+		else if (owner == 5)
+			s = "France";
+		else if (owner == 6)
+			s = "Russia";
+		else if (owner == 7)
+			s = "Germany";
+		return s;
+	}
+	
+	public boolean hasSC(){
+		return supplyCenter;
+	}
+	
+	public boolean isLand(){
+		return land;
 	}
 }

@@ -1,4 +1,5 @@
 package Driver;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -16,14 +17,15 @@ public class Canvas extends ECanvas{
 
 	Territory[] territories;
 	Graphics g;
-	private String tName;
+	private Territory disTerr;
 	private int state;
 
 	/* Singleton variable for the Canvas */
 	private static Canvas c = null;
 	
-	final int NORM = 0;
-	final int DIS_TERR = 1;
+	public static final int START = 0;
+	public static final int NORM = 1;
+	public static final int DIS_TERR = 2;
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
@@ -109,6 +111,7 @@ public class Canvas extends ECanvas{
 
 	private Canvas(){
 		super(1);
+		state = 0;
 	}
 	
 	public static Canvas getC() {
@@ -118,10 +121,40 @@ public class Canvas extends ECanvas{
 	}
 
 	@Override
-	public void eInit(GameContainer gc, EGame eg) {	
-				
+	public void eInit(GameContainer gc, EGame eg) {			
 		defineSS();
 	    createTerritories();
+	    setBoard();
+	}
+
+	/*
+	 * Sets up the play area for a 7 teams.  Specifically it
+	 * sets ownership for territories and generate units for each 
+	 * team. 
+	 */
+	private void setBoard() {
+		getT("Edinburgh").setOwner(Territory.ENGLAND);
+		getT("Liverpool").setOwner(Territory.ENGLAND);
+		getT("London").setOwner(Territory.ENGLAND);
+		getT("Vienna").setOwner(Territory.AUSTRIA_HUNGARY);
+		getT("Budapest").setOwner(Territory.AUSTRIA_HUNGARY);
+		getT("Trieste").setOwner(Territory.AUSTRIA_HUNGARY);
+		getT("Paris").setOwner(Territory.FRANCE);
+		getT("Brest").setOwner(Territory.FRANCE);
+		getT("Marseilles").setOwner(Territory.FRANCE);
+		getT("Berlin").setOwner(Territory.GERMANY);
+		getT("Kiel").setOwner(Territory.GERMANY);
+		getT("Munich").setOwner(Territory.GERMANY);
+		getT("Venice").setOwner(Territory.ITALY);
+		getT("Rome").setOwner(Territory.ITALY);
+		getT("Naples").setOwner(Territory.ITALY);
+		getT("St. Petersburgh").setOwner(Territory.RUSSIA);
+		getT("Moscow").setOwner(Territory.RUSSIA);
+		getT("Sevastopal").setOwner(Territory.RUSSIA);
+		getT("Warsaw").setOwner(Territory.RUSSIA);
+		getT("Ankara").setOwner(Territory.TURKEY);
+		getT("Constantinople").setOwner(Territory.TURKEY);
+		getT("Smyrna").setOwner(Territory.TURKEY);
 	}
 
 	/*
@@ -227,7 +260,10 @@ public class Canvas extends ECanvas{
 		g.setColor(Color.green);
 		g.fillRect(1106, 0, 1400-1126, gc.getHeight());
 		g.setColor(Color.black);
-		g.drawString("Country:", 1190, 50);
+		g.drawString("Country:", 1150, 50);
+		g.drawString("Owner:", 1150, 120);
+		g.drawString("Contains Supply Center:", 1150, 180);
+		g.drawString("Terrain type:", 1150, 240);
 		g.drawImage(MasterMap, 0, 0);
 		for (Territory t: territories)
 			t.eDraw();
@@ -235,7 +271,16 @@ public class Canvas extends ECanvas{
 		
 		switch (state){
 		case DIS_TERR: {
-			g.drawString(tName, 1185, 70);
+			g.drawString(disTerr.getName(), 1145, 70);
+			g.drawString(disTerr.getOwner(), 1145, 140);
+			if (disTerr.hasSC())
+				g.drawString("Yes", 1145, 200);
+			else
+				g.drawString("No", 1145, 200);
+			if (disTerr.isLand())
+				g.drawString("Land", 1145, 260);
+			else
+				g.drawString("Water", 1145, 260);
 		}
 		}
 	}
@@ -373,8 +418,8 @@ public class Canvas extends ECanvas{
 	 * 
 	 * @param name -> the name of the territory 
 	 */
-	public void setTName(String name){
-		tName = name;
+	public void setDisTerr(Territory t){
+		disTerr = t;
 	}
 	
 	/*
@@ -384,5 +429,14 @@ public class Canvas extends ECanvas{
 	 */
 	public void setState(int s){
 		state = s;
+	}
+	
+	private Territory getT(String name){
+		for (Territory t : territories){
+			System.out.println(t.getName());
+			if (t.getName().equals(name))
+				return t;
+		}
+		return null;
 	}
 }
