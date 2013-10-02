@@ -1,4 +1,7 @@
 package Objects;
+import java.awt.event.MouseEvent;
+
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SpriteSheet;
 
@@ -55,7 +58,7 @@ public class Territory extends ImageEntity {
 		Color c;
 		try{
 			c = Canvas.getC().getCurrentColor();
-			if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen()){
+			if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen() && Mouse.isButtonDown(0)){
 				System.out.println(name + " hey I work!!!!");
 				Canvas.getC().setDisTerr(this);
 				Canvas.getC().setState(Canvas.DIS_TERR );
