@@ -1,6 +1,4 @@
 package Objects;
-import java.awt.event.MouseEvent;
-
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SpriteSheet;
@@ -18,6 +16,10 @@ public class Territory extends ImageEntity {
 	private Color colorKey;
 	private boolean supplyCenter;
 	private boolean land;
+	
+	private int unit;
+	public static final int LAND = 1;
+	public static final int WATER = 2;
 	
 	private int owner;
 	public static final int NEUTRAL = 0;
@@ -48,6 +50,7 @@ public class Territory extends ImageEntity {
 		colorKey = color;
 		supplyCenter = hasSC;
 		land = isLand;
+		unit = 0;
 	}
 	
 	/*
@@ -59,12 +62,9 @@ public class Territory extends ImageEntity {
 		try{
 			c = Canvas.getC().getCurrentColor();
 			if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen() && Mouse.isButtonDown(0)){
-				System.out.println(name + " hey I work!!!!");
 				Canvas.getC().setDisTerr(this);
 				Canvas.getC().setState(Canvas.DIS_TERR );
 			}
-			else
-				System.out.println(name + "\n" + c.getRed() + " " + c.getBlue() + " " + c.getGreen() + "\n" + colorKey.getRed() + " " + colorKey.getBlue() + " " + colorKey.getGreen());
 		}
 		catch (ArrayIndexOutOfBoundsException e){
 			System.out.println(e.getMessage());
@@ -89,11 +89,20 @@ public class Territory extends ImageEntity {
 		terr = new EAnimation(ss.getSprite(owner, 0));
 	}
 	
+	public void setOwner(int owner, int u){
+		setOwner(owner);
+		unit = u;
+	}
+
 	public String getName(){
 		return name;
 	}
 	
-	public String getOwner(){
+	public int getOwner(){
+		return owner;
+	}
+	
+	public String getOwnerName(){
 		String s = null;
 		if (owner == 0)
 			s = "Neutral";
@@ -120,5 +129,9 @@ public class Territory extends ImageEntity {
 	
 	public boolean isLand(){
 		return land;
+	}
+
+	public int getUnit() {
+		return unit;
 	}
 }

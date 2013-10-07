@@ -32,6 +32,10 @@ public class Canvas extends ECanvas{
 	private Image MasterMap;
 	private Image Borders;
 	
+	/* SpriteSheets for units */
+	private SpriteSheet landUnit;
+	private SpriteSheet waterUnit;
+	
 	/* Handy dandy SpriteSheets for territories. */
 	private SpriteSheet NorthAfrica;
 	private SpriteSheet MidAtlantic;
@@ -133,28 +137,28 @@ public class Canvas extends ECanvas{
 	 * team. 
 	 */
 	private void setBoard() {
-		getT("Edinburgh").setOwner(Territory.ENGLAND);
-		getT("Liverpool").setOwner(Territory.ENGLAND);
-		getT("London").setOwner(Territory.ENGLAND);
-		getT("Vienna").setOwner(Territory.AUSTRIA_HUNGARY);
-		getT("Budapest").setOwner(Territory.AUSTRIA_HUNGARY);
-		getT("Trieste").setOwner(Territory.AUSTRIA_HUNGARY);
-		getT("Paris").setOwner(Territory.FRANCE);
-		getT("Brest").setOwner(Territory.FRANCE);
-		getT("Marseilles").setOwner(Territory.FRANCE);
-		getT("Berlin").setOwner(Territory.GERMANY);
-		getT("Kiel").setOwner(Territory.GERMANY);
-		getT("Munich").setOwner(Territory.GERMANY);
-		getT("Venice").setOwner(Territory.ITALY);
-		getT("Rome").setOwner(Territory.ITALY);
-		getT("Naples").setOwner(Territory.ITALY);
-		getT("St. Petersburgh").setOwner(Territory.RUSSIA);
-		getT("Moscow").setOwner(Territory.RUSSIA);
-		getT("Sevastopal").setOwner(Territory.RUSSIA);
-		getT("Warsaw").setOwner(Territory.RUSSIA);
-		getT("Ankara").setOwner(Territory.TURKEY);
-		getT("Constantinople").setOwner(Territory.TURKEY);
-		getT("Smyrna").setOwner(Territory.TURKEY);
+		getT("Edinburgh").setOwner(Territory.ENGLAND, 2);
+		getT("Liverpool").setOwner(Territory.ENGLAND, 1);
+		getT("London").setOwner(Territory.ENGLAND, 2);
+		getT("Vienna").setOwner(Territory.AUSTRIA_HUNGARY, 1);
+		getT("Budapest").setOwner(Territory.AUSTRIA_HUNGARY, 1);
+		getT("Trieste").setOwner(Territory.AUSTRIA_HUNGARY, 2);
+		getT("Paris").setOwner(Territory.FRANCE, 1);
+		getT("Brest").setOwner(Territory.FRANCE, 2);
+		getT("Marseilles").setOwner(Territory.FRANCE, 1);
+		getT("Berlin").setOwner(Territory.GERMANY, 1);
+		getT("Kiel").setOwner(Territory.GERMANY, 2);
+		getT("Munich").setOwner(Territory.GERMANY, 2);
+		getT("Venice").setOwner(Territory.ITALY, 1);
+		getT("Rome").setOwner(Territory.ITALY, 1);
+		getT("Naples").setOwner(Territory.ITALY, 2);
+		getT("St. Petersburgh").setOwner(Territory.RUSSIA, 2);
+		getT("Moscow").setOwner(Territory.RUSSIA, 1);
+		getT("Sevastopal").setOwner(Territory.RUSSIA, 2);
+		getT("Warsaw").setOwner(Territory.RUSSIA, 1);
+		getT("Ankara").setOwner(Territory.TURKEY, 2);
+		getT("Constantinople").setOwner(Territory.TURKEY, 1);
+		getT("Smyrna").setOwner(Territory.TURKEY, 1);
 	}
 
 	/*
@@ -163,6 +167,11 @@ public class Canvas extends ECanvas{
 	private void defineSS() {
 		MasterMap=EAnimation.loadImage("/images/MasterMap.png");
 		Borders=EAnimation.loadImage("/images/Borders.png");
+		
+		Image temp = EAnimation.loadImage("/images/LandUnit.png");
+		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
+		temp = EAnimation.loadImage("/images/WaterUnit.png");
+		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		
 		AdriaticSea=SSFactory("/images/AdriaticSea.png");
 	    AegeanSea=SSFactory("/images/AegeanSea.png");
@@ -265,14 +274,21 @@ public class Canvas extends ECanvas{
 		g.drawString("Contains Supply Center:", 1150, 180);
 		g.drawString("Terrain type:", 1150, 240);
 		g.drawImage(MasterMap, 0, 0);
+		
 		for (Territory t: territories)
 			t.eDraw();
 		g.drawImage(Borders, 0, 0);
+		for (Territory t: territories){
+			if (t.getUnit() == t.LAND)
+				new EAnimation(landUnit.getSprite(t.getOwner()-1, 0)).draw(t.getX(), t.getY());
+			else if (t.getUnit() == t.WATER)
+				new EAnimation(waterUnit.getSprite(t.getOwner()-1, 0)).draw(t.getX(), t.getY());
+		}
 		
-		switch (state){
+		switch (state) {
 		case DIS_TERR: {
 			g.drawString(disTerr.getName(), 1145, 70);
-			g.drawString(disTerr.getOwner(), 1145, 140);
+			g.drawString(disTerr.getOwnerName(), 1145, 140);
 			if (disTerr.hasSC())
 				g.drawString("Yes", 1145, 200);
 			else
@@ -294,9 +310,9 @@ public class Canvas extends ECanvas{
 	 * Updates the game on for the current frame. Game is set to run at 60 frames per second so this fires 60 times a second.
 	 */
 	private void updateGame() {
+		int mx = Mouse.getX();
+		int my = Math.abs(Mouse.getY() - 831);
 		for (Territory t: territories){
-			int mx = Mouse.getX();
-			int my = Math.abs(Mouse.getY() - 831);
 			if (mx >= t.getX() && mx <= t.getWidth()+t.getX() && my >= t.getY() && my <= t.getHeight()+t.getY())
 				t.update();
 		}
@@ -439,4 +455,5 @@ public class Canvas extends ECanvas{
 		}
 		return null;
 	}
+
 }
