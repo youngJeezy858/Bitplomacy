@@ -16,10 +16,7 @@ public class Territory extends ImageEntity {
 	private Color colorKey;
 	private boolean supplyCenter;
 	private boolean land;
-	
-	private int unit;
-	public static final int LAND = 1;
-	public static final int WATER = 2;
+	private Unit unit;
 	
 	private int owner;
 	public static final int NEUTRAL = 0;
@@ -50,7 +47,7 @@ public class Territory extends ImageEntity {
 		colorKey = color;
 		supplyCenter = hasSC;
 		land = isLand;
-		unit = 0;
+		unit = null;
 	}
 	
 	/*
@@ -79,6 +76,11 @@ public class Territory extends ImageEntity {
 	public void eDraw(){
 		terr.draw(this.getX(), this.getY());
 	}
+	
+	public void uDraw(){
+		if (unit != null)
+			unit.draw(this.getX()+(this.getWidth()/16)-20, this.getY()+(this.getHeight()/2)-50);
+	}
 
 	/*
 	 * Sets the owner of the Territory.  See class fields for int codes of each team.
@@ -89,8 +91,7 @@ public class Territory extends ImageEntity {
 		terr = new EAnimation(ss.getSprite(owner, 0));
 	}
 	
-	public void setOwner(int owner, int u){
-		setOwner(owner);
+	public void addUnit(Unit u){
 		unit = u;
 	}
 
@@ -131,7 +132,7 @@ public class Territory extends ImageEntity {
 		return land;
 	}
 
-	public int getUnit() {
+	public Unit getUnit() {
 		return unit;
 	}
 }

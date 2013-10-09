@@ -7,7 +7,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
+import Objects.Player;
 import Objects.Territory;
+import Objects.Unit;
 
 import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
@@ -15,8 +17,9 @@ import com.erebos.engine.graphics.EAnimation;
 
 public class Canvas extends ECanvas{
 
-	Territory[] territories;
-	Graphics g;
+	private Territory[] territories;
+	private Player[] players;
+	private Graphics g;
 	private Territory disTerr;
 	private int state;
 
@@ -32,7 +35,7 @@ public class Canvas extends ECanvas{
 	private Image MasterMap;
 	private Image Borders;
 	
-	/* SpriteSheets for units */
+	/* SpriteSheets for Units */
 	private SpriteSheet landUnit;
 	private SpriteSheet waterUnit;
 	
@@ -125,46 +128,17 @@ public class Canvas extends ECanvas{
 	}
 
 	@Override
-	public void eInit(GameContainer gc, EGame eg) {			
-		defineSS();
-	    createTerritories();
-	    setBoard();
-	}
-
-	/*
-	 * Sets up the play area for a 7 teams.  Specifically it
-	 * sets ownership for territories and generate units for each 
-	 * team. 
-	 */
-	private void setBoard() {
-		getT("Edinburgh").setOwner(Territory.ENGLAND, 2);
-		getT("Liverpool").setOwner(Territory.ENGLAND, 1);
-		getT("London").setOwner(Territory.ENGLAND, 2);
-		getT("Vienna").setOwner(Territory.AUSTRIA_HUNGARY, 1);
-		getT("Budapest").setOwner(Territory.AUSTRIA_HUNGARY, 1);
-		getT("Trieste").setOwner(Territory.AUSTRIA_HUNGARY, 2);
-		getT("Paris").setOwner(Territory.FRANCE, 1);
-		getT("Brest").setOwner(Territory.FRANCE, 2);
-		getT("Marseilles").setOwner(Territory.FRANCE, 1);
-		getT("Berlin").setOwner(Territory.GERMANY, 1);
-		getT("Kiel").setOwner(Territory.GERMANY, 2);
-		getT("Munich").setOwner(Territory.GERMANY, 2);
-		getT("Venice").setOwner(Territory.ITALY, 1);
-		getT("Rome").setOwner(Territory.ITALY, 1);
-		getT("Naples").setOwner(Territory.ITALY, 2);
-		getT("St. Petersburgh").setOwner(Territory.RUSSIA, 2);
-		getT("Moscow").setOwner(Territory.RUSSIA, 1);
-		getT("Sevastopal").setOwner(Territory.RUSSIA, 2);
-		getT("Warsaw").setOwner(Territory.RUSSIA, 1);
-		getT("Ankara").setOwner(Territory.TURKEY, 2);
-		getT("Constantinople").setOwner(Territory.TURKEY, 1);
-		getT("Smyrna").setOwner(Territory.TURKEY, 1);
-	}
-
-	/*
-	 * Defines all the SpriteSheet variables
-	 */
-	private void defineSS() {
+	public void eInit(GameContainer gc, EGame eg) {		
+		
+		players = new Player[7];
+		players[0] = new Player("England");
+		players[1] = new Player("Austria-Hungary");
+		players[2] = new Player("Italy");
+		players[3] = new Player("Turkey");
+		players[4] = new Player("France");
+		players[5] = new Player("Russia");
+		players[6] = new Player("Germany");
+		
 		MasterMap=EAnimation.loadImage("/images/MasterMap.png");
 		Borders=EAnimation.loadImage("/images/Borders.png");
 		
@@ -172,6 +146,16 @@ public class Canvas extends ECanvas{
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		temp = EAnimation.loadImage("/images/WaterUnit.png");
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
+		
+		defineSS();
+	    createTerritories();
+	    setBoard();
+	}
+
+	/*
+	 * Defines all the SpriteSheet variables
+	 */
+	private void defineSS() {
 		
 		AdriaticSea=SSFactory("/images/AdriaticSea.png");
 	    AegeanSea=SSFactory("/images/AegeanSea.png");
@@ -249,79 +233,11 @@ public class Canvas extends ECanvas{
 	    Portugal=SSFactory("/images/Portugal.png");
 	    Spain=SSFactory("/images/Spain.png");
 	}
-	
-	/*
-	 * Used to generate a SpriteSheet of a territory.  Assumes that your SpriteSheet has 8 sprites.
-	 * @param String location -> the file path of the image
-	 * @returns -> a Spritesheet of the image
-	 */
-	private SpriteSheet SSFactory(String location){
-		Image temp = EAnimation.loadImage(location);
-		SpriteSheet ss = new SpriteSheet(temp, temp.getWidth()/8, temp.getHeight());
-		return ss;
-	}
-
-	@Override
-	public void eRender(GameContainer gc, EGame eg, Graphics g) {
-		this.g = g;
-		g.setColor(Color.white);
-		g.fillRect(0, 0, 1126, gc.getHeight());
-		g.setColor(Color.green);
-		g.fillRect(1106, 0, 1400-1126, gc.getHeight());
-		g.setColor(Color.black);
-		g.drawString("Country:", 1150, 50);
-		g.drawString("Owner:", 1150, 120);
-		g.drawString("Contains Supply Center:", 1150, 180);
-		g.drawString("Terrain type:", 1150, 240);
-		g.drawImage(MasterMap, 0, 0);
-		
-		for (Territory t: territories)
-			t.eDraw();
-		g.drawImage(Borders, 0, 0);
-		for (Territory t: territories){
-			if (t.getUnit() == t.LAND)
-				new EAnimation(landUnit.getSprite(t.getOwner()-1, 0)).draw(t.getX(), t.getY());
-			else if (t.getUnit() == t.WATER)
-				new EAnimation(waterUnit.getSprite(t.getOwner()-1, 0)).draw(t.getX(), t.getY());
-		}
-		
-		switch (state) {
-		case DIS_TERR: {
-			g.drawString(disTerr.getName(), 1145, 70);
-			g.drawString(disTerr.getOwnerName(), 1145, 140);
-			if (disTerr.hasSC())
-				g.drawString("Yes", 1145, 200);
-			else
-				g.drawString("No", 1145, 200);
-			if (disTerr.isLand())
-				g.drawString("Land", 1145, 260);
-			else
-				g.drawString("Water", 1145, 260);
-		}
-		}
-	}
-
-	@Override
-	public void eUpdate(GameContainer gc, EGame eg, int delta) {		
-		updateGame();
-	}
-
-	/*
-	 * Updates the game on for the current frame. Game is set to run at 60 frames per second so this fires 60 times a second.
-	 */
-	private void updateGame() {
-		int mx = Mouse.getX();
-		int my = Math.abs(Mouse.getY() - 831);
-		for (Territory t: territories){
-			if (mx >= t.getX() && mx <= t.getWidth()+t.getX() && my >= t.getY() && my <= t.getHeight()+t.getY())
-				t.update();
-		}
-	}
 
 	/*
 	 * As the name says.  Used when initializing the game.
 	 */
-	public void createTerritories(){
+	private void createTerritories(){
 		
 		territories = new Territory[75];
 		TFactory(AdriaticSea, "Adriatic Sea", false, false, 0, new Color(105, 205, 229), 569, 607);
@@ -401,7 +317,51 @@ public class Canvas extends ECanvas{
 		TFactory(York, "York", true, false, 73, new Color(125, 125, 125), 409, 329);
 		
 	}
+
+	/*
+	 * Sets up the play area for a 7 teams.  Specifically it
+	 * sets ownership for territories and generate units for each 
+	 * team. 
+	 */
+	private void setBoard() {
+
+		createUnit(getT("Edinburgh"), Territory.ENGLAND, waterUnit, false, players[Territory.ENGLAND-1]);
+		createUnit(getT("Liverpool"), Territory.ENGLAND, landUnit, true, players[Territory.ENGLAND-1]);
+		createUnit(getT("London"), Territory.ENGLAND, waterUnit, false, players[Territory.ENGLAND-1]);
+
+		createUnit(getT("Vienna"), Territory.AUSTRIA_HUNGARY, landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
+		createUnit(getT("Budapest"), Territory.AUSTRIA_HUNGARY, landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
+		createUnit(getT("Trieste"), Territory.AUSTRIA_HUNGARY, waterUnit, false, players[Territory.AUSTRIA_HUNGARY-1]);
+
+		createUnit(getT("Paris"), Territory.FRANCE, landUnit, true, players[Territory.FRANCE-1]);
+		createUnit(getT("Brest"), Territory.FRANCE, waterUnit, false, players[Territory.FRANCE-1]);
+		createUnit(getT("Marseilles"), Territory.FRANCE, landUnit, true, players[Territory.FRANCE-1]);
+
+		createUnit(getT("Berlin"), Territory.GERMANY, landUnit, true, players[Territory.GERMANY-1]);
+		createUnit(getT("Kiel"), Territory.GERMANY, waterUnit, false, players[Territory.GERMANY-1]);
+		createUnit(getT("Munich"), Territory.GERMANY, waterUnit, false, players[Territory.GERMANY-1]);
+
+		createUnit(getT("Venice"), Territory.ITALY, landUnit, true, players[Territory.ITALY-1]);
+		createUnit(getT("Rome"), Territory.ITALY, landUnit, true, players[Territory.ITALY-1]);
+		createUnit(getT("Naples"), Territory.ITALY, waterUnit, false, players[Territory.ITALY-1]);
+
+		createUnit(getT("St. Petersburgh"), Territory.RUSSIA, waterUnit, false, players[Territory.RUSSIA-1]);
+		createUnit(getT("Moscow"), Territory.RUSSIA, landUnit, true, players[Territory.RUSSIA-1]);
+		createUnit(getT("Sevastopal"), Territory.RUSSIA, waterUnit, false, players[Territory.RUSSIA-1]);
+		createUnit(getT("Warsaw"), Territory.RUSSIA, landUnit, true, players[Territory.RUSSIA-1]);
+
+		createUnit(getT("Ankara"), Territory.TURKEY, waterUnit, false, players[Territory.TURKEY-1]);
+		createUnit(getT("Constantinople"), Territory.TURKEY, landUnit, true, players[Territory.TURKEY-1]);
+		createUnit(getT("Smyrna"), Territory.TURKEY, landUnit, true, players[Territory.TURKEY-1]);
+	}
 	
+	private void createUnit(Territory t, int owner, SpriteSheet ss, boolean isLand, Player p){
+		t.setOwner(owner);
+		Unit temp = new Unit(ss, owner - 1, isLand, t);
+		t.addUnit(temp);
+		p.addUnit(temp);
+	}
+
 	/*
 	 * Creates a Territory in the territories array and sets its position on the map.
 	 * 
@@ -419,7 +379,74 @@ public class Canvas extends ECanvas{
 		territories[pos].setX(x);
 		territories[pos].setY(y);
 	}
-	
+
+	/*
+	 * Used to generate a SpriteSheet of a territory.  Assumes that your SpriteSheet has 8 sprites.
+	 * @param String location -> the file path of the image
+	 * @returns -> a Spritesheet of the image
+	 */
+	private SpriteSheet SSFactory(String location){
+		Image temp = EAnimation.loadImage(location);
+		SpriteSheet ss = new SpriteSheet(temp, temp.getWidth()/8, temp.getHeight());
+		return ss;
+	}
+
+	@Override
+	public void eRender(GameContainer gc, EGame eg, Graphics g) {
+		this.g = g;
+		
+		g.setColor(Color.white);
+		g.fillRect(0, 0, 1126, gc.getHeight());
+		g.setColor(Color.green);
+		g.fillRect(1106, 0, 1400-1126, gc.getHeight());
+		
+		g.setColor(Color.black);
+		g.drawString("Country:", 1150, 50);
+		g.drawString("Owner:", 1150, 120);
+		
+		g.drawString("SUPPLY CENTER TOTALS", 1145, 200);
+		int i = 220;
+		for (Player p : players){
+			g.drawString(p.getName() + ": " + p.getSupplyCount(), 1145, i);
+			i = i + 20;
+		}
+		
+		//draw masterMap for color keys
+		g.drawImage(MasterMap, 0, 0);	
+		//draw territory images
+		for (Territory t: territories)
+			t.eDraw();
+		//draw overlying borders
+		g.drawImage(Borders, 0, 0);
+		//units last since they are on top
+		for (Territory t: territories)
+			t.uDraw();
+		
+		switch (state) {
+		case DIS_TERR: {
+			g.drawString(disTerr.getName(), 1145, 70);
+			g.drawString(disTerr.getOwnerName(), 1145, 140);
+		}
+		}
+	}
+
+	@Override
+	public void eUpdate(GameContainer gc, EGame eg, int delta) {		
+		updateGame();
+	}
+
+	/*
+	 * Updates the game on for the current frame. Game is set to run at 60 frames per second so this fires 60 times a second.
+	 */
+	private void updateGame() {
+		int mx = Mouse.getX();
+		int my = Math.abs(Mouse.getY() - 831);
+		for (Territory t: territories){
+			if (mx >= t.getX() && mx <= t.getWidth()+t.getX() && my >= t.getY() && my <= t.getHeight()+t.getY())
+				t.update();
+		}
+	}
+
 	/*
 	 * Gets the Color from the current mouse location.  Used to access color keys.
 	 * 
