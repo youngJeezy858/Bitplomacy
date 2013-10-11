@@ -1,9 +1,10 @@
-package Objects;
+package gameObjects;
+import gui.Canvas;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SpriteSheet;
 
-import Driver.Canvas;
 
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
@@ -55,19 +56,11 @@ public class Territory extends ImageEntity {
 	 * Territory, then display the name.  See updateGame in the Canvas class for more info.
 	 */
 	public void update(){
-		Color c;
-		try{
-			c = Canvas.getC().getCurrentColor();
-			if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen() && Mouse.isButtonDown(0)){
-				Canvas.getC().setDisTerr(this);
-				Canvas.getC().setState(Canvas.DIS_TERR );
-			}
+		Color c = Canvas.getC().getCurrentColor();
+		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen() && Mouse.isButtonDown(0)){
+			Canvas.getC().setDisTerr(this);
+			Canvas.getC().setState(Canvas.TERR_SELECTED);
 		}
-		catch (ArrayIndexOutOfBoundsException e){
-			System.out.println(e.getMessage());
-			System.out.println("nope " + name);
-		}
-
 	}
 	
 	/*

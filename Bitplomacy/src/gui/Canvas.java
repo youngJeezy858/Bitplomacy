@@ -1,4 +1,8 @@
-package Driver;
+package gui;
+
+import gameObjects.Player;
+import gameObjects.Territory;
+import gameObjects.Unit;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
@@ -7,9 +11,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
-import Objects.Player;
-import Objects.Territory;
-import Objects.Unit;
 
 import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
@@ -19,6 +20,7 @@ public class Canvas extends ECanvas{
 
 	private Territory[] territories;
 	private Player[] players;
+	private Commands[] commands = {new AttackCommand(1152, 500, 100), new DefendCommand(1152, 606, 150), new SupportCommand(1269, 500, 50), new ConvoyCommand(1269, 606, 250), new SubmitCommand(1151, 717, 200)};
 	private Graphics g;
 	private Territory disTerr;
 	private int state;
@@ -28,13 +30,13 @@ public class Canvas extends ECanvas{
 	
 	public static final int START = 0;
 	public static final int NORM = 1;
-	public static final int DIS_TERR = 2;
+	public static final int TERR_SELECTED = 2;
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
 	private Image MasterMap;
 	private Image Borders;
-	
+		
 	/* SpriteSheets for Units */
 	private SpriteSheet landUnit;
 	private SpriteSheet waterUnit;
@@ -141,6 +143,12 @@ public class Canvas extends ECanvas{
 		
 		MasterMap=EAnimation.loadImage("/images/MasterMap.png");
 		Borders=EAnimation.loadImage("/images/Borders.png");
+		
+		commands[0].setEA(new EAnimation(EAnimation.loadImage("/images/AttackIcon.png")));
+		commands[1].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
+		commands[2].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
+		commands[3].setEA(new EAnimation(EAnimation.loadImage("/images/ConvoyIcon.png")));
+		commands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
 		
 		Image temp = EAnimation.loadImage("/images/LandUnit.png");
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
@@ -393,10 +401,12 @@ public class Canvas extends ECanvas{
 
 	@Override
 	public void eRender(GameContainer gc, EGame eg, Graphics g) {
+		
 		this.g = g;
 		
-		g.setColor(Color.white);
-		g.fillRect(0, 0, 1126, gc.getHeight());
+		//draw masterMap for color keys
+		g.drawImage(MasterMap, 0, 0);	
+		
 		g.setColor(Color.green);
 		g.fillRect(1106, 0, 1400-1126, gc.getHeight());
 		
@@ -411,19 +421,16 @@ public class Canvas extends ECanvas{
 			i = i + 20;
 		}
 		
-		//draw masterMap for color keys
-		g.drawImage(MasterMap, 0, 0);	
-		//draw territory images
+		for (Commands c : commands)
+			c.draw();
 		for (Territory t: territories)
 			t.eDraw();
-		//draw overlying borders
 		g.drawImage(Borders, 0, 0);
-		//units last since they are on top
 		for (Territory t: territories)
 			t.uDraw();
 		
 		switch (state) {
-		case DIS_TERR: {
+		case TERR_SELECTED: {
 			g.drawString(disTerr.getName(), 1145, 70);
 			g.drawString(disTerr.getOwnerName(), 1145, 140);
 		}
@@ -444,6 +451,10 @@ public class Canvas extends ECanvas{
 		for (Territory t: territories){
 			if (mx >= t.getX() && mx <= t.getWidth()+t.getX() && my >= t.getY() && my <= t.getHeight()+t.getY())
 				t.update();
+		}
+		for (Commands c: commands){
+			if (mx >= c.getX() && mx <= c.getWidth()+c.getX() && my >= c.getY() && my <= c.getHeight()+c.getY())
+				c.update();
 		}
 	}
 

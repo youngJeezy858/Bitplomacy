@@ -1,4 +1,4 @@
-package Objects;
+package gameObjects;
 
 import org.newdawn.slick.SpriteSheet;
 
