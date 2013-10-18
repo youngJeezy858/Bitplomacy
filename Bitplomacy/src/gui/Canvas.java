@@ -9,6 +9,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
 
@@ -439,22 +440,26 @@ public class Canvas extends ECanvas{
 
 	@Override
 	public void eUpdate(GameContainer gc, EGame eg, int delta) {		
-		updateGame();
+		updateGame(gc);
 	}
 
 	/*
 	 * Updates the game on for the current frame. Game is set to run at 60 frames per second so this fires 60 times a second.
 	 */
-	private void updateGame() {
+	private void updateGame(GameContainer gc) {
 		int mx = Mouse.getX();
 		int my = Math.abs(Mouse.getY() - 831);
-		for (Territory t: territories){
-			if (mx >= t.getX() && mx <= t.getWidth()+t.getX() && my >= t.getY() && my <= t.getHeight()+t.getY())
-				t.update();
-		}
-		for (Commands c: commands){
-			if (mx >= c.getX() && mx <= c.getWidth()+c.getX() && my >= c.getY() && my <= c.getHeight()+c.getY())
-				c.update();
+		if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			for (Territory t : territories) {
+				if (mx >= t.getX() && mx <= t.getWidth() + t.getX()
+						&& my >= t.getY() && my <= t.getHeight() + t.getY())
+					t.update();
+			}
+			for (Commands c : commands) {
+				if (mx >= c.getX() && mx <= c.getWidth() + c.getX()
+						&& my >= c.getY() && my <= c.getHeight() + c.getY())
+					c.update();
+			}
 		}
 	}
 
@@ -493,5 +498,13 @@ public class Canvas extends ECanvas{
 		}
 		return null;
 	}
+//	
+//	private void scale(float f){
+//		MasterMap = MasterMap.getScaledCopy(f);
+//		Borders = Borders.getScaledCopy(f);
+//			
+//		landUnit = new SpriteSheet(landUnit.ge, tw, th);
+//		private SpriteSheet waterUnit;
+//	}
 
 }

@@ -1,9 +1,11 @@
 package gameObjects;
 import gui.Canvas;
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
+import org.lwjgl.input.*;
 
 
 import com.erebos.engine.entity.ImageEntity;
@@ -57,7 +59,7 @@ public class Territory extends ImageEntity {
 	 */
 	public void update(){
 		Color c = Canvas.getC().getCurrentColor();
-		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen() && Mouse.isButtonDown(0)){
+		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen()){
 			Canvas.getC().setDisTerr(this);
 			Canvas.getC().setState(Canvas.TERR_SELECTED);
 		}
