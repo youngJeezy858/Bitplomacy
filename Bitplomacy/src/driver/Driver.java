@@ -40,6 +40,9 @@ public class Driver extends EGame
 	
 		Driver.class.getClassLoader();
 		InputStream stream=ClassLoader.getSystemResourceAsStream("natives/natives.zip");
+		String osArch=System.getProperty("os.arch");
+		String osName=System.getProperty("os.name");
+		
 		byte[] buffer = new byte[1024];
 
 		     try
@@ -49,6 +52,9 @@ public class Driver extends EGame
 		    	while(ze!=null)
 		    	{
 		    	   String fileName = ze.getName();
+		    	   if((fileName.contains(".so") && osName.contains("inux")) || 
+		    		  ((fileName.contains(".jnilib")||fileName.contains(".dylib"))&&osName.contains("Mac")) )
+		    	  {
 		           File newFile = new File(destDir + File.separator + fileName);
 		           if(ze.isDirectory())  //Make sure we make a directory if we run into one in case it exist or we'll get exceptions
 		           {
@@ -66,6 +72,7 @@ public class Driver extends EGame
 		            	fos.write(buffer, 0, len);
 		            }
 		            fos.close();   
+		           	} 
 		           }
 		           ze = zis.getNextEntry();
 		    	}
