@@ -1,5 +1,6 @@
 package gui;
 
+import gameObjects.Order;
 import gameObjects.Player;
 import gameObjects.Territory;
 import gameObjects.Unit;
@@ -21,17 +22,22 @@ public class Canvas extends ECanvas{
 
 	private Territory[] territories;
 	private Player[] players;
-	private Commands[] commands = {new AttackCommand(1152, 500, 100), new DefendCommand(1152, 606, 150), new SupportCommand(1269, 500, 50), new ConvoyCommand(1269, 606, 250), new SubmitCommand(1151, 717, 200)};
-	private Graphics g;
+	private Commands[] commands = { new AttackCommand(1152, 500, 100),
+			new DefendCommand(1152, 606, 150),
+			new SupportCommand(1269, 500, 50),
+			new ConvoyCommand(1269, 606, 250),
+			new SubmitCommand(1151, 717, 200) };
 	private Territory disTerr;
 	private int state;
-
+	private Order currOrder;
+	
 	/* Singleton variable for the Canvas */
 	private static Canvas c = null;
 	
 	public static final int START = 0;
 	public static final int NORM = 1;
 	public static final int TERR_SELECTED = 2;
+	public static final int COMM_SELECTED = 3;
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
@@ -121,7 +127,7 @@ public class Canvas extends ECanvas{
 
 	private Canvas(){
 		super(1);
-		state = 0;
+		state = 1;
 	}
 	
 	public static Canvas getC() {
@@ -146,8 +152,8 @@ public class Canvas extends ECanvas{
 		Borders=EAnimation.loadImage("/images/Borders.png");
 		
 		commands[0].setEA(new EAnimation(EAnimation.loadImage("/images/AttackIcon.png")));
-		commands[1].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
-		commands[2].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
+		commands[1].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
+		commands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
 		commands[3].setEA(new EAnimation(EAnimation.loadImage("/images/ConvoyIcon.png")));
 		commands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
 		
@@ -159,6 +165,13 @@ public class Canvas extends ECanvas{
 		defineSS();
 	    createTerritories();
 	    setBoard();
+	    adjustNumSC();
+
+	}
+
+	public void adjustNumSC() {
+		for (Player p : players)
+	    	p.adjustNumSC();
 	}
 
 	/*
@@ -367,8 +380,8 @@ public class Canvas extends ECanvas{
 	private void createUnit(Territory t, int owner, SpriteSheet ss, boolean isLand, Player p){
 		t.setOwner(owner);
 		Unit temp = new Unit(ss, owner - 1, isLand, t);
-		t.addUnit(temp);
-		p.addUnit(temp);
+		t.setUnit(temp);
+		p.addUnit(t.getUnit());
 	}
 
 	/*
@@ -402,9 +415,7 @@ public class Canvas extends ECanvas{
 
 	@Override
 	public void eRender(GameContainer gc, EGame eg, Graphics g) {
-		
-		this.g = g;
-		
+			
 		//draw masterMap for color keys
 		g.drawImage(MasterMap, 0, 0);	
 		
@@ -422,6 +433,17 @@ public class Canvas extends ECanvas{
 			i = i + 20;
 		}
 		
+		if (currOrder != null){
+			g.drawString(currOrder.toString(), 1130, 400);
+			long time;
+			if (currOrder.getTerr2() != null){
+				time = System.currentTimeMillis();
+				g.drawString("Accepted...", 1130, 420);
+				if (time+5000 < System.currentTimeMillis())
+					currOrder = null;
+			}
+		}
+		
 		for (Commands c : commands)
 			c.draw();
 		for (Territory t: territories)
@@ -430,12 +452,11 @@ public class Canvas extends ECanvas{
 		for (Territory t: territories)
 			t.uDraw();
 		
-		switch (state) {
-		case TERR_SELECTED: {
+		if (state == TERR_SELECTED || state == COMM_SELECTED) {
 			g.drawString(disTerr.getName(), 1145, 70);
 			g.drawString(disTerr.getOwnerName(), 1145, 140);
 		}
-		}
+
 	}
 
 	@Override
@@ -490,21 +511,46 @@ public class Canvas extends ECanvas{
 		state = s;
 	}
 	
-	private Territory getT(String name){
+	public Territory getT(String name){
 		for (Territory t : territories){
-			System.out.println(t.getName());
 			if (t.getName().equals(name))
 				return t;
 		}
 		return null;
 	}
-//	
-//	private void scale(float f){
-//		MasterMap = MasterMap.getScaledCopy(f);
-//		Borders = Borders.getScaledCopy(f);
-//			
-//		landUnit = new SpriteSheet(landUnit.ge, tw, th);
-//		private SpriteSheet waterUnit;
-//	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void resetOrder(Territory t) {
+		currOrder = new Order(t);
+	}
+
+	public void setOrder(Territory t) {
+		currOrder.addTerr2(t);
+		currOrder.getUnit().setOrder(currOrder);	
+	}
+	
+
+	public void submit() {
+		for (Player p : players)
+			p.executeOrders();
+		adjustNumSC();
+	}
+
+	public void attack() {
+		if (state == Canvas.TERR_SELECTED && currOrder != null){
+			currOrder.addCommand("attack");
+			state = Canvas.COMM_SELECTED;
+		}
+		else
+			System.out.println("Attack command wus good");
+	}
+
+	public Order getOrder() {
+		System.out.println(currOrder.toString());
+		return currOrder;
+	}
 
 }

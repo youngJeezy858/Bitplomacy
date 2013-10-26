@@ -2,12 +2,7 @@ package gameObjects;
 import gui.Canvas;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
-import org.lwjgl.input.*;
-
-
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
@@ -58,10 +53,19 @@ public class Territory extends ImageEntity {
 	 * Territory, then display the name.  See updateGame in the Canvas class for more info.
 	 */
 	public void update(){
-		Color c = Canvas.getC().getCurrentColor();
+		Canvas canvas = Canvas.getC();
+		Color c = canvas.getCurrentColor();
 		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen()){
-			Canvas.getC().setDisTerr(this);
-			Canvas.getC().setState(Canvas.TERR_SELECTED);
+			if (canvas.getState() == Canvas.NORM || canvas.getState() == Canvas.TERR_SELECTED){
+				canvas.setDisTerr(this);
+				canvas.setState(Canvas.TERR_SELECTED);
+				if (unit != null)
+					canvas.resetOrder(this);
+			}
+			else if (canvas.getState() == Canvas.COMM_SELECTED){
+				canvas.setOrder(this);
+				canvas.setState(Canvas.NORM);
+			}
 		}
 	}
 	
@@ -86,8 +90,9 @@ public class Territory extends ImageEntity {
 		terr = new EAnimation(ss.getSprite(owner, 0));
 	}
 	
-	public void addUnit(Unit u){
+	public void setUnit(Unit u){
 		unit = u;
+		setOwner(u.getOwner());
 	}
 
 	public String getName(){
@@ -130,4 +135,11 @@ public class Territory extends ImageEntity {
 	public Unit getUnit() {
 		return unit;
 	}
+	
+	public void removeUnit(){
+		if (!hasSC())
+			setOwner(NEUTRAL);
+		unit = null;
+	}
+	
 }

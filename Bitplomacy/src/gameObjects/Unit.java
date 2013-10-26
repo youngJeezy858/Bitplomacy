@@ -11,6 +11,8 @@ public class Unit extends ImageEntity{
 	private EAnimation image;
 	private SpriteSheet ss;
 	private Territory curTerr;
+	private Order order;
+	private int owner;
 	
 	public Unit(SpriteSheet ss, int owner, boolean land, Territory t){
 		super(ss);
@@ -18,6 +20,7 @@ public class Unit extends ImageEntity{
 		this.ss = ss;
 		image = new EAnimation(ss.getSprite(owner, 0));
 		curTerr = t;
+		this.owner = owner + 1;
 	}
 	
 	public void draw(float x, float y){
@@ -32,8 +35,29 @@ public class Unit extends ImageEntity{
 		image = new EAnimation(ss.getSprite(owner, 0));
 	}
 	
-	public Territory getT(){
+	public Territory getTerritory(){
 		return curTerr;
 	}
 	
+	public void setTerritory(Territory t){
+		curTerr = t;
+	}
+
+	public void executeOrder() {
+		if (order != null){
+			System.out.println("hiya");
+			order.execute();
+		}
+		else
+			System.out.println(curTerr.getName());
+		order = null;
+	}
+
+	public void setOrder(Order o) {
+		order = o;
+	}
+
+	public int getOwner() {
+		return owner;
+	}
 }

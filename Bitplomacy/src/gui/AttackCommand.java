@@ -8,7 +8,7 @@ public class AttackCommand extends Commands{
 
 	@Override
 	public void execute() {
-		System.out.println("Attack command wus good");
+		Canvas.getC().attack();
 	}
 
 }

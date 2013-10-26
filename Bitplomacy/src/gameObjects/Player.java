@@ -15,8 +15,6 @@ public class Player {
 	
 	public void addUnit(Unit u){
 		units.add(u);
-		if (u.getT().hasSC())
-			supplyCenterCount++;
 	}
 	
 	public int getSupplyCount(){
@@ -26,4 +24,19 @@ public class Player {
 	public String getName(){
 		return name;
 	}
+	
+	public void adjustNumSC(){
+		int i = 0;
+		for (Unit u : units){
+			if (u.getTerritory().hasSC())
+				i++;
+		}
+		supplyCenterCount = i;
+	}
+
+	public void executeOrders() {
+		for (Unit u : units)
+			u.executeOrder();
+	}
+	
 }
