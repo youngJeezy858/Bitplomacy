@@ -35,7 +35,6 @@ public class Driver extends EGame
 		d.start(d, 1380, 831, false);
 	}
 	
-	@SuppressWarnings("resource")
 	public static void copyNatives(File destDir)
 	{
 	

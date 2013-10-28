@@ -1,17 +1,22 @@
 package gui;
 
+import java.util.ArrayList;
+
 import gameObjects.Order;
 import gameObjects.Player;
 import gameObjects.Territory;
+import gameObjects.Turn;
 import gameObjects.Unit;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.TrueTypeFont;
 
 
 import com.erebos.engine.core.*;
@@ -30,6 +35,9 @@ public class Canvas extends ECanvas{
 	private Territory disTerr;
 	private int state;
 	private Order currOrder;
+	
+	private Turn currTurn;
+	private ArrayList<Turn> turns;
 	
 	/* Singleton variable for the Canvas */
 	private static Canvas c = null;
@@ -162,6 +170,9 @@ public class Canvas extends ECanvas{
 		temp = EAnimation.loadImage("/images/WaterUnit.png");
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		
+		currTurn = new Turn("Spring", 1900);
+		turns = new ArrayList<Turn>();
+		
 		defineSS();
 	    createTerritories();
 	    setBoard();
@@ -170,8 +181,15 @@ public class Canvas extends ECanvas{
 	}
 
 	public void adjustNumSC() {
-		for (Player p : players)
-	    	p.adjustNumSC();
+		int i;
+		for (Player p : players){
+			i = 0;
+	    	for (Territory t : territories){
+	    		if (t.hasSC() && t.getOwnerName().equals(p.getName()))
+	    			i++;
+	    	}
+			p.adjustNumSC(i);
+		}
 	}
 
 	/*
@@ -284,7 +302,7 @@ public class Canvas extends ECanvas{
 		TFactory(EasternMed, "Eastern Medditerian Sea", false, false, 19, new Color(95, 205, 229), 743, 783);
 		TFactory(Edinburgh, "Edinburgh", true, true, 20, new Color(115, 115, 115), 398, 261);	
 		TFactory(EnglishChannel, "English Channel", false, false, 21, new Color(150, 205, 229), 303, 435);	
-		TFactory(Finland, "Finland", true, true, 22, new Color(178, 178, 178), 693, 58);		
+		TFactory(Finland, "Finland", true, false, 22, new Color(178, 178, 178), 693, 58);		
 		TFactory(Galicia, "Galicia", true, false, 74, new Color(199, 199, 199), 671, 490);		
 		TFactory(Gascony, "Gascony", true, false, 23, new Color(175, 175, 175), 345, 557);
 		TFactory(Greece, "Greece", true, true, 24, new Color(179, 179, 179), 691, 694);
@@ -452,6 +470,11 @@ public class Canvas extends ECanvas{
 		for (Territory t: territories)
 			t.uDraw();
 		
+		Font f = g.getFont();
+		g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true));
+		g.drawString(currTurn.toString(), 10, 10);
+		
+		g.setFont(f);
 		if (state == TERR_SELECTED || state == COMM_SELECTED) {
 			g.drawString(disTerr.getName(), 1145, 70);
 			g.drawString(disTerr.getOwnerName(), 1145, 140);
@@ -537,6 +560,26 @@ public class Canvas extends ECanvas{
 		for (Player p : players)
 			p.executeOrders();
 		adjustNumSC();
+		adjustTurn();
+	}
+
+	private void adjustTurn() {
+		
+		String s = currTurn.getSeason();
+		int i = currTurn.getYear();
+		turns.add(currTurn);
+		if (s.equals("Spring"))
+			currTurn = new Turn("Summer", i);
+		else if (s.equals("Summer"))
+			currTurn = new Turn("Fall", i);
+		else if (s.equals("Fall"))
+			currTurn = new Turn("Winter", i);
+		else if (s.equals("Winter"))
+			currTurn = new Turn("Build/Remove", i);
+		else{
+			i++;
+			currTurn = new Turn("Spring", i);
+		}
 	}
 
 	public void attack() {
@@ -549,8 +592,11 @@ public class Canvas extends ECanvas{
 	}
 
 	public Order getOrder() {
-		System.out.println(currOrder.toString());
 		return currOrder;
+	}
+	
+	public void addOrder(Order o){
+		currTurn.addOrder(o);
 	}
 
 }

@@ -1,5 +1,7 @@
 package gameObjects;
 
+import gui.Canvas;
+
 import org.newdawn.slick.SpriteSheet;
 
 import com.erebos.engine.entity.ImageEntity;
@@ -45,11 +47,9 @@ public class Unit extends ImageEntity{
 
 	public void executeOrder() {
 		if (order != null){
-			System.out.println("hiya");
 			order.execute();
+			Canvas.getC().addOrder(order);
 		}
-		else
-			System.out.println(curTerr.getName());
 		order = null;
 	}
 

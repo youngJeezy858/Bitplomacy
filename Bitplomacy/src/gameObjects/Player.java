@@ -25,13 +25,8 @@ public class Player {
 		return name;
 	}
 	
-	public void adjustNumSC(){
-		int i = 0;
-		for (Unit u : units){
-			if (u.getTerritory().hasSC())
-				i++;
-		}
-		supplyCenterCount = i;
+	public void adjustNumSC(int num){
+		supplyCenterCount = num;
 	}
 
 	public void executeOrders() {
