@@ -8,7 +8,7 @@ public class ConvoyCommand extends Commands{
 
 	@Override
 	public void execute() {
-		System.out.println("Convoy command wus really goodie");
+		Canvas.getC().convoy();
 	}
 
 }

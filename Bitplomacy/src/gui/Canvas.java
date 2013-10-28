@@ -453,13 +453,8 @@ public class Canvas extends ECanvas{
 		
 		if (currOrder != null){
 			g.drawString(currOrder.toString(), 1130, 400);
-			long time;
-			if (currOrder.getTerr2() != null){
-				time = System.currentTimeMillis();
+			if (currOrder.getTerr2() != null || currOrder.getCommand() != null && currOrder.getCommand().equals("defend"))
 				g.drawString("Accepted...", 1130, 420);
-				if (time+5000 < System.currentTimeMillis())
-					currOrder = null;
-			}
 		}
 		
 		for (Commands c : commands)
@@ -597,6 +592,35 @@ public class Canvas extends ECanvas{
 	
 	public void addOrder(Order o){
 		currTurn.addOrder(o);
+	}
+
+	public void support() {
+		if (state == Canvas.TERR_SELECTED && currOrder != null){
+			currOrder.addCommand("support");
+			state = Canvas.COMM_SELECTED;
+		}
+		else
+			System.out.println("support command wus good");	
+	}
+
+	public void defend() {
+		if (state == Canvas.TERR_SELECTED && currOrder != null){
+			currOrder.addCommand("defend");
+			currOrder.getUnit().setOrder(currOrder);
+			state = Canvas.NORM;
+		}	
+		else
+			System.out.println("defend command wus good");
+	}
+
+	public void convoy() {
+		if (state == Canvas.TERR_SELECTED && currOrder != null){
+			currOrder.addCommand("convoy");
+			state = Canvas.COMM_SELECTED;
+		}
+		else
+			System.out.println("Convoy command wus good");	
+		
 	}
 
 }

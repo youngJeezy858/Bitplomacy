@@ -47,4 +47,8 @@ public class Order {
 		return unit;
 	}
 
+	public String getCommand() {
+		return command;
+	}
+
 }

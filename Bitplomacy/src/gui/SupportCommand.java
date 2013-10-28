@@ -8,7 +8,7 @@ public class SupportCommand extends Commands{
 
 	@Override
 	public void execute() {
-		System.out.println("Support command wus really good");
+		Canvas.getC().support();
 	}
 
 }

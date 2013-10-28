@@ -31,7 +31,7 @@ public class Driver extends EGame
 		System.setProperty("org.lwjgl.librarypath", homeFolder.getAbsolutePath());
 		
 		Driver d = new Driver();
-		d.setTargetFPS(30);
+		d.setTargetFPS(60);
 		d.start(d, 1380, 831, false);
 	}
 	

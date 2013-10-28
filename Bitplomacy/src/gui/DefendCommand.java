@@ -8,7 +8,7 @@ public class DefendCommand extends Commands{
 
 	@Override
 	public void execute() {
-		System.out.println("Defend command wus goodie");
+		Canvas.getC().defend();
 	}
 
 }
