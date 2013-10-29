@@ -46,6 +46,7 @@ public class Canvas extends ECanvas{
 	public static final int NORM = 1;
 	public static final int TERR_SELECTED = 2;
 	public static final int COMM_SELECTED = 3;
+	public static final int SELECT_SUPPORT = 4;
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
@@ -280,81 +281,81 @@ public class Canvas extends ECanvas{
 	private void createTerritories(){
 		
 		territories = new Territory[75];
-		TFactory(AdriaticSea, "Adriatic Sea", false, false, 0, new Color(105, 205, 229), 569, 607);
-		TFactory(AegeanSea, "Aegean Sea", false, false, 1, new Color(100, 205, 229), 738, 716);
-		TFactory(Albania, "Albania", true, false, 2, new Color(182, 182, 182), 677, 674);
-		TFactory(Ankara, "Ankara", true, true, 3, new Color(189, 189, 189), 872, 663);
-		TFactory(Apu, "Apu", true, false, 4, new Color(85, 85, 85), 584, 683);
-		TFactory(Armenia, "Armenia", true, false, 5, new Color(191, 191, 191), 1021, 664);
-		TFactory(BalticSea, "Baltic Sea", false, false, 6, new Color(130, 205, 229), 574, 315);
-		TFactory(BarentSea, "Barent Sea", false, false, 7, new Color(155, 205, 229), 716, 0);
-		TFactory(Belgium, "Belgium", true, true, 8, new Color(145, 145, 145), 432, 450);
-		TFactory(Berlin, "Berlin", true, true, 9, new Color(55, 55, 55), 564, 400);
-		TFactory(BlackSea, "Black Sea", false, false, 10, new Color(90, 205, 229), 826, 542);
-		TFactory(Bohmeia, "Bohmeia", true, false, 11, new Color(35, 35, 35), 576, 486);
-		TFactory(Brest, "Brest", true, true, 12, new Color(170, 170, 170), 326, 475);
-		TFactory(Budapest, "Budapest", true, true, 13, new Color(198, 198, 198), 637, 547);
-		TFactory(Bulgaria, "Bulgaria", true, true, 14, new Color(181, 181, 181), 729, 646);
-		TFactory(Bur, "Bur", true, false, 15, new Color(155, 155, 155), 411, 490);
-		TFactory(Cly, "Cly", true, false, 16, new Color(110, 110, 110), 374, 268);
-		TFactory(Constantinople, "Constantinople", true, true, 17, new Color(188, 188, 188), 793, 689);
-		TFactory(Denmark, "Denmark", true, true, 18, new Color(40, 40, 40), 552, 323);
-		TFactory(EasternMed, "Eastern Medditerian Sea", false, false, 19, new Color(95, 205, 229), 743, 783);
-		TFactory(Edinburgh, "Edinburgh", true, true, 20, new Color(115, 115, 115), 398, 261);	
-		TFactory(EnglishChannel, "English Channel", false, false, 21, new Color(150, 205, 229), 303, 435);	
-		TFactory(Finland, "Finland", true, false, 22, new Color(178, 178, 178), 693, 58);		
-		TFactory(Galicia, "Galicia", true, false, 74, new Color(199, 199, 199), 671, 490);		
-		TFactory(Gascony, "Gascony", true, false, 23, new Color(175, 175, 175), 345, 557);
-		TFactory(Greece, "Greece", true, true, 24, new Color(179, 179, 179), 691, 694);
-		TFactory(GulfBothnia, "Gulf of Bothnia", false, false, 25, new Color(125, 205, 229), 654, 156);
-		TFactory(GulfLyon, "Gulf of Lyon", false, false, 26, new Color(120, 205, 229), 353, 630);
-		TFactory(Hel, "Hel", false, false, 27, new Color(140, 205, 229), 505, 353);
-		TFactory(Holand, "Holand", true, true, 28, new Color(140, 140, 140), 472, 418);
-		TFactory(IonianSea, "Ionian Sea", false, false, 29, new Color(110, 205, 229), 529, 719);
-		TFactory(IrishSea, "Irish Sea", false, false, 30, new Color(160, 205, 229), 258, 329);
-		TFactory(Kiel, "Kiel", true, true, 31, new Color(60, 60, 60), 504, 375);
-		TFactory(Linova, "Linova", true, false, 32, new Color(190, 190, 190), 698, 320);
-		TFactory(Liverpool, "Liverpool", true, true, 33, new Color(120, 120, 120), 378, 320);
-		TFactory(London, "London", true, true, 34, new Color(130, 130, 130), 397, 395);
-		TFactory(Marseilles, "Marseilles", true, true, 35, new Color(160, 160, 160), 389, 571);
-		TFactory(MidAtlantic, "Mid Atlantic Ocean", false, false, 36, new Color(175, 205, 229), 0, 467);
-		TFactory(Moscow, "Moscow", true, true, 37, new Color(194, 194, 194), 765, 289);
-		TFactory(Munich, "Munich", true, true, 38, new Color(65, 65, 65), 488, 460);
-		TFactory(NorthAfrica, "North Africa", true, false, 39, new Color(200, 200, 200), 113, 750);
-		TFactory(Naples, "Naples", true, true, 40, new Color(80, 80, 80), 588, 716);
-		TFactory(NorthAtlantic, "North Atlantic Ocean", false, false, 41, new Color(180, 205, 229), 0, 0);
-		TFactory(NorthSea, "North Sea", false, false, 42, new Color(145, 205, 229), 427, 230);
-		TFactory(Norway, "Norway", true, true, 43, new Color(176, 176, 176), 523, 36);
-		TFactory(NorwegianSea, "Norwegian Sea", false, false, 44, new Color(165, 205, 229), 239, 0);
-		TFactory(Paris, "Paris", true, true, 45, new Color(165, 165, 165), 392, 508);
-		TFactory(Pic, "Pic", true, false, 46, new Color(150, 150, 150), 398, 473);
-		TFactory(Pie, "Pie", true, false, 47, new Color(105, 105, 105), 483, 588);
-		TFactory(Portugal, "Portugal", true, true, 48, new Color(185, 185, 185), 181, 611);
-		TFactory(Prussia, "Prussia", true, false, 49, new Color(50, 50, 50), 619, 374);
-		TFactory(Rome, "Rome", true, true, 50, new Color(90, 90, 90), 551, 675);
-		TFactory(Ruhr, "Ruhr", true, false, 51, new Color(70, 70, 70), 486, 443);
-		TFactory(Rumania, "Rumania", true, true, 52, new Color(184, 184, 184), 743, 553);
-		TFactory(Serbia, "Serbia", true, true, 53, new Color(183, 183, 183), 679, 625);
-		TFactory(Sevastopal, "Sevastopal", true, true, 54, new Color(192, 192, 192), 832, 424);
-		TFactory(Silesia, "Silesia", true, false, 55, new Color(45, 45, 45), 572, 449);
-		TFactory(Ska, "Ska", false, false, 56, new Color(135, 205, 229), 535, 303);
-		TFactory(Smyrna, "Smyrna", true, true, 57, new Color(187, 187, 187), 803, 708);
-		TFactory(Spain, "Spain", true, true, 58, new Color(180, 180, 180), 206, 574);
-		TFactory(StPetersburgh, "St. Petersburgh", true, true, 59, new Color(195, 195, 195), 723, 0);
-		TFactory(Sweden, "Sweden", true, true, 60, new Color(177, 177, 177), 589, 80);
-		TFactory(Syria, "Syria", true, false, 61, new Color(186, 186, 186), 943, 771);
-		TFactory(Trieste, "Trieste", true, true, 62, new Color(197, 197, 197), 586, 576);
-		TFactory(Tunis, "Tunis", true, true, 63, new Color(75, 75, 75), 480, 785);
-		TFactory(Tus, "Tus", true, false, 64, new Color(95, 95, 95), 525, 637);
-		TFactory(Tyrol, "Tyrol", true, false, 65, new Color(30, 30, 30), 532, 541);
-		TFactory(TyrrhenianSea, "Tyrrhenian Sea", false, false, 66, new Color(115, 205, 229), 503, 673);
-		TFactory(Ukraine, "Ukraine", true, false, 67, new Color(193, 193, 193), 772, 440);
-		TFactory(Venice, "Venice", true, true, 68, new Color(100, 100, 100), 535, 583);
-		TFactory(Vienna, "Vienna", true, true, 69, new Color(205, 205, 205), 610, 531);
-		TFactory(Wa, "Wa", true, true, 70, new Color(135, 135, 135), 327, 383);
-		TFactory(Warsaw, "Warsaw", true, true, 71, new Color(196, 196, 196), 674, 432);
-		TFactory(WestMed, "Western Medditerian Sea", false, false, 72, new Color(170, 205, 229), 231, 694);
-		TFactory(York, "York", true, false, 73, new Color(125, 125, 125), 409, 329);
+		TFactory(AdriaticSea, "Adriatic Sea", false, false, false, 0, new Color(105, 205, 229), 569, 607);
+		TFactory(AegeanSea, "Aegean Sea", false, false, false, 1, new Color(100, 205, 229), 738, 716);
+		TFactory(Albania, "Albania", true, false, true, 2, new Color(182, 182, 182), 677, 674);
+		TFactory(Ankara, "Ankara", true, true, true, 3, new Color(189, 189, 189), 872, 663);
+		TFactory(Apu, "Apu", true, false, true, 4, new Color(85, 85, 85), 584, 683);
+		TFactory(Armenia, "Armenia", true, false, false, 5, new Color(191, 191, 191), 1021, 664);
+		TFactory(BalticSea, "Baltic Sea", false, false, false, 6, new Color(130, 205, 229), 574, 315);
+		TFactory(BarentSea, "Barent Sea", false, false, false, 7, new Color(155, 205, 229), 716, 0);
+		TFactory(Belgium, "Belgium", true, true, true, 8, new Color(145, 145, 145), 432, 450);
+		TFactory(Berlin, "Berlin", true, true, true, 9, new Color(55, 55, 55), 564, 400);
+		TFactory(BlackSea, "Black Sea", false, false, false, 10, new Color(90, 205, 229), 826, 542);
+		TFactory(Bohmeia, "Bohmeia", true, false, false, 11, new Color(35, 35, 35), 576, 486);
+		TFactory(Brest, "Brest", true, true, true, 12, new Color(170, 170, 170), 326, 475);
+		TFactory(Budapest, "Budapest", true, true, true, 13, new Color(198, 198, 198), 637, 547);
+		TFactory(Bulgaria, "Bulgaria", true, true, true, 14, new Color(181, 181, 181), 729, 646);
+		TFactory(Bur, "Bur", true, false, false, 15, new Color(155, 155, 155), 411, 490);
+		TFactory(Cly, "Cly", true, false, true, 16, new Color(110, 110, 110), 374, 268);
+		TFactory(Constantinople, "Constantinople", true, true, true, 17, new Color(188, 188, 188), 793, 689);
+		TFactory(Denmark, "Denmark", true, true, true, 18, new Color(40, 40, 40), 552, 323);
+		TFactory(EasternMed, "Eastern Medditerian Sea", false, false, false, 19, new Color(95, 205, 229), 743, 783);
+		TFactory(Edinburgh, "Edinburgh", true, true, true, 20, new Color(115, 115, 115), 398, 261);	
+		TFactory(EnglishChannel, "English Channel", false, false, false, 21, new Color(150, 205, 229), 303, 435);	
+		TFactory(Finland, "Finland", true, false, true, 22, new Color(178, 178, 178), 693, 58);		
+		TFactory(Galicia, "Galicia", true, false, false, 74, new Color(199, 199, 199), 671, 490);		
+		TFactory(Gascony, "Gascony", true, false, true, 23, new Color(175, 175, 175), 345, 557);
+		TFactory(Greece, "Greece", true, true, true, 24, new Color(179, 179, 179), 691, 694);
+		TFactory(GulfBothnia, "Gulf of Bothnia", false, false, false, 25, new Color(125, 205, 229), 654, 156);
+		TFactory(GulfLyon, "Gulf of Lyon", false, false, false, 26, new Color(120, 205, 229), 353, 630);
+		TFactory(Hel, "Hel", false, false, false, 27, new Color(140, 205, 229), 505, 353);
+		TFactory(Holand, "Holand", true, true, true, 28, new Color(140, 140, 140), 472, 418);
+		TFactory(IonianSea, "Ionian Sea", false, false, false, 29, new Color(110, 205, 229), 529, 719);
+		TFactory(IrishSea, "Irish Sea", false, false, false, 30, new Color(160, 205, 229), 258, 329);
+		TFactory(Kiel, "Kiel", true, true, true, 31, new Color(60, 60, 60), 504, 375);
+		TFactory(Linova, "Linova", true, false, true, 32, new Color(190, 190, 190), 698, 320);
+		TFactory(Liverpool, "Liverpool", true, true, true, 33, new Color(120, 120, 120), 378, 320);
+		TFactory(London, "London", true, true, true, 34, new Color(130, 130, 130), 397, 395);
+		TFactory(Marseilles, "Marseilles", true, true, true, 35, new Color(160, 160, 160), 389, 571);
+		TFactory(MidAtlantic, "Mid Atlantic Ocean", false, false, false, 36, new Color(175, 205, 229), 0, 467);
+		TFactory(Moscow, "Moscow", true, true, false, 37, new Color(194, 194, 194), 765, 289);
+		TFactory(Munich, "Munich", true, true, false, 38, new Color(65, 65, 65), 488, 460);
+		TFactory(NorthAfrica, "North Africa", true, false, true, 39, new Color(200, 200, 200), 113, 750);
+		TFactory(Naples, "Naples", true, true, true, 40, new Color(80, 80, 80), 588, 716);
+		TFactory(NorthAtlantic, "North Atlantic Ocean", false, false, false, 41, new Color(180, 205, 229), 0, 0);
+		TFactory(NorthSea, "North Sea", false, false, false, 42, new Color(145, 205, 229), 427, 230);
+		TFactory(Norway, "Norway", true, true, true, 43, new Color(176, 176, 176), 523, 36);
+		TFactory(NorwegianSea, "Norwegian Sea", false, false, false, 44, new Color(165, 205, 229), 239, 0);
+		TFactory(Paris, "Paris", true, true, false, 45, new Color(165, 165, 165), 392, 508);
+		TFactory(Pic, "Pic", true, false, true, 46, new Color(150, 150, 150), 398, 473);
+		TFactory(Pie, "Pie", true, false, true, 47, new Color(105, 105, 105), 483, 588);
+		TFactory(Portugal, "Portugal", true, true, true, 48, new Color(185, 185, 185), 181, 611);
+		TFactory(Prussia, "Prussia", true, false, true, 49, new Color(50, 50, 50), 619, 374);
+		TFactory(Rome, "Rome", true, true, true, 50, new Color(90, 90, 90), 551, 675);
+		TFactory(Ruhr, "Ruhr", true, false, false, 51, new Color(70, 70, 70), 486, 443);
+		TFactory(Rumania, "Rumania", true, true, true, 52, new Color(184, 184, 184), 743, 553);
+		TFactory(Serbia, "Serbia", true, true, false, 53, new Color(183, 183, 183), 679, 625);
+		TFactory(Sevastopal, "Sevastopal", true, true, true, 54, new Color(192, 192, 192), 832, 424);
+		TFactory(Silesia, "Silesia", true, false, false, 55, new Color(45, 45, 45), 572, 449);
+		TFactory(Ska, "Ska", false, false, false, 56, new Color(135, 205, 229), 535, 303);
+		TFactory(Smyrna, "Smyrna", true, true, true, 57, new Color(187, 187, 187), 803, 708);
+		TFactory(Spain, "Spain", true, true, true, 58, new Color(180, 180, 180), 206, 574);
+		TFactory(StPetersburgh, "St. Petersburgh", true, true, true, 59, new Color(195, 195, 195), 723, 0);
+		TFactory(Sweden, "Sweden", true, true, true, 60, new Color(177, 177, 177), 589, 80);
+		TFactory(Syria, "Syria", true, false, true, 61, new Color(186, 186, 186), 943, 771);
+		TFactory(Trieste, "Trieste", true, true, true, 62, new Color(197, 197, 197), 586, 576);
+		TFactory(Tunis, "Tunis", true, true, true, 63, new Color(75, 75, 75), 480, 785);
+		TFactory(Tus, "Tus", true, false, true, 64, new Color(95, 95, 95), 525, 637);
+		TFactory(Tyrol, "Tyrol", true, false, false, 65, new Color(30, 30, 30), 532, 541);
+		TFactory(TyrrhenianSea, "Tyrrhenian Sea", false, false, false, 66, new Color(115, 205, 229), 503, 673);
+		TFactory(Ukraine, "Ukraine", true, false, false, 67, new Color(193, 193, 193), 772, 440);
+		TFactory(Venice, "Venice", true, true, true, 68, new Color(100, 100, 100), 535, 583);
+		TFactory(Vienna, "Vienna", true, true, false, 69, new Color(205, 205, 205), 610, 531);
+		TFactory(Wa, "Wa", true, true, true, 70, new Color(135, 135, 135), 327, 383);
+		TFactory(Warsaw, "Warsaw", true, true, false, 71, new Color(196, 196, 196), 674, 432);
+		TFactory(WestMed, "Western Medditerian Sea", false, false, false, 72, new Color(170, 205, 229), 231, 694);
+		TFactory(York, "York", true, false, true, 73, new Color(125, 125, 125), 409, 329);
 		
 	}
 
@@ -414,8 +415,8 @@ public class Canvas extends ECanvas{
 	 * @param x -> the x position of the territory on the map
 	 * @param y -> the y position of the territory on the map
 	 */
-	private void TFactory(SpriteSheet ss, String name, boolean isLand, boolean hasSC, int pos, Color color, int x, int y){
-		territories[pos] = new Territory(ss, name, isLand, hasSC, color);
+	private void TFactory(SpriteSheet ss, String name, boolean isLand, boolean hasSC, boolean hasCoast, int pos, Color color, int x, int y){
+		territories[pos] = new Territory(ss, name, isLand, hasSC, hasCoast, color);
 		territories[pos].setX(x);
 		territories[pos].setY(y);
 	}
@@ -453,8 +454,12 @@ public class Canvas extends ECanvas{
 		
 		if (currOrder != null){
 			g.drawString(currOrder.toString(), 1130, 400);
-			if (currOrder.getTerr2() != null || currOrder.getCommand() != null && currOrder.getCommand().equals("defend"))
-				g.drawString("Accepted...", 1130, 420);
+			if (currOrder.isReady()){
+				if (currOrder.isValidOrder())
+					g.drawString("Accepted...", 1130, 420);
+				else
+					g.drawString("Not a valid order...", 1130, 420);
+			}
 		}
 		
 		for (Commands c : commands)
@@ -547,11 +552,13 @@ public class Canvas extends ECanvas{
 
 	public void setOrder(Territory t) {
 		currOrder.addTerr2(t);
-		currOrder.getUnit().setOrder(currOrder);	
+		if (currOrder.isValidOrder())
+			currOrder.getUnit().setOrder(currOrder);	
 	}
 	
 
 	public void submit() {
+		currOrder = null;
 		for (Player p : players)
 			p.executeOrders();
 		adjustNumSC();
@@ -621,6 +628,10 @@ public class Canvas extends ECanvas{
 		else
 			System.out.println("Convoy command wus good");	
 		
+	}
+
+	public void setSupport(Unit unit) {
+		currOrder.setSupport(unit);
 	}
 
 }

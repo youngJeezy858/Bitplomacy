@@ -60,4 +60,8 @@ public class Unit extends ImageEntity{
 	public int getOwner() {
 		return owner;
 	}
+
+	public Order getOrder() {
+		return order;
+	}
 }

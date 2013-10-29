@@ -14,6 +14,7 @@ public class Territory extends ImageEntity {
 	private Color colorKey;
 	private boolean supplyCenter;
 	private boolean land;
+	private boolean hasCoast;
 	private Unit unit;
 	
 	private int owner;
@@ -36,12 +37,13 @@ public class Territory extends ImageEntity {
 	 * @param hasSC -> boolean value to determine if a Territory has a supply center or not
 	 * @param color -> the color that acts as the Territory's key when referencing the master map
 	 */
-	public Territory(SpriteSheet terr, String name, boolean isLand, boolean hasSC, Color color){
+	public Territory(SpriteSheet terr, String name, boolean isLand, boolean hasSC, boolean hasCoast, Color color){
 		super(terr);
 		ss = terr;
 		owner = NEUTRAL;
 		this.terr = new EAnimation(terr.getSprite(owner, 0));
 		this.name = name;
+		this.hasCoast = hasCoast;
 		colorKey = color;
 		supplyCenter = hasSC;
 		land = isLand;
@@ -64,7 +66,16 @@ public class Territory extends ImageEntity {
 			}
 			else if (canvas.getState() == Canvas.COMM_SELECTED){
 				canvas.setOrder(this);
-				canvas.setState(Canvas.NORM);
+				if (canvas.getOrder().getCommand().equals("support"))
+					canvas.setState(Canvas.SELECT_SUPPORT);
+				else
+					canvas.setState(Canvas.NORM);
+			}
+			else if (canvas.getState() == Canvas.SELECT_SUPPORT){
+				if (unit != null){
+					canvas.setSupport(unit);
+					canvas.setState(Canvas.NORM);
+				}
 			}
 		}
 	}
@@ -140,6 +151,80 @@ public class Territory extends ImageEntity {
 		if (!hasSC())
 			setOwner(NEUTRAL);
 		unit = null;
+	}
+
+	public boolean isValidAttack(Territory t) {		
+		//case one: land unit wanting to go to water. Check if there's a ship to convoy.
+		if (unit.isLand() && !t.land) {
+			if (t.getUnit() == null)
+				return false;
+		}
+		 
+		//case two: water unit wanting to go to a port-less land territory - exit immediately
+		if (t.land && !unit.isLand() && !t.hasCoast)
+			return false;
+		
+		return isAdjacent(t);
+	}
+
+	public boolean isValidSupport(Territory t, Unit u) {		
+		// case one: land unit wanting to support water -
+		// exit immediately
+		if (!t.land && unit.isLand()) 
+			return false;
+
+		// case two: water unit wanting to supports a port-less land territory -
+		// exit immediately
+		if (t.land && !unit.isLand() && !t.hasCoast)
+			return false;
+		
+		//case three: check if the territory is adjacent to this unit
+		return isAdjacent(t) && u.getTerritory().isAdjacent(t);
+
+	}
+
+	public boolean isValidConvoy(Territory t, Unit convoyedUnit) {
+		//need to think more bout this one
+		return isAdjacent(t);
+	}
+	
+	public boolean Rando(Territory t, Unit u){
+		
+		//From attack
+		if (t.land && !unit.isLand()) {
+			Order o = t.getUnit().getOrder();
+			if (o == null || !o.getCommand().equals("convoy") || !t.isValidConvoy(this, unit))
+				return false;
+			else
+				return true;
+		}
+		
+		
+		//From support
+		Order o = u.getOrder();
+		if (o == null || !(o.getCommand().equals("defend") || o.getCommand().equals("attack")))
+			return false;
+		else if (o.getCommand().equals("defend")
+				&& !u.getTerritory().getName().equals(t.getName()))
+			return false;
+		else if (o.getCommand().equals("attack")
+				&& !o.getTerr2().getName().equals(t.getName()))
+			return false;
+		
+		return true;
+	}
+	
+	public boolean isAdjacent(Territory terr){
+		/*
+		* private Arraylist<Territory> adjacentTerritories;
+		* for (Territory t : adjacentTerritories){
+		* 		if (t.getName().equals(terr.geName()))
+		* 			return true;
+		* }
+		* return false;
+		* 
+		*/
+		return true;
 	}
 	
 }

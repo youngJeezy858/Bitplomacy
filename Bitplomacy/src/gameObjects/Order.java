@@ -6,6 +6,7 @@ public class Order {
 	private Territory terr1;
 	private String command;
 	private Territory terr2;
+	private Unit supportedUnit;
 	
 	public Order(Territory t1){
 		terr1 = t1;
@@ -22,12 +23,31 @@ public class Order {
 	
 	public void execute(){
 
-		if (command.equals("attack") && terr2 != null){
-			terr1.removeUnit();
-			unit.setTerritory(terr2);
-			terr2.setUnit(unit);
+		if (command.equals("attack")){
+			attack();
 		}
 		
+	}
+
+	public boolean isValidOrder(){
+		
+		if (command.equals("attack") && terr1.isValidAttack(terr2))
+			return true;
+		else if (command.equals("support") && terr1.isValidSupport(terr2, supportedUnit))
+			return true;
+		else if (command.equals("defend"))
+			return true;
+		else if (command.equals("convoy") && terr1.isValidConvoy(terr2, null))
+			return true;
+		else
+			return false;
+		
+	}
+	
+	private void attack() {
+		terr1.removeUnit();
+		unit.setTerritory(terr2);
+		terr2.setUnit(unit);	
 	}
 
 	public String toString() {
@@ -49,6 +69,22 @@ public class Order {
 
 	public String getCommand() {
 		return command;
+	}
+
+	public void setSupport(Unit u) {
+		supportedUnit = u;
+	}
+
+	public boolean isReady() {
+		if (command == null)
+			return false;
+		else if (command.equals("attack") && terr2 == null)
+			return false;
+		else if (command.equals("support") && (terr2 == null || supportedUnit == null))
+			return false;
+		else if (command.equals("convoy") && terr2 == null)
+			return false;
+		return true;
 	}
 
 }
