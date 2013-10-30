@@ -453,10 +453,10 @@ public class Canvas extends ECanvas{
 		}
 		
 		if (currOrder != null){
-			g.drawString(currOrder.toString(), 1130, 400);
+			g.drawString(currOrder.toString(), 1130, 380);
 			if (currOrder.isReady()){
 				if (currOrder.isValidOrder())
-					g.drawString("Accepted...", 1130, 420);
+					g.drawString("Accepted...", 1130, 470);
 				else
 					g.drawString("Not a valid order...", 1130, 420);
 			}
@@ -552,7 +552,7 @@ public class Canvas extends ECanvas{
 
 	public void setOrder(Territory t) {
 		currOrder.addTerr2(t);
-		if (currOrder.isValidOrder())
+		if (currOrder.getCommand().equals("attack"))
 			currOrder.getUnit().setOrder(currOrder);	
 	}
 	
@@ -563,6 +563,7 @@ public class Canvas extends ECanvas{
 			p.executeOrders();
 		adjustNumSC();
 		adjustTurn();
+		state = NORM;
 	}
 
 	private void adjustTurn() {

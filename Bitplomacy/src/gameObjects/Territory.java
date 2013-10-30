@@ -135,6 +135,27 @@ public class Territory extends ImageEntity {
 		return s;
 	}
 	
+	public static String getOwnerName(int owner){
+		String s = null;
+		if (owner == 0)
+			s = "Neutral";
+		else if (owner == 1)
+			s = "England";
+		else if (owner == 2)
+			s = "Austria-Hungary";
+		else if (owner == 3)
+			s = "Italy";
+		else if (owner == 4)
+			s = "Turkey";
+		else if (owner == 5)
+			s = "France";
+		else if (owner == 6)
+			s = "Russia";
+		else if (owner == 7)
+			s = "Germany";
+		return s;
+	}
+	
 	public boolean hasSC(){
 		return supplyCenter;
 	}
@@ -167,7 +188,8 @@ public class Territory extends ImageEntity {
 		return isAdjacent(t);
 	}
 
-	public boolean isValidSupport(Territory t, Unit u) {		
+	public boolean isValidSupport(Territory t, Unit u) {
+		
 		// case one: land unit wanting to support water -
 		// exit immediately
 		if (!t.land && unit.isLand()) 

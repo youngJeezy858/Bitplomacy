@@ -51,11 +51,13 @@ public class Order {
 	}
 
 	public String toString() {
-		String s = terr1.getName() + " ";
+		String s = terr1.getName() + "\n";
 		if (command != null)
-			s += command + " ";
+			s += command + "\n";
+		if (supportedUnit != null)
+			s += "for " + Territory.getOwnerName(supportedUnit.getOwner()) + "\nat ";
 		if (terr2 != null)
-			s += terr2.getName();
+			s += terr2.getName() + "\n";
 		return s;
 	}
 
