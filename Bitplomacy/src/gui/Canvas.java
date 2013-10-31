@@ -25,6 +25,9 @@ import com.erebos.engine.graphics.EAnimation;
 
 public class Canvas extends ECanvas{
 
+	/* Singleton variable for the Canvas */
+	private static Canvas c = null;
+	
 	private Territory[] territories;
 	private Player[] players;
 	private Commands[] commands = { new AttackCommand(1152, 500, 100),
@@ -35,18 +38,14 @@ public class Canvas extends ECanvas{
 	private Territory disTerr;
 	private int state;
 	private Order currOrder;
-	
 	private Turn currTurn;
-	private ArrayList<Turn> turns;
-	
-	/* Singleton variable for the Canvas */
-	private static Canvas c = null;
 	
 	public static final int START = 0;
 	public static final int NORM = 1;
 	public static final int TERR_SELECTED = 2;
 	public static final int COMM_SELECTED = 3;
 	public static final int SELECT_SUPPORT = 4;
+	public static final int SELECT_CONVOY = 5;
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
@@ -139,12 +138,6 @@ public class Canvas extends ECanvas{
 		state = 1;
 	}
 	
-	public static Canvas getC() {
-		if (c == null)
-			c = new Canvas();
-		return c;
-	}
-
 	@Override
 	public void eInit(GameContainer gc, EGame eg) {		
 		
@@ -172,25 +165,12 @@ public class Canvas extends ECanvas{
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		
 		currTurn = new Turn("Spring", 1900);
-		turns = new ArrayList<Turn>();
 		
 		defineSS();
 	    createTerritories();
 	    setBoard();
 	    adjustNumSC();
 
-	}
-
-	public void adjustNumSC() {
-		int i;
-		for (Player p : players){
-			i = 0;
-	    	for (Territory t : territories){
-	    		if (t.hasSC() && t.getOwnerName().equals(p.getName()))
-	    			i++;
-	    	}
-			p.adjustNumSC(i);
-		}
 	}
 
 	/*
@@ -455,10 +435,12 @@ public class Canvas extends ECanvas{
 		if (currOrder != null){
 			g.drawString(currOrder.toString(), 1130, 380);
 			if (currOrder.isReady()){
+				currOrder.getUnit().setOrder(currOrder);
+				state = NORM;
 				if (currOrder.isValidOrder())
 					g.drawString("Accepted...", 1130, 470);
 				else
-					g.drawString("Not a valid order...", 1130, 420);
+					g.drawString("Not a valid order...", 1130, 470);
 			}
 		}
 		
@@ -507,70 +489,26 @@ public class Canvas extends ECanvas{
 		}
 	}
 
-	/*
-	 * Gets the Color from the current mouse location.  Used to access color keys.
-	 * 
-	 * @returns Color -> the Color at the current mouse position
-	 */
-	public Color getCurrentColor(){
-		return new Color(MasterMap.getColor(Mouse.getX(), Math.abs(Mouse.getY()-831)));
+	public void addOrder(Order o){
+		currTurn.addOrder(o);
 	}
-	
-	/*
-	 * Sets the Territory name to be displayed
-	 * 
-	 * @param name -> the name of the territory 
-	 */
-	public void setDisTerr(Territory t){
-		disTerr = t;
-	}
-	
-	/*
-	 * Sets the current state of the game.  Used for updating the game.
-	 * 
-	 * @param s -> the state of the game as an int value.  See class fields for state descriptions
-	 */
-	public void setState(int s){
-		state = s;
-	}
-	
-	public Territory getT(String name){
-		for (Territory t : territories){
-			if (t.getName().equals(name))
-				return t;
+
+	public void adjustNumSC() {
+		int i;
+		for (Player p : players){
+			i = 0;
+	    	for (Territory t : territories){
+	    		if (t.hasSC() && t.getOwnerName().equals(p.getName()))
+	    			i++;
+	    	}
+			p.adjustNumSC(i);
 		}
-		return null;
-	}
-
-	public int getState() {
-		return state;
-	}
-
-	public void resetOrder(Territory t) {
-		currOrder = new Order(t);
-	}
-
-	public void setOrder(Territory t) {
-		currOrder.addTerr2(t);
-		if (currOrder.getCommand().equals("attack"))
-			currOrder.getUnit().setOrder(currOrder);	
-	}
-	
-
-	public void submit() {
-		currOrder = null;
-		for (Player p : players)
-			p.executeOrders();
-		adjustNumSC();
-		adjustTurn();
-		state = NORM;
 	}
 
 	private void adjustTurn() {
 		
 		String s = currTurn.getSeason();
 		int i = currTurn.getYear();
-		turns.add(currTurn);
 		if (s.equals("Spring"))
 			currTurn = new Turn("Summer", i);
 		else if (s.equals("Summer"))
@@ -585,26 +523,59 @@ public class Canvas extends ECanvas{
 		}
 	}
 
+	public static Canvas getC() {
+		if (c == null)
+			c = new Canvas();
+		return c;
+	}
+
+	/*
+	 * Gets the Color from the current mouse location.  Used to access color keys.
+	 * 
+	 * @returns Color -> the Color at the current mouse position
+	 */
+	public Color getCurrentColor(){
+		return new Color(MasterMap.getColor(Mouse.getX(), Math.abs(Mouse.getY()-831)));
+	}
+	
+	
+	public Order getOrder() {
+		return currOrder;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public Territory getT(String name){
+		for (Territory t : territories){
+			if (t.getName().equals(name))
+				return t;
+		}
+		return null;
+	}
+
+	/*
+	 * Sets the current state of the game.  Used for updating the game.
+	 * 
+	 * @param s -> the state of the game as an int value.  See class fields for state descriptions
+	 */
+	public void setState(int s){
+		state = s;
+	}
+	
 	public void attack() {
 		if (state == Canvas.TERR_SELECTED && currOrder != null){
-			currOrder.addCommand("attack");
+			currOrder.setCommand("attack");
 			state = Canvas.COMM_SELECTED;
 		}
 		else
 			System.out.println("Attack command wus good");
 	}
 
-	public Order getOrder() {
-		return currOrder;
-	}
-	
-	public void addOrder(Order o){
-		currTurn.addOrder(o);
-	}
-
 	public void support() {
 		if (state == Canvas.TERR_SELECTED && currOrder != null){
-			currOrder.addCommand("support");
+			currOrder.setCommand("support");
 			state = Canvas.COMM_SELECTED;
 		}
 		else
@@ -613,7 +584,7 @@ public class Canvas extends ECanvas{
 
 	public void defend() {
 		if (state == Canvas.TERR_SELECTED && currOrder != null){
-			currOrder.addCommand("defend");
+			currOrder.setCommand("defend");
 			currOrder.getUnit().setOrder(currOrder);
 			state = Canvas.NORM;
 		}	
@@ -623,7 +594,7 @@ public class Canvas extends ECanvas{
 
 	public void convoy() {
 		if (state == Canvas.TERR_SELECTED && currOrder != null){
-			currOrder.addCommand("convoy");
+			currOrder.setCommand("convoy");
 			state = Canvas.COMM_SELECTED;
 		}
 		else
@@ -631,8 +602,47 @@ public class Canvas extends ECanvas{
 		
 	}
 
-	public void setSupport(Unit unit) {
-		currOrder.setSupport(unit);
+	public void submit() {
+		currOrder = null;
+		for (Player p : players)
+			p.executeOrders();
+		currTurn.resolveOrders();
+		adjustNumSC();
+		adjustTurn();
+		state = NORM;
+	}
+
+	public void updateTerritory(Territory t) {
+
+		if (state == NORM || state == TERR_SELECTED){
+			disTerr = t;
+			state = TERR_SELECTED;
+			if (t.getUnit() != null)
+				currOrder = new Order(t);
+		}
+		else if (state == COMM_SELECTED){
+			if (currOrder.getCommand().equals("attack"))
+				currOrder.setTerr2(t);
+			if (currOrder.getCommand().equals("support")){
+				currOrder.setTerr2(t);
+				state = SELECT_SUPPORT;
+			}
+			else if (currOrder.getCommand().equals("convoy")){
+				currOrder.setTerr2(t);
+				state = Canvas.SELECT_CONVOY;
+			}
+		}
+		else if (state == SELECT_SUPPORT){
+			if (t.getUnit() != null){
+				currOrder.setSupport(t.getUnit());
+				state = NORM;
+			}
+		}
+		else if (state == Canvas.SELECT_CONVOY){
+			currOrder.setConvoyDestination(t);
+			state = NORM;
+		}
+
 	}
 
 }

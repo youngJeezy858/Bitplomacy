@@ -55,29 +55,9 @@ public class Territory extends ImageEntity {
 	 * Territory, then display the name.  See updateGame in the Canvas class for more info.
 	 */
 	public void update(){
-		Canvas canvas = Canvas.getC();
-		Color c = canvas.getCurrentColor();
-		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen()){
-			if (canvas.getState() == Canvas.NORM || canvas.getState() == Canvas.TERR_SELECTED){
-				canvas.setDisTerr(this);
-				canvas.setState(Canvas.TERR_SELECTED);
-				if (unit != null)
-					canvas.resetOrder(this);
-			}
-			else if (canvas.getState() == Canvas.COMM_SELECTED){
-				canvas.setOrder(this);
-				if (canvas.getOrder().getCommand().equals("support"))
-					canvas.setState(Canvas.SELECT_SUPPORT);
-				else
-					canvas.setState(Canvas.NORM);
-			}
-			else if (canvas.getState() == Canvas.SELECT_SUPPORT){
-				if (unit != null){
-					canvas.setSupport(unit);
-					canvas.setState(Canvas.NORM);
-				}
-			}
-		}
+		Color c = Canvas.getC().getCurrentColor();
+		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen())
+			Canvas.getC().updateTerritory(this);
 	}
 	
 	/*
@@ -205,35 +185,20 @@ public class Territory extends ImageEntity {
 
 	}
 
-	public boolean isValidConvoy(Territory t, Unit convoyedUnit) {
-		//need to think more bout this one
-		return isAdjacent(t);
-	}
-	
-	public boolean Rando(Territory t, Unit u){
-		
-		//From attack
-		if (t.land && !unit.isLand()) {
-			Order o = t.getUnit().getOrder();
-			if (o == null || !o.getCommand().equals("convoy") || !t.isValidConvoy(this, unit))
+	public boolean isValidConvoy(Territory convoyStart, Territory convoyDes) {
+		//case one: water unit wants to convoy
+		if (!unit.isLand()){
+			if (convoyStart.getUnit() == null)
 				return false;
-			else
-				return true;
+			else if (!convoyDes.isLand() && convoyDes.getUnit() == null)
+				return false;
+			else if (!convoyStart.isLand() && convoyDes.getUnit() == null)
+				return false;
 		}
-		
-		
-		//From support
-		Order o = u.getOrder();
-		if (o == null || !(o.getCommand().equals("defend") || o.getCommand().equals("attack")))
-			return false;
-		else if (o.getCommand().equals("defend")
-				&& !u.getTerritory().getName().equals(t.getName()))
-			return false;
-		else if (o.getCommand().equals("attack")
-				&& !o.getTerr2().getName().equals(t.getName()))
+		else
 			return false;
 		
-		return true;
+		return isAdjacent(convoyDes) && isAdjacent(convoyStart);
 	}
 	
 	public boolean isAdjacent(Territory terr){
@@ -247,6 +212,13 @@ public class Territory extends ImageEntity {
 		* 
 		*/
 		return true;
+	}
+	
+	public boolean equals(Territory t){
+		if (t.getName().equals(name))
+			return true;
+		else
+			return false;
 	}
 	
 }

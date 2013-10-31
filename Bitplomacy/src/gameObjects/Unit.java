@@ -46,10 +46,10 @@ public class Unit extends ImageEntity{
 	}
 
 	public void executeOrder() {
-		if (order != null){
+		if (order != null)
 			order.execute();
-			Canvas.getC().addOrder(order);
-		}
+		else
+			Canvas.getC().addOrder(new Order(curTerr));
 		order = null;
 	}
 
