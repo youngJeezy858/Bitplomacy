@@ -33,5 +33,10 @@ public class Player {
 		for (Unit u : units)
 			u.executeOrder();
 	}
+
+	public void resetOrders() {
+		for (Unit u : units)
+			u.resetOrder();
+	}
 	
 }

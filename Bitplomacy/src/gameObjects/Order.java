@@ -1,15 +1,18 @@
 package gameObjects;
 
+import java.util.ArrayList;
+
 import gui.Canvas;
 
 public class Order {
 
-	private Unit unit;
 	private Territory terr1;
-	private String command;
 	private Territory terr2;
+	private Territory convoyDestination;
+	private Unit unit;
 	private Unit supportedUnit;
-	private Territory convoyDes;
+	private ArrayList<Unit> convoyUnits;
+	private String command;
 	private int strength;
 	private boolean successfulMove;
 	
@@ -18,30 +21,19 @@ public class Order {
 		unit = terr1.getUnit();
 		strength = 1;
 		command = "idle";
-		successfulMove = true;
+		successfulMove = false;
+		convoyUnits = new ArrayList<Unit>();
 	}
 	
-	public void setCommand(String c){
-		command = c;
-	}
-	
-	public void setTerr2(Territory t2){
-		terr2 = t2;
-	}
-	
-	public void execute(){
-		Canvas.getC().addOrder(this);	
-	}
-
 	public boolean isValidOrder(){
 		
-		if (command.equals("attack") && terr1.isValidAttack(terr2))
+		if (command.equals("attack") && terr1.isValidAttack(terr2, convoyUnits))
 			return true;
 		else if (command.equals("support") && terr1.isValidSupport(terr2, supportedUnit))
 			return true;
 		else if (command.equals("defend"))
 			return true;
-		else if (command.equals("convoy") && terr1.isValidConvoy(terr2, convoyDes))
+		else if (command.equals("convoy") && terr1.isValidConvoy(terr2, convoyDestination))
 			return true;
 		else
 			return false;
@@ -56,49 +48,36 @@ public class Order {
 			s += "for " + Territory.getOwnerName(supportedUnit.getOwner()) + "\nat ";
 		if (terr2 != null)
 			s += terr2.getName() + "\n";
-		if (convoyDes != null)
-			s += "to " + convoyDes.getName();
+		if (convoyUnits.size() > 0){
+			s += "by way of \n";
+			for (Unit u : convoyUnits)
+				s += u.getTerritory().getName() + "\n";
+		}
 		return s;
 	}
 
-	public Territory getTerr2() {
-		return terr2;
+	public void addConvoyUnit(Unit u){
+		convoyUnits.add(u);
 	}
 
-	public Unit getUnit() {
-		return unit;
+	public void adjudicate(boolean b){
+		successfulMove = b;
+	}
+
+	public void execute(){
+		Canvas.getC().addOrder(this);	
 	}
 
 	public String getCommand() {
 		return command;
 	}
 
-	public void setSupport(Unit u) {
-		supportedUnit = u;
+	public Territory getConvoyDestination(){
+		return convoyDestination;
 	}
 
-	public boolean isReady() {
-		if (command == "idle")
-			return false;
-		else if (command.equals("attack") && terr2 == null)
-			return false;
-		else if (command.equals("support") && (terr2 == null || supportedUnit == null))
-			return false;
-		else if (command.equals("convoy") && (terr2 == null || convoyDes == null))
-			return false;
-		return true;
-	}
-	
-	public void setConvoyDestination(Territory t){
-		convoyDes = t;
-	}
-	
 	public int getStrength(){
 		return strength;
-	}
-	
-	public void incrementStrength(){
-		strength++;
 	}
 
 	public Unit getSupportedUnit() {
@@ -109,20 +88,60 @@ public class Order {
 		return terr1;
 	}
 
-	public void adjudicate(boolean b){
-		successfulMove = b;
+	public Territory getTerr2() {
+		return terr2;
 	}
-	
-	public Territory getConvoyDestination(){
-		return convoyDes;
+
+	public Unit getUnit() {
+		return unit;
 	}
-	
-	public void setTerr1(Territory t){
-		terr1 = t;
+
+	public void incrementStrength(){
+		strength++;
+	}
+
+	public boolean isReady() {
+		if (command == "idle")
+			return false;
+		else if (command.equals("attack") && terr2 == null)
+			return false;
+		else if (command.equals("support") && (terr2 == null || supportedUnit == null))
+			return false;
+		else if (command.equals("convoy") && (terr2 == null || convoyDestination == null))
+			return false;
+		else if (command.equals("attack") && Canvas.getC().getState() == Canvas.SELECT_SUPPORT_UNITS && !this.isValidOrder())
+			return false;
+		return true;
 	}
 
 	public boolean isSuccessful() {
 		return successfulMove;
+	}
+
+	public void setCommand(String c){
+		command = c;
+	}
+
+	public void setConvoyDestination(Territory t) {
+		convoyDestination = t;
+	}
+
+	public void setSupport(Unit u) {
+		supportedUnit = u;
+	}
+
+	public void setTerr1(Territory t){
+		terr1 = t;
+	}
+
+	public void setTerr2(Territory t2){
+		terr2 = t2;
+	}
+
+	public boolean expectingConvoy() {
+		if (!terr1.isAdjacent(terr2) && unit.isLand() && terr2.isLand())
+			return true;
+		return false;
 	}
 	
 }

@@ -50,11 +50,11 @@ public class Turn {
 	}
 
 	public void resolveOrders() {
-		resolveConvoy();
 		resolveSupport();
 		resolveDefend();
 		resolveIdle();
 		resolveAttack();
+		resolveConvoy();
 		resolveRetreats();
 	}
 
@@ -100,13 +100,10 @@ public class Turn {
 	private void findAttackers(Order o) {
 		for (Order attack : attackOrders){
 			if (attack.getTerr2().equals(o.getTerr1())){
-				if (attack.getStrength() > o.getStrength()){
-					o.adjudicate(false);
+				if (attack.getStrength() > o.getStrength())
 					attack.adjudicate(true);
-				}
 				else
 					o.adjudicate(true);
-					attack.adjudicate(false);
 			}
 		}
 	}
@@ -139,25 +136,12 @@ public class Turn {
 
 	private void resolveSupport() {
 		for (Order o : supportOrders){
-			if (findSomethingToSupport(o, defendOrders))
-				continue;
-			if (findSomethingToSupport(o, blankOrders))
-				continue;
-			if (findSomethingToSupport(o, attackOrders))
-				continue;
-			o.adjudicate(false);
+			Order supported = o.getSupportedUnit().getOrder();
+			if (!(supported == null || supported.getTerr2() == null || !supported.getTerr2().equals(o.getTerr2()))){
+				supported.incrementStrength();
+				o.adjudicate(true);
+			}
 		}
 	}
 
-	private boolean findSomethingToSupport(Order o, ArrayList<Order> orders) {
-		for (Order supported : orders){
-			if (supported.getTerr1().equals(o.getSupportedUnit().getTerritory())){
-				supported.incrementStrength();
-				o.adjudicate(true);
-				return true;
-			}
-		}
-		return false;
-	}
-	
 }

@@ -1,6 +1,10 @@
 package gui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import gameObjects.Order;
 import gameObjects.Player;
@@ -44,8 +48,9 @@ public class Canvas extends ECanvas{
 	public static final int NORM = 1;
 	public static final int TERR_SELECTED = 2;
 	public static final int COMM_SELECTED = 3;
-	public static final int SELECT_SUPPORT = 4;
+	public static final int SELECT_SUPPORT_DESTINATION = 4;
 	public static final int SELECT_CONVOY = 5;
+	public static final int SELECT_SUPPORT_UNITS = 6;
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
@@ -165,6 +170,20 @@ public class Canvas extends ECanvas{
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		
 		currTurn = new Turn("Spring", 1900);
+		
+		File f = new File("/docs/terr.csv");
+		try {
+			Scanner sc = new Scanner(f);
+			sc.nextLine();
+			while (sc.hasNextLine()){
+				System.out.println(sc.nextLine());
+			}
+			sc.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		
 		
 		defineSS();
 	    createTerritories();
@@ -435,10 +454,11 @@ public class Canvas extends ECanvas{
 		if (currOrder != null){
 			g.drawString(currOrder.toString(), 1130, 380);
 			if (currOrder.isReady()){
-				currOrder.getUnit().setOrder(currOrder);
 				state = NORM;
-				if (currOrder.isValidOrder())
+				if (currOrder.isValidOrder()){
 					g.drawString("Accepted...", 1130, 470);
+					currOrder.getUnit().setOrder(currOrder);
+				}
 				else
 					g.drawString("Not a valid order...", 1130, 470);
 			}
@@ -585,6 +605,7 @@ public class Canvas extends ECanvas{
 	public void defend() {
 		if (state == Canvas.TERR_SELECTED && currOrder != null){
 			currOrder.setCommand("defend");
+			currOrder.setTerr2(currOrder.getTerr1());
 			currOrder.getUnit().setOrder(currOrder);
 			state = Canvas.NORM;
 		}	
@@ -607,6 +628,8 @@ public class Canvas extends ECanvas{
 		for (Player p : players)
 			p.executeOrders();
 		currTurn.resolveOrders();
+		for (Player p : players)
+			p.resetOrders();
 		adjustNumSC();
 		adjustTurn();
 		state = NORM;
@@ -621,18 +644,21 @@ public class Canvas extends ECanvas{
 				currOrder = new Order(t);
 		}
 		else if (state == COMM_SELECTED){
-			if (currOrder.getCommand().equals("attack"))
+			if (currOrder.getCommand().equals("attack")){
 				currOrder.setTerr2(t);
-			if (currOrder.getCommand().equals("support")){
+				if (currOrder.expectingConvoy())
+					state = SELECT_SUPPORT_UNITS;
+			}
+			else if (currOrder.getCommand().equals("support")){
 				currOrder.setTerr2(t);
-				state = SELECT_SUPPORT;
+				state = SELECT_SUPPORT_DESTINATION;
 			}
 			else if (currOrder.getCommand().equals("convoy")){
 				currOrder.setTerr2(t);
 				state = Canvas.SELECT_CONVOY;
 			}
 		}
-		else if (state == SELECT_SUPPORT){
+		else if (state == SELECT_SUPPORT_DESTINATION){
 			if (t.getUnit() != null){
 				currOrder.setSupport(t.getUnit());
 				state = NORM;
@@ -642,6 +668,11 @@ public class Canvas extends ECanvas{
 			currOrder.setConvoyDestination(t);
 			state = NORM;
 		}
+		else if (state == Canvas.SELECT_SUPPORT_UNITS){
+			if (currOrder.isReady())
+				state = NORM;
+		}
+			
 
 	}
 

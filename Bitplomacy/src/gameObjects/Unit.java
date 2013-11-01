@@ -50,7 +50,6 @@ public class Unit extends ImageEntity{
 			order.execute();
 		else
 			Canvas.getC().addOrder(new Order(curTerr));
-		order = null;
 	}
 
 	public void setOrder(Order o) {
@@ -63,5 +62,9 @@ public class Unit extends ImageEntity{
 
 	public Order getOrder() {
 		return order;
+	}
+	
+	public void resetOrder(){
+		order = null;
 	}
 }
