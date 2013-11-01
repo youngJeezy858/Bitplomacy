@@ -109,8 +109,10 @@ public class Order {
 			return false;
 		else if (command.equals("convoy") && (terr2 == null || convoyDestination == null))
 			return false;
-		else if (command.equals("attack") && Canvas.getC().getState() == Canvas.SELECT_SUPPORT_UNITS && !this.isValidOrder())
+		else if (command.equals("attack") && Canvas.getC().getState() == Canvas.SELECT_CONVOY_UNITS && !this.isValidOrder()){
+			System.out.println("fuck");
 			return false;
+		}
 		return true;
 	}
 
@@ -139,8 +141,10 @@ public class Order {
 	}
 
 	public boolean expectingConvoy() {
-		if (!terr1.isAdjacent(terr2) && unit.isLand() && terr2.isLand())
+		if (!terr1.isAdjacent(terr2) && unit.isLand() && terr2.isLand()){
+			System.out.println("hiya");
 			return true;
+		}
 		return false;
 	}
 	

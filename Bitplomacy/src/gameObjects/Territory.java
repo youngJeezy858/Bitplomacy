@@ -128,8 +128,10 @@ public class Territory extends ImageEntity {
 
 	public boolean isAdjacent(Territory terr){
 		for (String s : adjacentTerritories){
-			if (terr.getName().equals(s))
+			if (terr.getName().equals(s)){
+		 		System.out.println("hey");
 		 		return true;
+			}
 		 }
 		 return false;
 	}
