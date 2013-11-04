@@ -22,6 +22,8 @@ import org.newdawn.slick.TrueTypeFont;
 import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
 
+import driver.Driver;
+
 
 public class Canvas extends ECanvas{
 
@@ -93,48 +95,45 @@ public class Canvas extends ECanvas{
 		
 		currTurn = new Turn("Spring", 1900);
 		
-		try {
-			//define territories
-			File f = new File("src/docs/terr.csv");
-			Scanner sc = new Scanner(f);
+		//define territories
+		//Canvas.class.getClassLoader();
+		//File f = new File(Canvas.class.getResourceAsStream("docs/terr.csv"));
+		Scanner sc = new Scanner(Canvas.class.getResourceAsStream("/docs/terr.csv"));
+		sc.nextLine();
+		int lines = 0;
+		while (sc.hasNextLine()){
+			lines++;
 			sc.nextLine();
-			int lines = 0;
-			while (sc.hasNextLine()){
-				lines++;
-				sc.nextLine();
-			}
-			sc.close();
-			sc = new Scanner(f);
-			sc.nextLine();
-			int i = 0;
-			territories = new Territory[lines];
-			while (sc.hasNextLine()){
-				String s = sc.nextLine();
-				String s2[] = s.split("\t");
-				SpriteSheet ss = SSFactory(s2[9]);
-				territories[i] = new Territory(ss, s2[0], new Boolean(s2[1].trim()), 
-						new Boolean(s2[2].trim()), new Boolean(s2[3].trim()), 
-						new Color(new Integer(s2[4]), new Integer(s2[5]), new Integer(s2[6])));
-				territories[i].setX(new Integer(s2[7]));
-				territories[i].setY(new Integer(s2[8]));
-				i++;
-			}
-			sc.close();
-			
-			//define adjacent territories
-			f = new File("src/docs/adjacentTerr.csv");
-			sc = new Scanner(f);
-			sc.nextLine();
-			while (sc.hasNextLine()){
-				String s[] = sc.nextLine().split(",");
-				Territory t = getT(s[0]);
-				for (i = 1; i < s.length; i++)
-					t.addAdjacent(s[i]);
-			}	
-			sc.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		}
+		sc.close();
+		sc = new Scanner(Canvas.class.getResourceAsStream("/docs/terr.csv"));
+		sc.nextLine();
+		int i = 0;
+		territories = new Territory[lines];
+		while (sc.hasNextLine()){
+			String s = sc.nextLine();
+			String s2[] = s.split("\t");
+			SpriteSheet ss = SSFactory(s2[9]);
+			territories[i] = new Territory(ss, s2[0], new Boolean(s2[1].trim()), 
+					new Boolean(s2[2].trim()), new Boolean(s2[3].trim()), 
+					new Color(new Integer(s2[4]), new Integer(s2[5]), new Integer(s2[6])));
+			territories[i].setX(new Integer(s2[7]));
+			territories[i].setY(new Integer(s2[8]));
+			i++;
+		}
+		sc.close();
+		
+		//define adjacent territories
+		//f = new File("src/docs/adjacentTerr.csv");
+		sc = new Scanner(Canvas.class.getResourceAsStream("/docs/adjacentTerr.csv"));
+		sc.nextLine();
+		while (sc.hasNextLine()){
+			String s[] = sc.nextLine().split(",");
+			Territory t = getT(s[0]);
+			for (i = 1; i < s.length; i++)
+				t.addAdjacent(s[i]);
+		}	
+		sc.close();
 		
 	    setBoard();
 	    adjustNumSC();
