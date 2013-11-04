@@ -403,7 +403,7 @@ public class Canvas extends ECanvas{
 				state = NORM;
 		}
 		
-		if (currOrder.isValidOrder()){
+		if (currOrder != null && currOrder.isValidOrder()){
 			currOrder.pushOrder();
 			state = NORM;
 		}

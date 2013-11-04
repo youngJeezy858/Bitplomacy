@@ -166,18 +166,18 @@ public class Order {
 		correctSyntax = true;
 	}
 
-	public boolean checkConvoyingUnits() {
-		
-		int i = 0;
-		Order o = convoyUnits.get(i).getOrder();
+	public boolean checkConvoyingUnits() {	
+		Order o = convoyUnits.get(0).getOrder();
 		if (!o.getCommand().equals("convoy") || !o.getTerr2().equals(terr1))
 			return false;
-		if (convoyUnits.size() == 1 && !o.getConvoyDestination().equals(terr2))
+		o = convoyUnits.get(convoyUnits.size()).getOrder();
+		if (!o.getCommand().equals("convoy") || !o.getConvoyDestination().equals(terr2))
 			return false;
-		else{
-			for (i = 1; i < convoyUnits.size(); i++){
-				if (i == convoyUnits.size()-1 && )
-			}
+		for (int i = 1; i < convoyUnits.size(); i++) {
+			o = convoyUnits.get(i).getOrder();
+			if (!o.getCommand().equals("convoy")
+					|| !o.getTerr2().equals(convoyUnits.get(i-1).getOrder()))
+				return false;
 		}
 		return true;
 	}
