@@ -407,9 +407,6 @@ public class Canvas extends ECanvas{
 			currOrder.pushOrder();
 			state = NORM;
 		}
-		
-		
-			
 
 	}
 

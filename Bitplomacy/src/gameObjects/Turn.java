@@ -62,30 +62,42 @@ public class Turn {
 	private void resolveFollowing() {
 		
 		for (Order o : attackOrders){
-			if (o.getState() == Order.CHECKED_WAITING){
+			if (o.getState() == Order.PASSED)
+				move(o);
+			else if (o.getState() == Order.CHECKED_WAITING){
 				recursiveResolveAttack(o);
 			}
 		}
 	}
+	
+	
 
 	private void recursiveResolveAttack(Order o) {
 		
-		Unit u = o.getTerr2().getUnit();
-		if (u != null && u.getOrder().getState() == Order.CHECKED_WAITING){
-			recursiveResolveAttack(o.getTerr2().getUnit().getOrder());
+		Unit unit = o.getTerr2().getUnit();
+		if (unit == null)
+			move(o);
+		else if ((unit.getOrder().getCommand().equals("attack") && unit.getOrder().getState() == Order.FAILED)
+				|| unit.getOrder().getCommand().equals("support")) {
+			if (o.getStrength() > 1)
+				move(o);
+			else
+				o.adjudicate(Order.FAILED);
 		}
-		else if (u == null || u.getOrder().getState() == Order.PASSED) {
-			o.getTerr2().setUnit(o.getUnit());
-			o.getUnit().setTerritory(o.getTerr2());
-			o.getTerr1().removeUnit();
-			o.adjudicate(Order.PASSED);
+		else if (unit.getOrder().getCommand().equals("attack") && unit.getOrder().getState() == Order.CHECKED_WAITING){
+			recursiveResolveAttack(unit.getOrder());
+			recursiveResolveAttack(o);
 		}
-		else if (u.getOrder().getState() == Order.FAILED && o.getStrength() > 1){
-			o.getTerr2().setUnit(o.getUnit());
-			o.getUnit().setTerritory(o.getTerr2());
-			o.getTerr1().removeUnit();
-			o.adjudicate(Order.PASSED);
-		}
+	}
+
+	private void move(Order o) {
+		Unit retreater = o.getTerr2().getUnit();
+		if (retreater != null)
+			retreater.retreat();
+		o.getTerr2().setUnit(o.getUnit());
+		o.getUnit().setTerritory(o.getTerr2());
+		o.getTerr1().removeUnit();
+		o.adjudicate(Order.PASSED);
 	}
 
 	private void resolveRetreats() {
@@ -99,10 +111,6 @@ public class Turn {
 		}
 	}
 
-//	o.getTerr2().setUnit(o.getUnit());
-//	o.getUnit().setTerritory(o.getTerr2());
-//	o.getTerr1().removeUnit();
-	
 	private void resolveSameMoves(Order o) {
 		for (Order attack : attackOrders){
 			if (o.getTerr2().equals(attack.getTerr2()) && !o.getTerr1().equals(attack.getTerr1())){

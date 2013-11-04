@@ -48,8 +48,11 @@ public class Unit extends ImageEntity{
 	public void executeOrder() {
 		if (order != null)
 			order.execute();
-		else
-			Canvas.getC().addOrder(new Order(curTerr));
+		else{
+			Order o = new Order(curTerr);
+			o.setTerr2(curTerr);
+			Canvas.getC().addOrder(o);
+		}
 	}
 
 	public void setOrder(Order o) {
@@ -66,5 +69,16 @@ public class Unit extends ImageEntity{
 	
 	public void resetOrder(){
 		order = null;
+	}
+
+	public void retreat() {
+		Territory t = curTerr.findVacant();
+		if (t == null)
+			curTerr.setUnit(null);
+		else{
+			curTerr = t;
+			t.setUnit(this);
+		}
+		
 	}
 }

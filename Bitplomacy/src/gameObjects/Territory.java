@@ -1,4 +1,6 @@
 package gameObjects;
+import gui.Canvas;
+
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -171,7 +173,7 @@ public class Territory extends ImageEntity {
 	}
 
 	public boolean isValidSupport(Territory t, Unit u) {
-		
+
 		// case one: land unit wanting to support water -
 		// exit immediately
 		if (!t.land && unit.isLand()) 
@@ -214,6 +216,19 @@ public class Territory extends ImageEntity {
 	public void uDraw(){
 		if (unit != null)
 			unit.draw(this.getX()+(this.getWidth()/16)-20, this.getY()+(this.getHeight()/2)-50);
+	}
+
+	public Territory findVacant() {
+		for (String s : adjacentTerritories){
+			Territory t = Canvas.getC().getT(s);
+			if (t.getUnit() == null){
+				if (unit.isLand() && t.land)
+					return t;
+				else if (!unit.isLand() && (t.hasCoast || !t.land))
+					return t;
+			}
+		}
+		return null;
 	}
 	
 }

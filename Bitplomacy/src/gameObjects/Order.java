@@ -120,7 +120,7 @@ public class Order {
 		
 		if (command.equals("attack") && terr1.isValidAttack(terr2, convoyUnits))
 			return true;
-		else if (command.equals("support") && terr1.isValidSupport(terr2, supportedUnit))
+		else if (command.equals("support") && supportedUnit != null && terr1.isValidSupport(terr2, supportedUnit))
 			return true;
 		else if (command.equals("defend"))
 			return true;
