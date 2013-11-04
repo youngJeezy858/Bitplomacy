@@ -1,8 +1,6 @@
 package gameObjects;
 import java.util.ArrayList;
 
-import gui.Canvas;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SpriteSheet;
 import com.erebos.engine.entity.ImageEntity;
@@ -129,7 +127,6 @@ public class Territory extends ImageEntity {
 	public boolean isAdjacent(Territory terr){
 		for (String s : adjacentTerritories){
 			if (terr.getName().equals(s)){
-		 		System.out.println("hey");
 		 		return true;
 			}
 		 }
@@ -140,16 +137,21 @@ public class Territory extends ImageEntity {
 		return land;
 	}
 
+	public boolean isMouseOver(Color c){
+		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen())
+			return true;
+		return false;
+	}
+
 	public boolean isValidAttack(Territory t, ArrayList<Unit> convoyUnits) {		
-	
 		if (unit.isLand() && !t.land)
 			return false;
 		if (t.land && !unit.isLand() && !t.hasCoast)
 			return false;
-		if (!isAdjacent(t) && unit.isLand() && convoyUnits.size() > 0)
-			return true;
+		if (convoyUnits.size() > 0 && 
+				!convoyUnits.get(convoyUnits.size()-1).getTerritory().isAdjacent(t))
+			return false;
 		return isAdjacent(t);
-	
 	}
 
 	public boolean isValidConvoy(Territory convoyStart, Territory convoyDestination) {
@@ -212,16 +214,6 @@ public class Territory extends ImageEntity {
 	public void uDraw(){
 		if (unit != null)
 			unit.draw(this.getX()+(this.getWidth()/16)-20, this.getY()+(this.getHeight()/2)-50);
-	}
-
-	/*
-	 * Updates the Territory. Current state of this method is that if the mouse cursor is over this 
-	 * Territory, then display the name.  See updateGame in the Canvas class for more info.
-	 */
-	public void update(){
-		Color c = Canvas.getC().getCurrentColor();
-		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen())
-			Canvas.getC().updateTerritory(this);
 	}
 	
 }

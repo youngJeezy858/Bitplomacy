@@ -8,7 +8,7 @@ public class SubmitCommand extends Commands{
 
 	@Override
 	public void execute() {
-		Canvas.getC().submit();		
+		Canvas.getC().setCommand("submit");;		
 	}
 
 }

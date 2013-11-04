@@ -51,10 +51,10 @@ public class Turn {
 
 	public void resolveOrders() {
 		resolveSupport();
+		resolveConvoy();
 		resolveDefend();
 		resolveIdle();
 		resolveAttack();
-		resolveConvoy();
 		resolveRetreats();
 	}
 
@@ -64,25 +64,25 @@ public class Turn {
 
 	private void resolveAttack() {
 		for (Order o : attackOrders){
-			if (o.isSuccessful())
+			if (o.getState() != Order.FAILED)
 				resolveSameMoves(o);
 		}
 	}
 
+//	o.getTerr2().setUnit(o.getUnit());
+//	o.getUnit().setTerritory(o.getTerr2());
+//	o.getTerr1().removeUnit();
+	
 	private void resolveSameMoves(Order o) {
 		for (Order attack : attackOrders){
 			if (o.getTerr2().equals(attack.getTerr2()) && !o.getTerr1().equals(attack.getTerr1())){
 				if (o.getStrength() <= attack.getStrength()){
-					o.adjudicate(false);
+					o.adjudicate(Order.FAILED);
 					retreatOrders.add(o);
 					return;
 				}
 			}
 		}
-		o.getTerr2().setUnit(o.getUnit());
-		o.getUnit().setTerritory(o.getTerr2());
-		o.getTerr1().removeUnit();
-		return;
 	}
 	
 	private void resolveIdle() {
@@ -100,20 +100,24 @@ public class Turn {
 	private void findAttackers(Order o) {
 		for (Order attack : attackOrders){
 			if (attack.getTerr2().equals(o.getTerr1())){
-				if (attack.getStrength() > o.getStrength())
-					attack.adjudicate(true);
-				else
-					o.adjudicate(true);
+				if (attack.getStrength() > o.getStrength()){
+					attack.adjudicate(Order.CHECKED_WAITING);
+					o.adjudicate(Order.FAILED);
+				}
+				else{
+					attack.adjudicate(Order.FAILED);
+					o.adjudicate(Order.PASSED);
+				}
 			}
 		}
 	}
 
 	private void resolveConvoy() {
 		for (Order o : attackOrders){
-			if (o.getTerr2().isLand() || !o.getUnit().isLand())
-				continue;
-			o.setConvoyDestination(o.getTerr1());
-			o.adjudicate(findConvoyOrder(o));
+			if (o.getState() == Order.AMPHIBIOUS_ATTACK){
+				for (Unit u : o.getConvoyUnits())
+					
+			}
 		}
 	}
 
@@ -137,10 +141,13 @@ public class Turn {
 	private void resolveSupport() {
 		for (Order o : supportOrders){
 			Order supported = o.getSupportedUnit().getOrder();
-			if (!(supported == null || supported.getTerr2() == null || !supported.getTerr2().equals(o.getTerr2()))){
+			if (supported.getTerr2().equals(o.getTerr2()) && 
+					(supported.getCommand().equals("attack") || supported.getCommand().equals("defend")) ){
 				supported.incrementStrength();
-				o.adjudicate(true);
+				o.adjudicate(Order.PASSED);
 			}
+			else
+				o.adjudicate(Order.FAILED);
 		}
 	}
 

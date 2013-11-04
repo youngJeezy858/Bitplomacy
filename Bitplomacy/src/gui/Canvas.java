@@ -2,8 +2,6 @@ package gui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import gameObjects.Order;
@@ -14,14 +12,12 @@ import gameObjects.Unit;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
-
 
 import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
@@ -39,18 +35,18 @@ public class Canvas extends ECanvas{
 			new SupportCommand(1269, 500, 50),
 			new ConvoyCommand(1269, 606, 250),
 			new SubmitCommand(1151, 717, 200) };
-	private Territory disTerr;
-	private int state;
+	
+	private String displayTerritoryName;
+	private String displayTerritoryOwner;
 	private Order currOrder;
 	private Turn currTurn;
 	
-	public static final int START = 0;
-	public static final int NORM = 1;
-	public static final int TERR_SELECTED = 2;
-	public static final int COMM_SELECTED = 3;
-	public static final int SELECT_SUPPORT = 4;
-	public static final int SELECT_CONVOY_DESTINATION = 5;
-	public static final int SELECT_CONVOY_UNITS = 6;
+	private int state;
+	public static final int NORM = 0;
+	public static final int COMM_SELECTED = 1;
+	public static final int SELECT_SUPPORT = 2;
+	public static final int SELECT_CONVOY_DESTINATION = 3;
+	public static final int SELECT_CONVOY_UNITS = 4;
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
@@ -63,11 +59,14 @@ public class Canvas extends ECanvas{
 	
 	private Canvas(){
 		super(1);
-		state = 1;
+		state = NORM;
 	}
 	
 	@Override
 	public void eInit(GameContainer gc, EGame eg) {		
+		
+		displayTerritoryName = "";
+		displayTerritoryOwner = "";
 		
 		players = new Player[7];
 		players[0] = new Player("England");
@@ -113,8 +112,8 @@ public class Canvas extends ECanvas{
 				String s = sc.nextLine();
 				String s2[] = s.split("\t");
 				SpriteSheet ss = SSFactory(s2[9]);
-				territories[i] = new Territory(ss, s2[0], new Boolean(s2[1]), 
-						new Boolean(s2[2]), new Boolean(s2[3]), 
+				territories[i] = new Territory(ss, s2[0], new Boolean(s2[1].trim()), 
+						new Boolean(s2[2].trim()), new Boolean(s2[3].trim()), 
 						new Color(new Integer(s2[4]), new Integer(s2[5]), new Integer(s2[6])));
 				territories[i].setX(new Integer(s2[7]));
 				territories[i].setY(new Integer(s2[8]));
@@ -129,11 +128,10 @@ public class Canvas extends ECanvas{
 			while (sc.hasNextLine()){
 				String s[] = sc.nextLine().split(",");
 				Territory t = getT(s[0]);
-				for (i = 1; i < s.length; i++){
-					System.out.println(s[i]);
+				for (i = 1; i < s.length; i++)
 					t.addAdjacent(s[i]);
-				}
-			}			
+			}	
+			sc.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -183,7 +181,7 @@ public class Canvas extends ECanvas{
 		t.setOwner(owner);
 		Unit temp = new Unit(ss, owner - 1, isLand, t);
 		t.setUnit(temp);
-												p.addUnit(t.getUnit());
+		p.addUnit(t.getUnit());
 	}
 
 	/*
@@ -197,7 +195,6 @@ public class Canvas extends ECanvas{
 		return ss;
 	}
 
-	@Override
 	public void eRender(GameContainer gc, EGame eg, Graphics g) {
 			
 		//draw masterMap for color keys
@@ -210,25 +207,18 @@ public class Canvas extends ECanvas{
 		g.drawString("Country:", 1150, 50);
 		g.drawString("Owner:", 1150, 120);
 		
-		g.drawString("SUPPLY CENTER TOTALS", 1145, 200);
-		int i = 220;
+		g.drawString("SUPPLY CENTER TOTALS", 1145, 180);
+		int i = 200;
 		for (Player p : players){
 			g.drawString(p.getName() + ": " + p.getSupplyCount(), 1145, i);
 			i = i + 20;
 		}
 		
-		if (currOrder != null){
-			g.drawString(currOrder.toString(), 1130, 380);
-			if (currOrder.isReady()){
-				state = NORM;
-				if (currOrder.isValidOrder()){
-					g.drawString("Accepted...", 1130, 470);
-					currOrder.getUnit().setOrder(currOrder);
-				}
-				else
-					g.drawString("Not a valid order...", 1130, 470);
-			}
-		}
+		if (currOrder != null)
+			g.drawString(currOrder.toString(), 1130, 360);
+		
+		g.drawString(displayTerritoryName, 1145, 70);
+		g.drawString(displayTerritoryOwner, 1145, 140);		
 		
 		for (Commands c : commands)
 			c.draw();
@@ -238,40 +228,36 @@ public class Canvas extends ECanvas{
 		for (Territory t: territories)
 			t.uDraw();
 		
-		Font f = g.getFont();
 		g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true));
 		g.drawString(currTurn.toString(), 10, 10);
-		
-		g.setFont(f);
-		if (state == TERR_SELECTED || state == COMM_SELECTED) {
-			g.drawString(disTerr.getName(), 1145, 70);
-			g.drawString(disTerr.getOwnerName(), 1145, 140);
-		}
 
 	}
 
 	@Override
-	public void eUpdate(GameContainer gc, EGame eg, int delta) {		
-		updateGame(gc);
-	}
-
-	/*
-	 * Updates the game on for the current frame. Game is set to run at 60 frames per second so this fires 60 times a second.
-	 */
-	private void updateGame(GameContainer gc) {
-		int mx = Mouse.getX();
-		int my = Math.abs(Mouse.getY() - 831);
+	public void eUpdate(GameContainer gc, EGame eg, int delta) {			
+		
 		if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			
+			int mx = Mouse.getX();
+			int my = Math.abs(Mouse.getY() - 831);
+			
 			for (Territory t : territories) {
 				if (mx >= t.getX() && mx <= t.getWidth() + t.getX()
-						&& my >= t.getY() && my <= t.getHeight() + t.getY())
-					t.update();
+						&& my >= t.getY() && my <= t.getHeight() + t.getY() &&
+						t.isMouseOver(getCurrentColor())){
+					updateTerritory(t);
+					return;
+				}
 			}
+			
 			for (Commands c : commands) {
 				if (mx >= c.getX() && mx <= c.getWidth() + c.getX()
-						&& my >= c.getY() && my <= c.getHeight() + c.getY())
+						&& my >= c.getY() && my <= c.getHeight() + c.getY()){
 					c.update();
+					return;
+				}
 			}
+		
 		}
 	}
 
@@ -341,6 +327,32 @@ public class Canvas extends ECanvas{
 		return null;
 	}
 
+	public void setCommand(String s){
+		
+		if (s.equals("submit")){
+			currOrder = null;
+			for (Player p : players)
+				p.executeOrders();
+			currTurn.resolveOrders();
+			for (Player p : players)
+				p.resetOrders();
+			adjustNumSC();
+			adjustTurn();
+			state = NORM;
+		}
+		else if (currOrder != null){
+			currOrder.setCommand(s);
+			if (s.equals("defend")){
+				currOrder.setTerr2(currOrder.getTerr1());
+				currOrder.pushOrder();
+				state = Canvas.NORM;
+			}
+			else 
+				state = Canvas.COMM_SELECTED;
+		}
+		System.out.println(s + " command wus good");
+	}
+
 	/*
 	 * Sets the current state of the game.  Used for updating the game.
 	 * 
@@ -350,94 +362,53 @@ public class Canvas extends ECanvas{
 		state = s;
 	}
 	
-	public void attack() {
-		if (state == Canvas.TERR_SELECTED && currOrder != null){
-			currOrder.setCommand("attack");
-			state = Canvas.COMM_SELECTED;
-		}
-		else
-			System.out.println("Attack command wus good");
-	}
-
-	public void support() {
-		if (state == Canvas.TERR_SELECTED && currOrder != null){
-			currOrder.setCommand("support");
-			state = Canvas.COMM_SELECTED;
-		}
-		else
-			System.out.println("support command wus good");	
-	}
-
-	public void defend() {
-		if (state == Canvas.TERR_SELECTED && currOrder != null){
-			currOrder.setCommand("defend");
-			currOrder.setTerr2(currOrder.getTerr1());
-			currOrder.getUnit().setOrder(currOrder);
-			state = Canvas.NORM;
-		}	
-		else
-			System.out.println("defend command wus good");
-	}
-
-	public void convoy() {
-		if (state == Canvas.TERR_SELECTED && currOrder != null){
-			currOrder.setCommand("convoy");
-			state = Canvas.COMM_SELECTED;
-		}
-		else
-			System.out.println("Convoy command wus good");	
-		
-	}
-
-	public void submit() {
-		currOrder = null;
-		for (Player p : players)
-			p.executeOrders();
-		currTurn.resolveOrders();
-		for (Player p : players)
-			p.resetOrders();
-		adjustNumSC();
-		adjustTurn();
-		state = NORM;
-	}
-
 	public void updateTerritory(Territory t) {
 
-		if (state == NORM || state == TERR_SELECTED){
-			disTerr = t;
-			state = TERR_SELECTED;
+		displayTerritoryName = t.getName();
+		displayTerritoryOwner = t.getOwnerName();
+		
+		if (state == NORM){
 			if (t.getUnit() != null)
 				currOrder = new Order(t);
 		}
-		else if (state == COMM_SELECTED){
+		
+		else if (state == COMM_SELECTED){			
+			currOrder.setTerr2(t);
 			if (currOrder.getCommand().equals("attack")){
-				currOrder.setTerr2(t);
 				if (currOrder.expectingConvoy())
 					state = SELECT_CONVOY_UNITS;
+				else
+					state = NORM;
 			}
-			else if (currOrder.getCommand().equals("support")){
-				currOrder.setTerr2(t);
+			else if (currOrder.getCommand().equals("support"))
+				state = SELECT_SUPPORT;
+			else if (currOrder.getCommand().equals("convoy"))
 				state = SELECT_CONVOY_DESTINATION;
-			}
-			else if (currOrder.getCommand().equals("convoy")){
-				currOrder.setTerr2(t);
-				state = Canvas.SELECT_CONVOY_DESTINATION;
-			}
 		}
+		
 		else if (state == SELECT_SUPPORT){
 			if (t.getUnit() != null){
 				currOrder.setSupport(t.getUnit());
 				state = NORM;
 			}
 		}
+		
 		else if (state == Canvas.SELECT_CONVOY_DESTINATION){
 			currOrder.setConvoyDestination(t);
 			state = NORM;
 		}
+		
 		else if (state == Canvas.SELECT_CONVOY_UNITS){
-			if (currOrder.isReady())
+			if (currOrder.isAmphibiousAttack(t))
 				state = NORM;
 		}
+		
+		if (currOrder.isValidOrder()){
+			currOrder.pushOrder();
+			state = NORM;
+		}
+		
+		
 			
 
 	}
