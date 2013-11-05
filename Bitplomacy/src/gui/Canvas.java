@@ -42,6 +42,7 @@ public class Canvas extends ECanvas{
 	private String displayTerritoryOwner;
 	private Order currOrder;
 	private Turn currTurn;
+	private TrueTypeFont font;
 	
 	private int state;
 	public static final int NORM = 0;
@@ -138,6 +139,7 @@ public class Canvas extends ECanvas{
 	    setBoard();
 	    adjustNumSC();
 
+	    font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true);
 	}
 
 	/*
@@ -227,7 +229,7 @@ public class Canvas extends ECanvas{
 		for (Territory t: territories)
 			t.uDraw();
 		
-		g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true));
+		g.setFont(font);
 		g.drawString(currTurn.toString(), 10, 10);
 
 	}
