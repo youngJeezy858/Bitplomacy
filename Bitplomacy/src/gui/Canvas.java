@@ -1,7 +1,5 @@
 package gui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import gameObjects.Order;
@@ -21,8 +19,6 @@ import org.newdawn.slick.TrueTypeFont;
 
 import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
-
-import driver.Driver;
 
 
 public class Canvas extends ECanvas{
@@ -97,8 +93,6 @@ public class Canvas extends ECanvas{
 		currTurn = new Turn("Spring", 1900);
 		
 		//define territories
-		//Canvas.class.getClassLoader();
-		//File f = new File(Canvas.class.getResourceAsStream("docs/terr.csv"));
 		Scanner sc = new Scanner(Canvas.class.getResourceAsStream("/docs/terr.csv"));
 		sc.nextLine();
 		int lines = 0;
@@ -125,7 +119,6 @@ public class Canvas extends ECanvas{
 		sc.close();
 		
 		//define adjacent territories
-		//f = new File("src/docs/adjacentTerr.csv");
 		sc = new Scanner(Canvas.class.getResourceAsStream("/docs/adjacentTerr.csv"));
 		sc.nextLine();
 		while (sc.hasNextLine()){
