@@ -3,7 +3,7 @@ Adriatic Sea	 false	 false	 false	105	205	229	569	607	/images/AdriaticSea.png
 Aegean Sea	 false	 false	 false	100	205	229	738	716	/images/AegeanSea.png
 Albania	 true	 false	 true	182	182	182	677	674	/images/Albania.png
 Ankara	 true	 true	 true	189	189	189	872	663	/images/Ankara.png
-Apu	 true	 false	 true	85	85	85	584	683	/images/Apu.png
+Apula	 true	 false	 true	85	85	85	584	683	/images/Apu.png
 Armenia	 true	 false	 false	191	191	191	1021	664	/images/Armenia.png
 Baltic Sea	 false	 false	 false	130	205	229	574	315	/images/BalticSea.png
 Barent Sea	 false	 false	 false	155	205	229	716	0	/images/BarentSea.png
@@ -14,8 +14,8 @@ Bohmeia	 true	 false	 false	35	35	35	576	486	/images/Bohmeia.png
 Brest	 true	 true	 true	170	170	170	326	475	/images/Brest.png
 Budapest	 true	 true	 true	198	198	198	637	547	/images/Budapest.png
 Bulgaria	 true	 true	 true	181	181	181	729	646	/images/Bulgaria.png
-Bur	 true	 false	 false	155	155	155	411	490	/images/Bur.png
-Cly	 true	 false	 true	110	110	110	374	268	/images/Cly.png
+Burgundy	 true	 false	 false	155	155	155	411	490	/images/Bur.png
+Clyde	 true	 false	 true	110	110	110	374	268	/images/Cly.png
 Constantinople	 true	 true	 true	188	188	188	793	689	/images/Constantinople.png
 Denmark	 true	 true	 true	40	40	40	552	323	/images/Denmark.png
 Eastern Medditerian Sea	 false	 false	 false	95	205	229	743	783	/images/EasternMed.png
@@ -27,7 +27,7 @@ Gascony	 true	 false	 true	175	175	175	345	557	/images/Gascony.png
 Greece	 true	 true	 true	179	179	179	691	694	/images/Greece.png
 Gulf of Bothnia	 false	 false	 false	125	205	229	654	156	/images/GulfBothnia.png
 Gulf of Lyon	 false	 false	 false	120	205	229	353	630	/images/GulfLyon.png
-Hel	 false	 false	 false	140	205	229	505	353	/images/Hel.png
+Heligoland	 false	 false	 false	140	205	229	505	353	/images/Hel.png
 Holand	 true	 true	 true	140	140	140	472	418	/images/Holand.png
 Ionian Sea	 false	 false	 false	110	205	229	529	719	/images/IonianSea.png
 Irish Sea	 false	 false	 false	160	205	229	258	329	/images/IrishSea.png
@@ -46,8 +46,8 @@ North Sea	 false	 false	 false	145	205	229	427	230	/images/NorthSea.png
 Norway	 true	 true	 true	176	176	176	523	36	/images/Norway.png
 Norwegian Sea	 false	 false	 false	165	205	229	239	0	/images/NorwegianSea.png
 Paris	 true	 true	 false	165	165	165	392	508	/images/Paris.png
-Pic	 true	 false	 true	150	150	150	398	473	/images/Pic.png
-Pie	 true	 false	 true	105	105	105	483	588	/images/Pie.png
+Picardy	 true	 false	 true	150	150	150	398	473	/images/Pic.png
+Piedmont	 true	 false	 true	105	105	105	483	588	/images/Pie.png
 Portugal	 true	 true	 true	185	185	185	181	611	/images/Portugal.png
 Prussia	 true	 false	 true	50	50	50	619	374	/images/Prussia.png
 Rome	 true	 true	 true	90	90	90	551	675	/images/Rome.png
@@ -56,7 +56,7 @@ Rumania	 true	 true	 true	184	184	184	743	553	/images/Rumania.png
 Serbia	 true	 true	 false	183	183	183	679	625	/images/Serbia.png
 Sevastopal	 true	 true	 true	192	192	192	832	424	/images/Sevastopal.png
 Silesia	 true	 false	 false	45	45	45	572	449	/images/Silesia.png
-Ska	 false	 false	 false	135	205	229	535	303	/images/Ska.png
+Skaggerak	 false	 false	 false	135	205	229	535	303	/images/Ska.png
 Smyrna	 true	 true	 true	187	187	187	803	708	/images/Smyrna.png
 Spain	 true	 true	 true	180	180	180	206	574	/images/Spain.png
 St. Petersburgh	 true	 true	 true	195	195	195	723	0	/images/StPetersburgh.png
@@ -64,13 +64,13 @@ Sweden	 true	 true	 true	177	177	177	589	80	/images/Sweden.png
 Syria	 true	 false	 true	186	186	186	943	771	/images/Syria.png
 Trieste	 true	 true	 true	197	197	197	586	576	/images/Trieste.png
 Tunis	 true	 true	 true	75	75	75	480	785	/images/Tunis.png
-Tus	 true	 false	 true	95	95	95	525	637	/images/Tus.png
+Tuscony	 true	 false	 true	95	95	95	525	637	/images/Tus.png
 Tyrol	 true	 false	 false	30	30	30	532	541	/images/Tyrol.png
 Tyrrhenian Sea	 false	 false	 false	115	205	229	503	673	/images/TyrrhenianSea.png
 Ukraine	 true	 false	 false	193	193	193	772	440	/images/Ukraine.png
 Venice	 true	 true	 true	100	100	100	535	583	/images/Venice.png
 Vienna	 true	 true	 false	205	205	205	610	531	/images/Vienna.png
-Wa	 true	 true	 true	135	135	135	327	383	/images/Wa.png
+Wales	 true	 true	 true	135	135	135	327	383	/images/Wa.png
 Warsaw	 true	 true	 false	196	196	196	674	432	/images/Warsaw.png
 Western Medditerian Sea	 false	 false	 false	170	205	229	231	694	/images/WestMed.png
 York	 true	 false	 true	125	125	125	409	329	/images/York.png

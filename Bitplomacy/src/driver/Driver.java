@@ -42,9 +42,7 @@ public class Driver extends EGame
 		InputStream stream=ClassLoader.getSystemResourceAsStream("natives/natives.zip");
 		String osArch=System.getProperty("os.arch");
 		String osName=System.getProperty("os.name");
-		
-		//System.out.println(osArch+" "+osName);
-		
+				
 		byte[] buffer = new byte[1024];
 		ZipInputStream zis=null;
 		     try

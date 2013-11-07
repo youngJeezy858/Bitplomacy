@@ -122,7 +122,7 @@ public class Canvas extends ECanvas{
 		sc = new Scanner(Canvas.class.getResourceAsStream("/docs/adjacentTerr.csv"));
 		sc.nextLine();
 		while (sc.hasNextLine()){
-			String s[] = sc.nextLine().split(",");
+			String s[] = sc.nextLine().split("\t");
 			Territory t = getT(s[0]);
 			for (i = 1; i < s.length; i++)
 				t.addAdjacent(s[i]);
