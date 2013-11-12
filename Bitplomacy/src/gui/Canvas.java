@@ -28,11 +28,21 @@ public class Canvas extends ECanvas{
 	
 	private Territory[] territories;
 	private Player[] players;
-	private Commands[] commands = { new AttackCommand(1152, 500, 100),
-			new DefendCommand(1152, 606, 150),
-			new SupportCommand(1269, 500, 50),
-			new ConvoyCommand(1269, 606, 250),
-			new SubmitCommand(1151, 717, 200) };
+	private Commands[] commands;
+	private Commands[] regularCommands = { new AttackCommand(1166, 635, 100),
+			new DefendCommand(1126, 729, 150),
+			new SupportCommand(1212, 729, 50),
+			new ConvoyCommand(1296, 729, 250),
+			new SubmitCommand(1152, 546, 200),
+			new MoveCommand(1258, 635, 25),
+			new SetOrderCommand(1152, 450, 75),
+			new DiscardOrderCommand(1269, 450, 125)};
+	private Commands[] buildRemoveCommands = { new BuildArmyCommand(1166, 635, 100),
+			new BuildNavyCommand(1258, 635, 25),
+			new RemoveUnitCommand(1212, 729, 50),
+			new SubmitCommand(1152, 546, 200),
+			new SetOrderCommand(1152, 450, 75),
+			new DiscardOrderCommand(1269, 450, 125)};
 	
 	private String displayTerritoryName;
 	private String displayTerritoryOwner;
@@ -79,18 +89,29 @@ public class Canvas extends ECanvas{
 		MasterMap=EAnimation.loadImage("/images/MasterMap.png");
 		Borders=EAnimation.loadImage("/images/Borders.png");
 		
-		commands[0].setEA(new EAnimation(EAnimation.loadImage("/images/AttackIcon.png")));
-		commands[1].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
-		commands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
-		commands[3].setEA(new EAnimation(EAnimation.loadImage("/images/ConvoyIcon.png")));
-		commands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
-		
-		Image temp = EAnimation.loadImage("/images/LandUnit.png");
+		regularCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/AttackIcon.png")));
+		regularCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
+		regularCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
+		regularCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/ConvoyIcon.png")));
+		regularCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
+		regularCommands[5].setEA(new EAnimation(EAnimation.loadImage("/images/MoveIcon.png")));
+		regularCommands[6].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
+		regularCommands[7].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
+
+		buildRemoveCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/BuildArmyIcon.png")));
+		buildRemoveCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/BuildNavyIcon.png")));
+		buildRemoveCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
+		buildRemoveCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
+		buildRemoveCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
+		buildRemoveCommands[5].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
+
+		Image temp = EAnimation.loadImage("/images/LandUnitUpdated.png");
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
-		temp = EAnimation.loadImage("/images/WaterUnit.png");
+		temp = EAnimation.loadImage("/images/WaterUnitUpdated.png");
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		
-		currTurn = new Turn("Spring", 1900);
+		currTurn = new Turn("Spring/Summer", 1900);
+		commands = regularCommands;
 		
 		//define territories
 		Scanner sc = new Scanner(Canvas.class.getResourceAsStream("/docs/terr.csv"));
@@ -194,25 +215,27 @@ public class Canvas extends ECanvas{
 		//draw masterMap for color keys
 		g.drawImage(MasterMap, 0, 0);	
 		
-		g.setColor(Color.green);
+		g.setColor(Color.gray);
 		g.fillRect(1106, 0, 1400-1126, gc.getHeight());
 		
 		g.setColor(Color.black);
-		g.drawString("Country:", 1150, 50);
-		g.drawString("Owner:", 1150, 120);
+		g.drawString("Country:", 1150, 20);
+		g.drawString("Owner:", 1150, 70);
 		
-		g.drawString("SUPPLY CENTER TOTALS", 1145, 180);
-		int i = 200;
+		g.drawString("SUPPLY CENTER TOTALS", 1145, 120);
+		int i = 140;
 		for (Player p : players){
 			g.drawString(p.getName() + ": " + p.getSupplyCount(), 1145, i);
 			i = i + 20;
 		}
 		
+		g.setColor(Color.blue);
 		if (currOrder != null)
-			g.drawString(currOrder.toString(), 1130, 360);
+			g.drawString(currOrder.toString(), 1130, 290);
+		g.setColor(Color.black);
 		
-		g.drawString(displayTerritoryName, 1145, 70);
-		g.drawString(displayTerritoryOwner, 1145, 140);		
+		g.drawString(displayTerritoryName, 1145, 40);
+		g.drawString(displayTerritoryOwner, 1145, 90);		
 		
 		for (Commands c : commands)
 			c.draw();
@@ -251,7 +274,6 @@ public class Canvas extends ECanvas{
 					return;
 				}
 			}
-		
 		}
 	}
 
@@ -275,17 +297,16 @@ public class Canvas extends ECanvas{
 		
 		String s = currTurn.getSeason();
 		int i = currTurn.getYear();
-		if (s.equals("Spring"))
-			currTurn = new Turn("Summer", i);
-		else if (s.equals("Summer"))
-			currTurn = new Turn("Fall", i);
-		else if (s.equals("Fall"))
-			currTurn = new Turn("Winter", i);
-		else if (s.equals("Winter"))
+		if (s.equals("Spring/Summer"))
+			currTurn = new Turn("Fall/Winter", i);
+		else if (s.equals("Fall/Winter")){
 			currTurn = new Turn("Build/Remove", i);
+			commands = buildRemoveCommands;
+		}
 		else{
 			i++;
-			currTurn = new Turn("Spring", i);
+			currTurn = new Turn("Spring/Summer", i);
+			commands = regularCommands;
 		}
 	}
 
@@ -321,30 +342,24 @@ public class Canvas extends ECanvas{
 		return null;
 	}
 
-	public void setCommand(String s){
-		
-		if (s.equals("submit")){
-			currOrder = null;
-			for (Player p : players)
-				p.executeOrders();
-			currTurn.resolveOrders();
-			for (Player p : players)
-				p.resetOrders();
-			adjustNumSC();
-			adjustTurn();
-			state = NORM;
-		}
-		else if (currOrder != null){
+	public void setCommand(String s){		
+		if (currOrder != null){
 			currOrder.setCommand(s);
-			if (s.equals("defend")){
-				currOrder.setTerr2(currOrder.getTerr1());
-				currOrder.pushOrder();
-				state = Canvas.NORM;
-			}
-			else 
-				state = Canvas.COMM_SELECTED;
+			state = Canvas.COMM_SELECTED;
 		}
 		System.out.println(s + " command wus good");
+	}
+
+	public void submit() {
+		currOrder = null;
+		for (Player p : players)
+			p.executeOrders();
+		currTurn.resolveOrders();
+		for (Player p : players)
+			p.resetOrders();
+		adjustNumSC();
+		adjustTurn();
+		state = NORM;
 	}
 
 	/*
@@ -368,12 +383,8 @@ public class Canvas extends ECanvas{
 		
 		else if (state == COMM_SELECTED){			
 			currOrder.setTerr2(t);
-			if (currOrder.getCommand().equals("attack")){
-				if (currOrder.expectingConvoy())
-					state = SELECT_CONVOY_UNITS;
-				else
-					state = NORM;
-			}
+			if (currOrder.getCommand().equals("attack"))
+				state = SELECT_CONVOY_UNITS;
 			else if (currOrder.getCommand().equals("support"))
 				state = SELECT_SUPPORT;
 			else if (currOrder.getCommand().equals("convoy"))
@@ -381,27 +392,30 @@ public class Canvas extends ECanvas{
 		}
 		
 		else if (state == SELECT_SUPPORT){
-			if (t.getUnit() != null){
-				currOrder.setSupport(t.getUnit());
-				state = NORM;
-			}
+			if (t.getUnit() != null)
+				currOrder.setSupport(t.getUnit()); 
 		}
-		
-		else if (state == Canvas.SELECT_CONVOY_DESTINATION){
+		else if (state == Canvas.SELECT_CONVOY_DESTINATION)
 			currOrder.setConvoyDestination(t);
-			state = NORM;
-		}
-		
 		else if (state == Canvas.SELECT_CONVOY_UNITS){
-			if (currOrder.isAmphibiousAttack(t))
-				state = NORM;
-		}
-		
-		if (currOrder != null && currOrder.isValidOrder()){
-			currOrder.pushOrder();
-			state = NORM;
+			if (t.getUnit() != null)
+				currOrder.addConvoyUnit(t.getUnit());
 		}
 
+	}
+
+	public void finalizeOrder() {
+		System.out.println("order set wus good");
+		if (currOrder != null)
+			currOrder.pushOrder();
+		currOrder = null;
+		state = NORM;
+	}
+
+	public void discardOrder() {
+		System.out.println("discardin that muthasuckin order");
+		currOrder = null;
+		state = NORM;
 	}
 
 }

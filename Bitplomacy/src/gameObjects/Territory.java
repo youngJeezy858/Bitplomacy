@@ -215,7 +215,7 @@ public class Territory extends ImageEntity {
 
 	public void uDraw(){
 		if (unit != null)
-			unit.draw(this.getX()+(this.getWidth()/16)-20, this.getY()+(this.getHeight()/2)-50);
+			unit.draw(this.getX()+(this.getWidth()/16)-16, this.getY()+(this.getHeight()/2)-24);
 	}
 
 	public Territory findVacant() {
