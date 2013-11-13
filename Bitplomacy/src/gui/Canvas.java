@@ -176,7 +176,7 @@ public class Canvas extends ECanvas{
 
 		createUnit(getT("Berlin"), Territory.GERMANY, landUnit, true, players[Territory.GERMANY-1]);
 		createUnit(getT("Kiel"), Territory.GERMANY, waterUnit, false, players[Territory.GERMANY-1]);
-		createUnit(getT("Munich"), Territory.GERMANY, waterUnit, false, players[Territory.GERMANY-1]);
+		createUnit(getT("Munich"), Territory.GERMANY, landUnit, true, players[Territory.GERMANY-1]);
 
 		createUnit(getT("Venice"), Territory.ITALY, landUnit, true, players[Territory.ITALY-1]);
 		createUnit(getT("Rome"), Territory.ITALY, landUnit, true, players[Territory.ITALY-1]);
@@ -345,7 +345,10 @@ public class Canvas extends ECanvas{
 	public void setCommand(String s){		
 		if (currOrder != null){
 			currOrder.setCommand(s);
-			state = Canvas.COMM_SELECTED;
+			if (s.equals("defend"))
+				state = NORM;
+			else
+				state = COMM_SELECTED;
 		}
 		System.out.println(s + " command wus good");
 	}
@@ -383,7 +386,7 @@ public class Canvas extends ECanvas{
 		
 		else if (state == COMM_SELECTED){			
 			currOrder.setTerr2(t);
-			if (currOrder.getCommand().equals("attack"))
+			if (currOrder.getCommand().equals("attack") || currOrder.getCommand().equals("move"))
 				state = SELECT_CONVOY_UNITS;
 			else if (currOrder.getCommand().equals("support"))
 				state = SELECT_SUPPORT;
@@ -395,13 +398,12 @@ public class Canvas extends ECanvas{
 			if (t.getUnit() != null)
 				currOrder.setSupport(t.getUnit()); 
 		}
-		else if (state == Canvas.SELECT_CONVOY_DESTINATION)
+		else if (state == SELECT_CONVOY_DESTINATION)
 			currOrder.setConvoyDestination(t);
-		else if (state == Canvas.SELECT_CONVOY_UNITS){
+		else if (state == SELECT_CONVOY_UNITS){
 			if (t.getUnit() != null)
 				currOrder.addConvoyUnit(t.getUnit());
 		}
-
 	}
 
 	public void finalizeOrder() {

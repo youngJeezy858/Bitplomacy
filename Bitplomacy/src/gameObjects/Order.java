@@ -14,7 +14,6 @@ public class Order {
 	private ArrayList<Unit> convoyUnits;
 	private String command;
 	private int strength;
-	private boolean correctSyntax;
 	
 	private int state;
 	public static final int NOT_CHECKED = 0;
@@ -29,7 +28,6 @@ public class Order {
 		strength = 1;
 		command = "idle";
 		state = 0;
-		correctSyntax = false;
 		convoyUnits = new ArrayList<Unit>();
 	}
 	
@@ -46,10 +44,8 @@ public class Order {
 			for (Unit u : convoyUnits)
 				s += u.getTerritory().getName() + "\n";
 		}
-		if (correctSyntax)
-			s += "Order is correct...";
-		else
-			s += "Not complete/valid...";
+		if (convoyDestination != null)
+			s += "to " + convoyDestination.getName();
 		return s;
 	}
 
@@ -97,38 +93,40 @@ public class Order {
 		strength++;
 	}
 
-	public boolean isAmphibiousAttack(Territory t) {
-		if (!t.isLand() || t.getUnit() == null)
-			return false;
-		if (convoyUnits.size() == 0 && terr1.isAdjacent(t)){
-			state = AMPHIBIOUS_ATTACK;
-			convoyUnits.add(t.getUnit());
-			return true;
-		}
-		else if (convoyUnits.size() > 0 && t.isAdjacent(convoyUnits.get(convoyUnits.size()-1).getTerritory())){
-			convoyUnits.add(t.getUnit());
-			return true;
-		}
-		return false;
-	}
-
 	public int getState() {
 		return state;
 	}
 
 	public boolean isValidOrder(){
 		
-		if (command.equals("attack") && terr1.isValidAttack(terr2, convoyUnits))
+		if (command.equals("attack") && terr2 != null)
+			return terr1.isValidAttack(terr2, convoyUnits);
+		else if (command.equals("move") && terr2 != null)
 			return true;
-		else if (command.equals("support") && supportedUnit != null && terr1.isValidSupport(terr2, supportedUnit))
+		else if (command.equals("support") && supportedUnit != null && terr2 != null)
 			return true;
 		else if (command.equals("defend"))
 			return true;
-		else if (command.equals("convoy") && terr1.isValidConvoy(terr2, convoyDestination))
+		else if (command.equals("convoy") && terr2 != null && convoyDestination != null)
 			return true;
 		else
 			return false;
 		
+	}
+
+	public boolean isValidSupport() {
+		
+		if (!unit.isLand() && terr2.isLand() && !terr2.hasCoast())
+			return false;
+		if (unit.isLand() && !terr2.isLand())
+			return false;
+		
+		String supportedCommand = supportedUnit.getOrder().command;
+		if (!(supportedCommand.equals("attack") || supportedCommand.equals("move") || supportedCommand.equals("defend"))) 
+			return false;
+		
+		return terr1.isAdjacent(terr2) && 
+				supportedUnit.getOrder().getTerr2().isAdjacent(terr2);
 	}
 
 	public void setCommand(String c){
@@ -157,13 +155,8 @@ public class Order {
 		return false;
 	}
 
-	public void setReady(boolean b) {
-		correctSyntax = true;
-	}
-
 	public void pushOrder() {
 		unit.setOrder(this);
-		correctSyntax = true;
 	}
 
 	public boolean checkConvoyingUnits() {	

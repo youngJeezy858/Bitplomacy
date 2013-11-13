@@ -9,6 +9,7 @@ public class Turn {
 	private ArrayList<Order> supportOrders;
 	private ArrayList<Order> defendOrders;
 	private ArrayList<Order> attackOrders;
+	private ArrayList<Order> moveOrders;	
 	private ArrayList<Order> convoyOrders;
 	private ArrayList<Order> blankOrders;
 	private ArrayList<Order> retreatOrders;
@@ -19,6 +20,7 @@ public class Turn {
 		supportOrders = new ArrayList<Order>();
 		defendOrders = new ArrayList<Order>();
 		attackOrders = new ArrayList<Order>();
+		moveOrders = new ArrayList<Order>();
 		convoyOrders = new ArrayList<Order>();
 		blankOrders = new ArrayList<Order>();
 		retreatOrders = new ArrayList<Order>();
@@ -33,6 +35,8 @@ public class Turn {
 			attackOrders.add(o);
 		else if (o.getCommand().equals("convoy"))
 			convoyOrders.add(o);
+		else if (o.getCommand().equals("move"))
+			moveOrders.add(o);
 		else
 			blankOrders.add(o);
 	}
@@ -49,55 +53,78 @@ public class Turn {
 		return year;
 	}
 
-	public void resolveOrders() {
-		resolveSupport();
-		resolveConvoy();
-		resolveDefend();
-		resolveIdle();
+	public void resolveOrders() {	
+		checkSyntax();
+		resolveSupport();	
+		resolveMove();
 		resolveAttack();
-		resolveFollowing();
+		resolveConvoy();
+		resolveWaitingOnConvoy();
 		resolveRetreats();
+		resolveSuccessfulMoves();
 	}
 
-	private void resolveFollowing() {
-		
+	private void checkSyntax() {
+		for (Order o : supportOrders){
+			if (!o.isValidOrder())
+				o.adjudicate(Order.FAILED);
+		}
 		for (Order o : attackOrders){
-			if (o.getState() == Order.PASSED)
-				move(o);
-			else if (o.getState() == Order.CHECKED_WAITING){
-				recursiveResolveAttack(o);
+			if (!o.isValidOrder() && !o.isValidOrder())
+				o.adjudicate(Order.FAILED);
+		}
+		for (Order o : moveOrders){
+			if (!o.isValidOrder())
+				o.adjudicate(Order.FAILED);
+		}
+		for (Order o : defendOrders){
+			if (!o.isValidOrder())
+				o.adjudicate(Order.FAILED);
+		}
+		for (Order o : convoyOrders){
+			if (!o.isValidOrder())
+				o.adjudicate(Order.FAILED);
+		}
+	}
+
+	private void resolveSupport() {
+		for (Order so : supportOrders){
+			if (so.getState() == Order.FAILED)
+				continue;
+			for (Order ao : attackOrders){
+				if (ao.getState() != Order.FAILED)
+					continue;
+				else if (ao.getTerr2().equals(so.getTerr1()) && !ao.getTerr1().equals(so.getTerr2()))
+					so.adjudicate(Order.FAILED);
+				else if (!so.isValidSupport())
+					so.adjudicate(Order.FAILED);
+				else{
+					so.adjudicate(Order.PASSED);
+					so.getSupportedUnit().getOrder().incrementStrength();
+				}
+					
 			}
 		}
 	}
-	
-	
 
-	private void recursiveResolveAttack(Order o) {
-		
-		Unit unit = o.getTerr2().getUnit();
-		if (unit == null)
-			move(o);
-		else if ((unit.getOrder().getCommand().equals("attack") && unit.getOrder().getState() == Order.FAILED)
-				|| unit.getOrder().getCommand().equals("support")) {
-			if (o.getStrength() > 1)
-				move(o);
-			else
-				o.adjudicate(Order.FAILED);
-		}
-		else if (unit.getOrder().getCommand().equals("attack") && unit.getOrder().getState() == Order.CHECKED_WAITING){
-			recursiveResolveAttack(unit.getOrder());
-			recursiveResolveAttack(o);
+	private void resolveMove() {
+		for (Order ao : moveOrders){
+			if (ao.getTerr2().getUnit() != null || ao.getState() == Order.FAILED){
+				ao.adjudicate(Order.FAILED);
+				continue;
+			}
+			else if ()
 		}
 	}
 
-	private void move(Order o) {
-		Unit retreater = o.getTerr2().getUnit();
-		if (retreater != null)
-			retreater.retreat();
-		o.getTerr2().setUnit(o.getUnit());
-		o.getUnit().setTerritory(o.getTerr2());
-		o.getTerr1().removeUnit();
-		o.adjudicate(Order.PASSED);
+	private void resolveSuccessfulMoves() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void resolveWaitingOnConvoy() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void resolveRetreats() {
@@ -125,34 +152,6 @@ public class Turn {
 		if (o.getState() != Order.PASSED)
 			o.adjudicate(Order.CHECKED_WAITING);
 	}
-	
-	private void resolveIdle() {
-		for (Order o : blankOrders)
-			findAttackers(o);
-	}
-
-	private void resolveDefend() {
-		for (Order o : defendOrders){
-			o.incrementStrength();
-			findAttackers(o);
-		}
-	}
-
-	private void findAttackers(Order o) {
-		for (Order attack : attackOrders){
-			if (attack.getTerr2().equals(o.getTerr1()) && attack.getState() != Order.FAILED){
-				if (attack.getStrength() > o.getStrength()){
-					attack.adjudicate(Order.PASSED);
-					o.adjudicate(Order.FAILED);
-					retreatOrders.add(o);
-				}
-				else{
-					attack.adjudicate(Order.FAILED);
-					o.adjudicate(Order.PASSED);
-				}
-			}
-		}
-	}
 
 	private void resolveConvoy() {
 		for (Order o : attackOrders){
@@ -162,19 +161,6 @@ public class Turn {
 				else 
 					o.adjudicate(Order.FAILED);
 			}
-		}
-	}
-
-	private void resolveSupport() {
-		for (Order o : supportOrders){
-			Order supported = o.getSupportedUnit().getOrder();
-			if (supported.getTerr2().equals(o.getTerr2()) && 
-					(supported.getCommand().equals("attack") || supported.getCommand().equals("defend")) ){
-				supported.incrementStrength();
-				o.adjudicate(Order.PASSED);
-			}
-			else
-				o.adjudicate(Order.FAILED);
 		}
 	}
 

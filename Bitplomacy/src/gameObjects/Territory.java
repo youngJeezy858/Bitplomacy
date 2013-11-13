@@ -148,12 +148,47 @@ public class Territory extends ImageEntity {
 	public boolean isValidAttack(Territory t, ArrayList<Unit> convoyUnits) {		
 		if (unit.isLand() && !t.land)
 			return false;
-		if (t.land && !unit.isLand() && !t.hasCoast)
+		else if (t.land && !unit.isLand() && !t.hasCoast)
 			return false;
-		if (convoyUnits.size() > 0 && 
-				!convoyUnits.get(convoyUnits.size()-1).getTerritory().isAdjacent(t))
+		else if (isAdjacent(t))
+			return true;
+		
+		else {
+			if (convoyUnits.size() == 0)
+				return false;
+			for (Unit u : convoyUnits){
+				if (u.isLand() || u.getTerritory().isLand())
+					return false;
+			}
+			return findConvoyPath(unit, t, convoyUnits);
+		}
+	}
+
+	private boolean findConvoyPath(Unit currUnit, Territory t, ArrayList<Unit> convoyUnits) {
+		
+		if (convoyUnits.size() == 0){
+			if (currUnit.getTerritory().isAdjacent(t))
+				return true;
+			else
+				return false;
+		}
+		
+		Unit temp = null;
+		int i;
+		for (i = 0; i < convoyUnits.size(); i++){
+			if (currUnit.getTerritory().isAdjacent(convoyUnits.get(i).getTerritory())){
+				temp = convoyUnits.get(i);
+				break;
+			}
+		}
+		
+		if (temp == null)
 			return false;
-		return isAdjacent(t);
+		else{
+			convoyUnits.remove(i);
+			return findConvoyPath(temp, t, convoyUnits);
+		}
+		
 	}
 
 	public boolean isValidConvoy(Territory convoyStart, Territory convoyDestination) {
@@ -170,23 +205,6 @@ public class Territory extends ImageEntity {
 			return false;
 		
 		return isAdjacent(convoyDestination) && isAdjacent(convoyStart);
-	}
-
-	public boolean isValidSupport(Territory t, Unit u) {
-
-		// case one: land unit wanting to support water -
-		// exit immediately
-		if (!t.land && unit.isLand()) 
-			return false;
-	
-		// case two: water unit wanting to supports a port-less land territory -
-		// exit immediately
-		if (t.land && !unit.isLand() && !t.hasCoast)
-			return false;
-		
-		//case three: check if the territory is adjacent to this unit
-		return isAdjacent(t) && u.getTerritory().isAdjacent(t);
-	
 	}
 
 	public boolean hasSC(){
@@ -229,6 +247,10 @@ public class Territory extends ImageEntity {
 			}
 		}
 		return null;
+	}
+
+	public boolean hasCoast() {
+		return hasCoast;
 	}
 	
 }
