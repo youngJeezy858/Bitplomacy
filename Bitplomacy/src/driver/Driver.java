@@ -10,10 +10,17 @@ import gui.Canvas;
 import com.erebos.engine.core.*;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Driver.
+ */
 public class Driver extends EGame
 {
 
 	
+	/**
+	 * Instantiates a new driver.
+	 */
 	public Driver() 
 	{
 		super("Bitplomacy");
@@ -21,6 +28,11 @@ public class Driver extends EGame
 		addCanvas(Canvas.getC());
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args)
 	{
 		File homeFolder=new File(System.getProperty("user.home")+File.separator+"Bitplomacy");
@@ -35,6 +47,11 @@ public class Driver extends EGame
 		d.start(d, 1380, 831, false);
 	}
 	
+	/**
+	 * Copy natives.
+	 *
+	 * @param destDir the dest dir
+	 */
 	public static void copyNatives(File destDir)
 	{
 	

@@ -2,18 +2,45 @@ package gameObjects;
 
 import java.util.ArrayList;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Turn.
+ */
 public class Turn {
 
+	/** The season. */
 	private String season;
+	
+	/** The year. */
 	private int year;
+	
+	/** The support orders. */
 	private ArrayList<Order> supportOrders;
+	
+	/** The defend orders. */
 	private ArrayList<Order> defendOrders;
+	
+	/** The attack orders. */
 	private ArrayList<Order> attackOrders;
+	
+	/** The move orders. */
 	private ArrayList<Order> moveOrders;	
+	
+	/** The convoy orders. */
 	private ArrayList<Order> convoyOrders;
+	
+	/** The blank orders. */
 	private ArrayList<Order> blankOrders;
+	
+	/** The retreat orders. */
 	private ArrayList<Order> retreatOrders;
 
+	/**
+	 * Instantiates a new turn.
+	 *
+	 * @param season the season
+	 * @param year the year
+	 */
 	public Turn(String season, int year){
 		this.season = season;
 		this.year = year;
@@ -26,6 +53,11 @@ public class Turn {
 		retreatOrders = new ArrayList<Order>();
 	}
 	
+	/**
+	 * Adds the order.
+	 *
+	 * @param o the order to be added
+	 */
 	public void addOrder(Order o){
 		if (o.getCommand().equals("support"))
 			supportOrders.add(o);
@@ -41,36 +73,55 @@ public class Turn {
 			blankOrders.add(o);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		return season + " " + year;
 	}
 	
+	/**
+	 * Gets the season.
+	 *
+	 * @return the season
+	 */
 	public String getSeason(){
 		return season;
 	}
 	
+	/**
+	 * Gets the year.
+	 *
+	 * @return the year
+	 */
 	public int getYear(){
 		return year;
 	}
 
+	/**
+	 * Resolve orders.
+	 */
 	public void resolveOrders() {	
 		checkSyntax();
-		resolveSupport();	
-		resolveMove();
-		resolveAttack();
-		resolveConvoy();
-		resolveWaitingOnConvoy();
+		resolveSupport();
+		resolveWaterAttacks();
+		resolveMoves();
+		resolveAttacks();
 		resolveRetreats();
 		resolveSuccessfulMoves();
 	}
 
+	/**
+	 * Check the syntax of the orders. Checks attack orders more deeply in case a support
+	 * order was cut off.  Executed first during adjudication.
+	 */
 	private void checkSyntax() {
 		for (Order o : supportOrders){
 			if (!o.isValidOrder())
 				o.adjudicate(Order.FAILED);
 		}
 		for (Order o : attackOrders){
-			if (!o.isValidOrder() && !o.isValidOrder())
+			if (!o.isValidOrder())
 				o.adjudicate(Order.FAILED);
 		}
 		for (Order o : moveOrders){
@@ -87,6 +138,11 @@ public class Turn {
 		}
 	}
 
+	/**
+	 * Resolves support orders.  Support orders that do not have correct syntax or have
+	 * had their support cut because of an attack have already been marked as FAILED.  
+	 * Executed second during adjudication.
+	 */
 	private void resolveSupport() {
 		for (Order so : supportOrders){
 			if (so.getState() == Order.FAILED)
@@ -107,37 +163,108 @@ public class Turn {
 		}
 	}
 
-	private void resolveMove() {
-		for (Order ao : moveOrders){
-			if (ao.getTerr2().getUnit() != null || ao.getState() == Order.FAILED){
-				ao.adjudicate(Order.FAILED);
-				continue;
+	/**
+	 * Sees if any convoy orders were dislodged by checking all water attacks. Executed 
+	 * third during adjudication.
+	 */
+	private void resolveWaterAttacks() {
+		for (Order ao : attackOrders){
+			if (ao.getState() != Order.FAILED && ao.getTerr2().getUnit() != null && !ao.getTerr2().isLand()
+					&& !ao.getTerr2().getUnit().getOrder().equals("attack") && !ao.getTerr2().getUnit().getOrder().equals("move")){
+				if (ao.getStrength() > ao.getTerr2().getUnit().getOrder().getStrength()){
+					ao.adjudicate(Order.PASSED);
+					ao.getTerr2().getUnit().getOrder().adjudicate(Order.FAILED);
+					retreatOrders.add(ao.getTerr2().getUnit().getOrder());
+				}
+				else
+					ao.adjudicate(Order.FAILED);
 			}
-			else if ()
 		}
 	}
 
+	/**
+	 * Resolves all move attacks.  If it passes it marks the order as CHECKED_WAITING
+	 * since it will still need to see if any other moves/attacks are going to the same
+	 * place.  Executed fourth during adjudication.  
+	 */
+	private void resolveMoves() {
+		for (Order mo : moveOrders){
+			if (resolveMove(mo))
+				mo.adjudicate(Order.FAILED);
+			else
+				mo.adjudicate(Order.CHECKED_WAITING);
+		}
+	}
+	
+	private boolean resolveMove(Order o){
+		if (o.getState() == Order.FAILED ||
+				(o.getUnit().isLand() && !o.getTerr2().isLand()) ||
+				(!o.getUnit().isLand() && o.getTerr2().isLand() && !o.getTerr2().hasCoast())){
+			return false;
+		}
+		
+		else if (o.getTerr2().getUnit() != null){
+			Order occupyingUnitOrder = o.getTerr2().getUnit().getOrder();
+			if (occupyingUnitOrder.equals("attack")){
+				if (occupyingUnitOrder.getTerr2().equals(o.getTerr1()) || !resolveAttack(occupyingUnitOrder))
+					return false;
+			}
+			else if (occupyingUnitOrder.equals("move")){
+				if (occupyingUnitOrder.getTerr2().equals(o.getTerr1())){
+					if (occupyingUnitOrder.getUnit().getOwner() == o.getUnit().getOwner())
+						return true;
+					else
+						return false;
+				}
+				else if (resolveMove)
+					/////THis won't work for the rotating door case.
+			}
+		}
+	}
+
+	private boolean resolveAttack(Order occupyingUnitOrder) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Resolve successful moves.
+	 */
 	private void resolveSuccessfulMoves() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Resolve waiting on convoy.
+	 */
 	private void resolveWaitingOnConvoy() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Resolve retreats.
+	 */
 	private void resolveRetreats() {
 		
 	}
 
-	private void resolveAttack() {
+	/**
+	 * Resolve attack.
+	 */
+	private void resolveAttacks() {
 		for (Order o : attackOrders){
 			if (o.getState() != Order.FAILED)
 				resolveSameMoves(o);
 		}
 	}
 
+	/**
+	 * Resolve same moves.
+	 *
+	 * @param o the o
+	 */
 	private void resolveSameMoves(Order o) {
 		for (Order attack : attackOrders){
 			if (o.getTerr2().equals(attack.getTerr2()) && !o.getTerr1().equals(attack.getTerr1())){
@@ -151,17 +278,6 @@ public class Turn {
 		}
 		if (o.getState() != Order.PASSED)
 			o.adjudicate(Order.CHECKED_WAITING);
-	}
-
-	private void resolveConvoy() {
-		for (Order o : attackOrders){
-			if (o.getState() == Order.AMPHIBIOUS_ATTACK){
-				if (o.checkConvoyingUnits())
-					o.adjudicate(Order.CHECKED_WAITING);
-				else 
-					o.adjudicate(Order.FAILED);
-			}
-		}
 	}
 
 }

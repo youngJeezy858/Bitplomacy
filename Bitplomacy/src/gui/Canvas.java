@@ -21,14 +21,26 @@ import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Canvas.
+ */
 public class Canvas extends ECanvas{
 
 	/* Singleton variable for the Canvas */
+	/** The c. */
 	private static Canvas c = null;
 	
+	/** The territories. */
 	private Territory[] territories;
+	
+	/** The players. */
 	private Player[] players;
+	
+	/** The commands. */
 	private Commands[] commands;
+	
+	/** The regular commands. */
 	private Commands[] regularCommands = { new AttackCommand(1166, 635, 100),
 			new DefendCommand(1126, 729, 150),
 			new SupportCommand(1212, 729, 50),
@@ -37,6 +49,8 @@ public class Canvas extends ECanvas{
 			new MoveCommand(1258, 635, 25),
 			new SetOrderCommand(1152, 450, 75),
 			new DiscardOrderCommand(1269, 450, 125)};
+	
+	/** The build remove commands. */
 	private Commands[] buildRemoveCommands = { new BuildArmyCommand(1166, 635, 100),
 			new BuildNavyCommand(1258, 635, 25),
 			new RemoveUnitCommand(1212, 729, 50),
@@ -44,33 +58,65 @@ public class Canvas extends ECanvas{
 			new SetOrderCommand(1152, 450, 75),
 			new DiscardOrderCommand(1269, 450, 125)};
 	
+	/** The display territory name. */
 	private String displayTerritoryName;
+	
+	/** The display territory owner. */
 	private String displayTerritoryOwner;
+	
+	/** The curr order. */
 	private Order currOrder;
+	
+	/** The curr turn. */
 	private Turn currTurn;
+	
+	/** The font. */
 	private TrueTypeFont font;
 	
+	/** The state. */
 	private int state;
+	
+	/** The Constant NORM. */
 	public static final int NORM = 0;
+	
+	/** The Constant COMM_SELECTED. */
 	public static final int COMM_SELECTED = 1;
+	
+	/** The Constant SELECT_SUPPORT. */
 	public static final int SELECT_SUPPORT = 2;
+	
+	/** The Constant SELECT_CONVOY_DESTINATION. */
 	public static final int SELECT_CONVOY_DESTINATION = 3;
+	
+	/** The Constant SELECT_CONVOY_UNITS. */
 	public static final int SELECT_CONVOY_UNITS = 4;
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
+	/** The Master map. */
 	private Image MasterMap;
+	
+	/** The Borders. */
 	private Image Borders;
 		
 	/* SpriteSheets for Units */
+	/** The land unit. */
 	private SpriteSheet landUnit;
+	
+	/** The water unit. */
 	private SpriteSheet waterUnit;
 	
+	/**
+	 * Instantiates a new canvas.
+	 */
 	private Canvas(){
 		super(1);
 		state = NORM;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.erebos.engine.core.ECanvas#eInit(org.newdawn.slick.GameContainer, com.erebos.engine.core.EGame)
+	 */
 	@Override
 	public void eInit(GameContainer gc, EGame eg) {		
 		
@@ -161,6 +207,9 @@ public class Canvas extends ECanvas{
 	 * sets ownership for territories and generate units for each 
 	 * team. 
 	 */
+	/**
+	 * Sets the board.
+	 */
 	private void setBoard() {
 		createUnit(getT("Edinburgh"), Territory.ENGLAND, waterUnit, false, players[Territory.ENGLAND-1]);
 		createUnit(getT("Liverpool"), Territory.ENGLAND, landUnit, true, players[Territory.ENGLAND-1]);
@@ -192,6 +241,15 @@ public class Canvas extends ECanvas{
 		createUnit(getT("Smyrna"), Territory.TURKEY, landUnit, true, players[Territory.TURKEY-1]);
 	}
 	
+	/**
+	 * Creates the unit.
+	 *
+	 * @param t the t
+	 * @param owner the owner
+	 * @param ss the ss
+	 * @param isLand the is land
+	 * @param p the p
+	 */
 	private void createUnit(Territory t, int owner, SpriteSheet ss, boolean isLand, Player p){
 		t.setOwner(owner);
 		Unit temp = new Unit(ss, owner - 1, isLand, t);
@@ -204,12 +262,21 @@ public class Canvas extends ECanvas{
 	 * @param String location -> the file path of the image
 	 * @returns -> a Spritesheet of the image
 	 */
+	/**
+	 * SS factory.
+	 *
+	 * @param location the location
+	 * @return the sprite sheet
+	 */
 	private SpriteSheet SSFactory(String location){
 		Image temp = EAnimation.loadImage(location);
 		SpriteSheet ss = new SpriteSheet(temp, temp.getWidth()/8, temp.getHeight());
 		return ss;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.erebos.engine.core.ECanvas#eRender(org.newdawn.slick.GameContainer, com.erebos.engine.core.EGame, org.newdawn.slick.Graphics)
+	 */
 	public void eRender(GameContainer gc, EGame eg, Graphics g) {
 			
 		//draw masterMap for color keys
@@ -250,6 +317,9 @@ public class Canvas extends ECanvas{
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.erebos.engine.core.ECanvas#eUpdate(org.newdawn.slick.GameContainer, com.erebos.engine.core.EGame, int)
+	 */
 	@Override
 	public void eUpdate(GameContainer gc, EGame eg, int delta) {			
 		
@@ -277,10 +347,18 @@ public class Canvas extends ECanvas{
 		}
 	}
 
+	/**
+	 * Adds the order.
+	 *
+	 * @param o the o
+	 */
 	public void addOrder(Order o){
 		currTurn.addOrder(o);
 	}
 
+	/**
+	 * Adjust num sc.
+	 */
 	public void adjustNumSC() {
 		int i;
 		for (Player p : players){
@@ -293,6 +371,9 @@ public class Canvas extends ECanvas{
 		}
 	}
 
+	/**
+	 * Adjust turn.
+	 */
 	private void adjustTurn() {
 		
 		String s = currTurn.getSeason();
@@ -310,6 +391,11 @@ public class Canvas extends ECanvas{
 		}
 	}
 
+	/**
+	 * Gets the c.
+	 *
+	 * @return the c
+	 */
 	public static Canvas getC() {
 		if (c == null)
 			c = new Canvas();
@@ -321,19 +407,40 @@ public class Canvas extends ECanvas{
 	 * 
 	 * @returns Color -> the Color at the current mouse position
 	 */
+	/**
+	 * Gets the current color.
+	 *
+	 * @return the current color
+	 */
 	public Color getCurrentColor(){
 		return new Color(MasterMap.getColor(Mouse.getX(), Math.abs(Mouse.getY()-831)));
 	}
 	
 	
+	/**
+	 * Gets the order.
+	 *
+	 * @return the order
+	 */
 	public Order getOrder() {
 		return currOrder;
 	}
 
+	/**
+	 * Gets the state.
+	 *
+	 * @return the state
+	 */
 	public int getState() {
 		return state;
 	}
 
+	/**
+	 * Gets the t.
+	 *
+	 * @param name the name
+	 * @return the t
+	 */
 	public Territory getT(String name){
 		for (Territory t : territories){
 			if (t.getName().equals(name))
@@ -342,6 +449,11 @@ public class Canvas extends ECanvas{
 		return null;
 	}
 
+	/**
+	 * Sets the command.
+	 *
+	 * @param s the new command
+	 */
 	public void setCommand(String s){		
 		if (currOrder != null){
 			currOrder.setCommand(s);
@@ -353,6 +465,9 @@ public class Canvas extends ECanvas{
 		System.out.println(s + " command wus good");
 	}
 
+	/**
+	 * Submit.
+	 */
 	public void submit() {
 		currOrder = null;
 		for (Player p : players)
@@ -370,10 +485,20 @@ public class Canvas extends ECanvas{
 	 * 
 	 * @param s -> the state of the game as an int value.  See class fields for state descriptions
 	 */
+	/**
+	 * Sets the state.
+	 *
+	 * @param s the new state
+	 */
 	public void setState(int s){
 		state = s;
 	}
 	
+	/**
+	 * Update territory.
+	 *
+	 * @param t the t
+	 */
 	public void updateTerritory(Territory t) {
 
 		displayTerritoryName = t.getName();
@@ -406,6 +531,9 @@ public class Canvas extends ECanvas{
 		}
 	}
 
+	/**
+	 * Finalize order.
+	 */
 	public void finalizeOrder() {
 		System.out.println("order set wus good");
 		if (currOrder != null)
@@ -414,6 +542,9 @@ public class Canvas extends ECanvas{
 		state = NORM;
 	}
 
+	/**
+	 * Discard order.
+	 */
 	public void discardOrder() {
 		System.out.println("discardin that muthasuckin order");
 		currOrder = null;
