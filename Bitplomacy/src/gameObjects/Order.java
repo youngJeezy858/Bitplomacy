@@ -48,6 +48,10 @@ public class Order {
 	
 	/** The Constant PASSED. */
 	public static final int PASSED = 3;
+
+	public static final int FOLLOWING = 4;
+
+	public static final int DONE = 5;
 		
 	/**
 	 * Instantiates a new order.
@@ -195,15 +199,17 @@ public class Order {
 	 */
 	public boolean isValidOrder(){
 		
-		if (command.equals("attack") && terr2 != null)
+		if (command.equals("attack") && terr2 != null && !terr2.equals(terr1))
 			return terr1.isValidAttack(terr2, convoyUnits);
-		else if (command.equals("move") && terr2 != null)
+		else if (command.equals("move") && terr2 != null && !terr2.equals(terr1))
 			return true;
-		else if (command.equals("support") && supportedUnit != null && terr2 != null)
+		else if (command.equals("support") && supportedUnit != null && terr2 != null && !terr2.equals(terr1))
 			return true;
 		else if (command.equals("defend"))
 			return true;
-		else if (command.equals("convoy") && terr2 != null && convoyDestination != null)
+		else if (command.equals("convoy") && terr2 != null && convoyDestination != null && !terr2.equals(terr1)
+				&& !unit.isLand() && !terr1.isLand() && terr2.getUnit() != null && 
+				(convoyDestination.isLand() || (!convoyDestination.isLand() && convoyDestination.getUnit() != null)))
 			return true;
 		else
 			return false;
@@ -226,8 +232,7 @@ public class Order {
 		if (!(supportedCommand.equals("attack") || supportedCommand.equals("move") || supportedCommand.equals("defend"))) 
 			return false;
 		
-		return terr1.isAdjacent(terr2) && 
-				supportedUnit.getOrder().getTerr2().isAdjacent(terr2);
+		return terr1.isAdjacent(terr2);
 	}
 
 	/**
@@ -322,6 +327,46 @@ public class Order {
 	 */
 	public boolean equals(String command){
 		return this.command.equals(command);
+	}
+
+	public ArrayList<Unit> getConvoyUnits() {
+		return convoyUnits;
+	}
+	
+	/**
+	 * Find convoy path.
+	 *
+	 * @param currUnit the curr unit
+	 * @param t the t
+	 * @param convoyUnits the convoy units
+	 * @return true, if successful
+	 */
+	public static boolean findConvoyPath(Unit currUnit, Territory t, ArrayList<Unit> convoyUnits) {
+		
+		if (convoyUnits.size() == 0){
+			if (currUnit.getTerritory().isAdjacent(t))
+				return true;
+			else
+				return false;
+		}
+		
+		Unit temp = null;
+		int i;
+		for (i = 0; i < convoyUnits.size(); i++){
+			if (currUnit.getTerritory().isAdjacent(convoyUnits.get(i).getTerritory())){
+				temp = convoyUnits.get(i);
+				temp.getOrder().adjudicate(Order.PASSED);
+				break;
+			}
+		}
+		
+		if (temp == null)
+			return false;
+		else{
+			convoyUnits.remove(i);
+			return findConvoyPath(temp, t, convoyUnits);
+		}
+		
 	}
 	
 }

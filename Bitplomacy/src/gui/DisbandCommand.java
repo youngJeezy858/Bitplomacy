@@ -4,7 +4,7 @@ package gui;
 /**
  * The Class RemoveUnitCommand.
  */
-public class RemoveUnitCommand extends Commands {
+public class DisbandCommand extends Commands {
 
 	/**
 	 * Instantiates a new removes the unit command.
@@ -13,7 +13,7 @@ public class RemoveUnitCommand extends Commands {
 	 * @param y the y
 	 * @param color the color
 	 */
-	public RemoveUnitCommand(float x, float y, int color) {
+	public DisbandCommand(float x, float y, int color) {
 		super(x, y, color);
 	}
 
@@ -22,7 +22,7 @@ public class RemoveUnitCommand extends Commands {
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("remove unit");
+		Canvas.getC().setCommand("disband");
 	}
 
 }

@@ -262,54 +262,13 @@ public class Territory extends ImageEntity {
 			return false;
 		else if (t.land && !unit.isLand() && !t.hasCoast)
 			return false;
-		else if (isAdjacent(t))
-			return true;
-		
-		else {
-			if (convoyUnits.size() == 0)
-				return false;
-			for (Unit u : convoyUnits){
-				if (u.isLand() || u.getTerritory().isLand())
-					return false;
-			}
-			return findConvoyPath(unit, t, convoyUnits);
-		}
-	}
-
-	/**
-	 * Find convoy path.
-	 *
-	 * @param currUnit the curr unit
-	 * @param t the t
-	 * @param convoyUnits the convoy units
-	 * @return true, if successful
-	 */
-	private boolean findConvoyPath(Unit currUnit, Territory t, ArrayList<Unit> convoyUnits) {
-		
-		if (convoyUnits.size() == 0){
-			if (currUnit.getTerritory().isAdjacent(t))
-				return true;
-			else
-				return false;
-		}
-		
-		Unit temp = null;
-		int i;
-		for (i = 0; i < convoyUnits.size(); i++){
-			if (currUnit.getTerritory().isAdjacent(convoyUnits.get(i).getTerritory())){
-				temp = convoyUnits.get(i);
-				temp.getOrder().adjudicate(Order.PASSED);
-				break;
-			}
-		}
-		
-		if (temp == null)
+		else if (t.getUnit() != null && t.getUnit().getOwner() == unit.getOwner())
 			return false;
-		else{
-			convoyUnits.remove(i);
-			return findConvoyPath(temp, t, convoyUnits);
-		}
-		
+		else if (isAdjacent(t) && convoyUnits.size() == 0)
+			return true;
+		else if (convoyUnits.size() > 0)
+			return true;
+		return false;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package gui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import gameObjects.Order;
@@ -53,7 +54,13 @@ public class Canvas extends ECanvas{
 	/** The build remove commands. */
 	private Commands[] buildRemoveCommands = { new BuildArmyCommand(1166, 635, 100),
 			new BuildNavyCommand(1258, 635, 25),
-			new RemoveUnitCommand(1212, 729, 50),
+			new DisbandCommand(1212, 729, 50),
+			new SubmitCommand(1152, 546, 200),
+			new SetOrderCommand(1152, 450, 75),
+			new DiscardOrderCommand(1269, 450, 125)};
+	
+	private Commands[] retreatDisbandCommands = { new DisbandCommand(1166, 635, 100),
+			new RetreatCommand(1258, 635, 25),
 			new SubmitCommand(1152, 546, 200),
 			new SetOrderCommand(1152, 450, 75),
 			new DiscardOrderCommand(1269, 450, 125)};
@@ -90,6 +97,11 @@ public class Canvas extends ECanvas{
 	
 	/** The Constant SELECT_CONVOY_UNITS. */
 	public static final int SELECT_CONVOY_UNITS = 4;
+  
+	public static final int SELECT_RETREAT_DESTINATION = 5;
+	
+	public static final int FINISH_ADJUDICATION = 6;
+
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
@@ -150,6 +162,12 @@ public class Canvas extends ECanvas{
 		buildRemoveCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
 		buildRemoveCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
 		buildRemoveCommands[5].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
+		
+		retreatDisbandCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
+		retreatDisbandCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/RetreatIcon.png")));
+		retreatDisbandCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
+		retreatDisbandCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
+		retreatDisbandCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
 
 		Image temp = EAnimation.loadImage("/images/LandUnitUpdated.png");
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
@@ -378,9 +396,19 @@ public class Canvas extends ECanvas{
 		
 		String s = currTurn.getSeason();
 		int i = currTurn.getYear();
-		if (s.equals("Spring/Summer"))
+		if (s.equals("Spring/Summer")){
+			currTurn.setSeason("Summer Retreats");
+			commands = retreatDisbandCommands;
+		}
+		else if (s.equals("Summer Retreats")){
 			currTurn = new Turn("Fall/Winter", i);
+			commands = regularCommands;
+		}
 		else if (s.equals("Fall/Winter")){
+			currTurn.setSeason("Winter Retreats");
+			commands = retreatDisbandCommands;
+		}
+		else if (s.equals("Winter Retreats")){
 			currTurn = new Turn("Build/Remove", i);
 			commands = buildRemoveCommands;
 		}
@@ -459,6 +487,8 @@ public class Canvas extends ECanvas{
 			currOrder.setCommand(s);
 			if (s.equals("defend"))
 				state = NORM;
+			else if (s.equals("disband"))
+				state = NORM;
 			else
 				state = COMM_SELECTED;
 		}
@@ -472,10 +502,12 @@ public class Canvas extends ECanvas{
 		currOrder = null;
 		for (Player p : players)
 			p.executeOrders();
-		currTurn.resolveOrders();
+		if (currTurn.getSeason().contains("Retreats"))
+			currTurn.resolveRetreats();
+		else
+			currTurn.resolveOrders();
 		for (Player p : players)
 			p.resetOrders();
-		adjustNumSC();
 		adjustTurn();
 		state = NORM;
 	}
@@ -549,6 +581,17 @@ public class Canvas extends ECanvas{
 		System.out.println("discardin that muthasuckin order");
 		currOrder = null;
 		state = NORM;
+	}
+
+	public void readyForRetreats() {
+		commands = retreatDisbandCommands;
+	}
+
+	public void removeUnit(Unit unit) {
+		players[unit.getOwner()-1].removeUnit(unit.getTerritory());
+		if (!unit.getTerritory().hasSC())
+			unit.getTerritory().setOwner(Territory.NEUTRAL);
+		unit.getTerritory().removeUnit();
 	}
 
 }

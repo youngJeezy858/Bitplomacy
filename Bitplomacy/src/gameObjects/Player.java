@@ -79,4 +79,17 @@ public class Player {
 			u.resetOrder();
 	}
 	
+	public void removeUnit(Territory t){
+		int i;
+		boolean blah = false;
+		for (i = 0; i < units.size(); i++){
+			if (units.get(i).getTerritory().equals(t)){
+				blah = true;
+				break;
+			}
+		}
+		if (blah)
+			units.remove(i);
+	}
+	
 }
