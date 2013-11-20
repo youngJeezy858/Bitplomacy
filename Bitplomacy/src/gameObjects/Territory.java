@@ -262,8 +262,6 @@ public class Territory extends ImageEntity {
 			return false;
 		else if (t.land && !unit.isLand() && !t.hasCoast)
 			return false;
-		else if (t.getUnit() != null && t.getUnit().getOwner() == unit.getOwner())
-			return false;
 		else if (isAdjacent(t) && convoyUnits.size() == 0)
 			return true;
 		else if (convoyUnits.size() > 0)

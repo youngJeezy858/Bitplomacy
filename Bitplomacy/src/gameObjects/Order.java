@@ -52,6 +52,10 @@ public class Order {
 	public static final int FOLLOWING = 4;
 
 	public static final int DONE = 5;
+
+	public static final int CHECKER = 6;
+
+	public static final int CHECKING = 7;
 		
 	/**
 	 * Instantiates a new order.
@@ -226,6 +230,8 @@ public class Order {
 		if (!unit.isLand() && terr2.isLand() && !terr2.hasCoast())
 			return false;
 		if (unit.isLand() && !terr2.isLand())
+			return false;
+		if (terr2.getUnit() != null && terr2.getUnit().getOwner() == unit.getOwner())
 			return false;
 		
 		String supportedCommand = supportedUnit.getOrder().command;

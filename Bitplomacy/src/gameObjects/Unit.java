@@ -100,6 +100,7 @@ public class Unit extends ImageEntity{
 		else{
 			Order o = new Order(curTerr);
 			o.setTerr2(curTerr);
+			order = o;
 			Canvas.getC().addOrder(o);
 		}
 	}

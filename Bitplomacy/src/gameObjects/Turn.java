@@ -151,6 +151,7 @@ public class Turn {
 				ro1.adjudicate(Order.FAILED);
 			else{
 				ro1.adjudicate(Order.PASSED);
+				ro1.getTerr1().removeUnit();
 				moveUnit(ro1);
 			}
 		}
@@ -162,13 +163,8 @@ public class Turn {
 		for (Order ao : attackOrders){
 			if (ao.getState() == Order.CHECKED_WAITING){
 				ao.adjudicate(Order.PASSED);
+				ao.getTerr1().removeUnit();
 				moveUnit(ao);
-			}
-		}
-		for (Order mo : moveOrders){
-			if (mo.getState() == Order.CHECKED_WAITING){
-				mo.adjudicate(Order.PASSED);
-				moveUnit(mo);
 			}
 		}
 	}
@@ -196,6 +192,14 @@ public class Turn {
 	}
 
 	private void movePassedFollowingUnits() {
+		for (Order ao : attackOrders){
+			if (ao.getState() == Order.PASSED || ao.getState() == Order.FOLLOWING || ao.getState() == Order.CHECKING)
+				ao.getTerr1().removeUnit();
+		}
+		for (Order mo : moveOrders){
+			if (mo.getState() == Order.PASSED || mo.getState() == Order.FOLLOWING || mo.getState() == Order.CHECKING)
+				mo.getTerr1().removeUnit();
+		}
 		for (Order ao : attackOrders)
 			moveUnit(ao);
 		for (Order mo : moveOrders)
@@ -203,18 +207,13 @@ public class Turn {
 	}
 
 	private void moveUnit(Order o) {
-		if (o.getState() == Order.PASSED){
+		if (o.getState() == Order.PASSED || o.getState() == Order.FOLLOWING || o.getState() == Order.CHECKING){
+			o.adjudicate(Order.PASSED);
 			o.getTerr2().setUnit(o.getUnit());
 			if (!o.getTerr2().hasSC())
 				o.getTerr2().setOwner(o.getUnit().getOwner());
 			o.getUnit().setTerritory(o.getTerr2());
-			o.getTerr1().removeUnit();
 			o.adjudicate(Order.DONE);
-		}
-		else if (o.getState() == Order.FOLLOWING){
-			moveUnit(o.getTerr2().getUnit().getOrder());
-			o.adjudicate(Order.PASSED);
-			moveUnit(o);
 		}	
 	}
 
@@ -222,7 +221,7 @@ public class Turn {
 		for (Order ao : attackOrders){
 			if (ao.getState() == Order.CHECKED_WAITING){
 				if (hasConflict(ao))
-					ao.adjudicate(Order.FAILED);
+					ao.adjudicate(Order.CHECKER);
 				else if (ao.getTerr2().getUnit() == null)
 					ao.adjudicate(Order.PASSED);
 			}
@@ -231,7 +230,7 @@ public class Turn {
 		for (Order mo : moveOrders){
 			if (mo.getState() == Order.CHECKED_WAITING){
 				if (hasConflict(mo))
-					mo.adjudicate(Order.FAILED);
+					mo.adjudicate(Order.CHECKER);
 				else if (mo.getTerr2().getUnit() == null)
 					mo.adjudicate(Order.PASSED);
 			}
@@ -240,7 +239,7 @@ public class Turn {
 
 	private boolean hasConflict(Order o) {
 		for (Order ao : attackOrders){
-			if (ao.getState() != Order.CHECKED_WAITING || ao.getState() != Order.FOLLOWING)
+			if (ao.getState() != Order.CHECKED_WAITING && ao.getState() != Order.FOLLOWING && ao.getState() != Order.CHECKER)
 				continue;
 			else if (ao.getTerr1().equals(o.getTerr1()))
 				continue;
@@ -424,17 +423,11 @@ public class Turn {
 		
 		else if (o.getTerr2().getUnit() != null){
 			Order occupyingUnitOrder = o.getTerr2().getUnit().getOrder();
-			if (occupyingUnitOrder.getState() == Order.FAILED || !(occupyingUnitOrder.equals("move") 
-					|| occupyingUnitOrder.equals("attack") || occupyingUnitOrder.equals("defend"))){
-				if (o.getStrength() > 1){
-					retreatingTerritories.add(occupyingUnitOrder.getTerr1());
-					return 1;
-				}
-				else
-					return 0;
-			}
 			
-			else if (occupyingUnitOrder.equals("attack")){
+			if (occupyingUnitOrder.getState() == Order.CHECKING)
+				return 1;
+			
+			else if (occupyingUnitOrder.equals("attack") && occupyingUnitOrder.getState() != Order.FAILED){
 				if (occupyingUnitOrder.getTerr2().equals(o.getTerr1())){
 					if (occupyingUnitOrder.getStrength() >= o.getStrength())
 						return 0;
@@ -443,6 +436,7 @@ public class Turn {
 						return 1;
 					}
 				}
+				o.adjudicate(Order.CHECKING);
 				int i = resolveAttack(occupyingUnitOrder);
 				if (i == 0){
 					if (o.getStrength() > 1)
@@ -454,7 +448,7 @@ public class Turn {
 					return 2;
 			}
 			
-			else if (occupyingUnitOrder.equals("move")){
+			else if (occupyingUnitOrder.equals("move") && occupyingUnitOrder.getState() != Order.FAILED){
 				int i = resolveMove(occupyingUnitOrder);
 				if (i != 1){
 					if (o.getStrength() > 1){
@@ -471,12 +465,24 @@ public class Turn {
 					return 2;
 				}
 			}
-			else if (occupyingUnitOrder.equals("defend")){
+			
+			else if (occupyingUnitOrder.getUnit().getOwner() == o.getUnit().getOwner())
+				return 0;
+			
+			else if (occupyingUnitOrder.equals("defend") && occupyingUnitOrder.getState() != Order.FAILED){
 				if (o.getStrength() > occupyingUnitOrder.getStrength()){
 					retreatingTerritories.add(occupyingUnitOrder.getTerr1());
 					return 1;
 				}
 				else
+					return 0;
+			}
+			
+			else {
+				if (o.getStrength() > 1) {
+					retreatingTerritories.add(occupyingUnitOrder.getTerr1());
+					return 1;
+				} else
 					return 0;
 			}
 		}
