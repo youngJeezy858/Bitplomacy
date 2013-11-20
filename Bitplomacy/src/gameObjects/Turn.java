@@ -1,8 +1,6 @@
 package gameObjects;
 
 import gui.Canvas;
-import gui.DisbandCommand;
-
 import java.util.ArrayList;
 
 // TODO: Auto-generated Javadoc
