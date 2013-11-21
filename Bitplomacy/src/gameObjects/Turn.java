@@ -505,7 +505,7 @@ public class Turn {
 	}
 
 	public void resolveBuildRemove() {
-		for ()
+
 	}
 
 }
