@@ -5,8 +5,7 @@ This is our Senior Design project for EE/CS/CPE 481.  It is a slightly different
 For the engine we use Erebos - an open source project that uses openGL with C based wrappers so that java developement
 is simple and easy to use.  For questions about the game engine please contact [emails/URL to come].
 
-Intended for use on a Ubuntu server and for developement in eclipse on a Linux OS.  Please note that this current
-build will not work for developement on Windows and Mac environments.
+Current build can be run and developed on any OS with an up to date JRE. Enjoy! 
 
 Contributors:
 
@@ -20,7 +19,7 @@ Sponser:
 Llyod Hoffman
 
 Advisor:
-Frances Vanscoy
+Frances VanScoy
 
 Instructor:
 Ramana Reddy
