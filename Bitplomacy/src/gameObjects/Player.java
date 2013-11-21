@@ -57,29 +57,30 @@ public class Player {
 	public int getOwnerNum(){
 		int i = 8;
 		 if (name.equals("England"))
-			 i = 0;
-		else if (name.equals("Austria-Hungary"))
 			 i = 1;
-		else if (name.equals("Italy"))
+		else if (name.equals("Austria-Hungary"))
 			 i = 2;
-		else if (name.equals("Turkey"))
+		else if (name.equals("Italy"))
 			 i = 3;
-		else if (name.equals("France"))
+		else if (name.equals("Turkey"))
 			 i = 4;
-		else if (name.equals("Russia"))
+		else if (name.equals("France"))
 			 i = 5;
-		else if (name.equals("Germany"))
+		else if (name.equals("Russia"))
 			 i = 6;
+		else if (name.equals("Germany"))
+			 i = 7;
 		return i;
 	}
 	
 	/**
 	 * Adjust num sc.
+	 * @param i2 
 	 *
 	 * @param num the num
 	 */
-	public void adjustNumSC(int num){
-		supplyCenterCount = num;
+	public void adjustNumSC(int i){
+		supplyCenterCount = i;
 	}
 
 	/**
@@ -109,6 +110,16 @@ public class Player {
 		}
 		if (blah)
 			units.remove(i);
+	}
+
+	public int getNumUnits() {
+		return units.size();
+	}
+
+	public Unit getAUnit() {
+		if (units.size() == 0)
+			return null;
+		return units.get(0);
 	}
 	
 }

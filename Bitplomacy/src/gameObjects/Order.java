@@ -75,7 +75,10 @@ public class Order {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		String s = Territory.getOwnerName(unit.getOwner()) + " unit in \n" + terr1.getName() + "\n";
+		String s = "";
+		if (unit != null)
+			s = Territory.getOwnerName(unit.getOwner()) + " unit in ";
+		s = terr1.getOwnerName() + " unit in \n" + terr1.getName() + "\n";
 		if (command != "idle")
 			s += command + "\n";
 		if (supportedUnit != null)

@@ -228,34 +228,34 @@ public class Canvas extends ECanvas{
 	 * Sets the board.
 	 */
 	private void setBoard() {
-		createStartingUnit(getT("Edinburgh"), Territory.ENGLAND, waterUnit, false, players[Territory.ENGLAND-1]);
-		createStartingUnit(getT("Liverpool"), Territory.ENGLAND, landUnit, true, players[Territory.ENGLAND-1]);
-		createStartingUnit(getT("London"), Territory.ENGLAND, waterUnit, false, players[Territory.ENGLAND-1]);
+		createStartingUnit(getT("Edinburgh"), waterUnit, false, players[Territory.ENGLAND-1]);
+		createStartingUnit(getT("Liverpool"), landUnit, true, players[Territory.ENGLAND-1]);
+		createStartingUnit(getT("London"), waterUnit, false, players[Territory.ENGLAND-1]);
 
-		createStartingUnit(getT("Vienna"), Territory.AUSTRIA_HUNGARY, landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
-		createStartingUnit(getT("Budapest"), Territory.AUSTRIA_HUNGARY, landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
-		createStartingUnit(getT("Trieste"), Territory.AUSTRIA_HUNGARY, waterUnit, false, players[Territory.AUSTRIA_HUNGARY-1]);
+		createStartingUnit(getT("Vienna"), landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
+		createStartingUnit(getT("Budapest"), landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
+		createStartingUnit(getT("Trieste"), waterUnit, false, players[Territory.AUSTRIA_HUNGARY-1]);
 
-		createStartingUnit(getT("Paris"), Territory.FRANCE, landUnit, true, players[Territory.FRANCE-1]);
-		createStartingUnit(getT("Brest"), Territory.FRANCE, waterUnit, false, players[Territory.FRANCE-1]);
-		createStartingUnit(getT("Marseilles"), Territory.FRANCE, landUnit, true, players[Territory.FRANCE-1]);
+		createStartingUnit(getT("Paris"), landUnit, true, players[Territory.FRANCE-1]);
+		createStartingUnit(getT("Brest"), waterUnit, false, players[Territory.FRANCE-1]);
+		createStartingUnit(getT("Marseilles"), landUnit, true, players[Territory.FRANCE-1]);
 
-		createStartingUnit(getT("Berlin"), Territory.GERMANY, landUnit, true, players[Territory.GERMANY-1]);
-		createStartingUnit(getT("Kiel"), Territory.GERMANY, waterUnit, false, players[Territory.GERMANY-1]);
-		createStartingUnit(getT("Munich"), Territory.GERMANY, landUnit, true, players[Territory.GERMANY-1]);
+		createStartingUnit(getT("Berlin"), landUnit, true, players[Territory.GERMANY-1]);
+		createStartingUnit(getT("Kiel"), waterUnit, false, players[Territory.GERMANY-1]);
+		createStartingUnit(getT("Munich"), landUnit, true, players[Territory.GERMANY-1]);
 
-		createStartingUnit(getT("Venice"), Territory.ITALY, landUnit, true, players[Territory.ITALY-1]);
-		createStartingUnit(getT("Rome"), Territory.ITALY, landUnit, true, players[Territory.ITALY-1]);
-		createStartingUnit(getT("Naples"), Territory.ITALY, waterUnit, false, players[Territory.ITALY-1]);
+		createStartingUnit(getT("Venice"), landUnit, true, players[Territory.ITALY-1]);
+		createStartingUnit(getT("Rome"), landUnit, true, players[Territory.ITALY-1]);
+		createStartingUnit(getT("Naples"), waterUnit, false, players[Territory.ITALY-1]);
 
-		createStartingUnit(getT("St. Petersburgh"), Territory.RUSSIA, waterUnit, false, players[Territory.RUSSIA-1]);
-		createStartingUnit(getT("Moscow"), Territory.RUSSIA, landUnit, true, players[Territory.RUSSIA-1]);
-		createStartingUnit(getT("Sevastopal"), Territory.RUSSIA, waterUnit, false, players[Territory.RUSSIA-1]);
-		createStartingUnit(getT("Warsaw"), Territory.RUSSIA, landUnit, true, players[Territory.RUSSIA-1]);
+		createStartingUnit(getT("St. Petersburgh"), waterUnit, false, players[Territory.RUSSIA-1]);
+		createStartingUnit(getT("Moscow"), landUnit, true, players[Territory.RUSSIA-1]);
+		createStartingUnit(getT("Sevastopal"), waterUnit, false, players[Territory.RUSSIA-1]);
+		createStartingUnit(getT("Warsaw"), landUnit, true, players[Territory.RUSSIA-1]);
 
-		createStartingUnit(getT("Ankara"), Territory.TURKEY, waterUnit, false, players[Territory.TURKEY-1]);
-		createStartingUnit(getT("Constantinople"), Territory.TURKEY, landUnit, true, players[Territory.TURKEY-1]);
-		createStartingUnit(getT("Smyrna"), Territory.TURKEY, landUnit, true, players[Territory.TURKEY-1]);
+		createStartingUnit(getT("Ankara"), waterUnit, false, players[Territory.TURKEY-1]);
+		createStartingUnit(getT("Constantinople"), landUnit, true, players[Territory.TURKEY-1]);
+		createStartingUnit(getT("Smyrna"),landUnit, true, players[Territory.TURKEY-1]);
 	}
 	
 	/**
@@ -267,10 +267,20 @@ public class Canvas extends ECanvas{
 	 * @param isLand the is land
 	 * @param p the p
 	 */
-	private void createStartingUnit(Territory t, int owner, SpriteSheet ss, boolean isLand, Player p){
-		t.setOwner(owner);
-		t.setHomeCity(owner);
-		Unit temp = new Unit(ss, owner - 1, isLand, t);
+	private void createStartingUnit(Territory t, SpriteSheet ss, boolean isLand, Player p){
+		t.setOwner(p.getOwnerNum());
+		t.setHomeCity(p.getOwnerNum());
+		Unit temp = new Unit(ss, p.getOwnerNum() - 1, isLand, t);
+		t.setUnit(temp);
+		p.addUnit(t.getUnit());
+	}
+	
+	public void createUnit(Territory t, boolean isLand, Player p){
+		Unit temp = null;
+		if (isLand)
+			temp = new Unit(landUnit, p.getOwnerNum() - 1, isLand, t);
+		else
+			temp = new Unit(waterUnit, p.getOwnerNum() - 1, isLand, t);
 		t.setUnit(temp);
 		p.addUnit(t.getUnit());
 	}
@@ -386,7 +396,7 @@ public class Canvas extends ECanvas{
 		for (Player p : players){
 			i = 0;
 	    	for (Territory t : territories){
-	    		if (t.hasSC() && t.getOwnerName().equals(p.getName()))
+	    		if (t.getUnit() != null && t.hasSC() && t.getUnit().getOwner() == p.getOwnerNum())
 	    			i++;
 	    	}
 			p.adjustNumSC(i);
@@ -490,14 +500,11 @@ public class Canvas extends ECanvas{
 	public void setCommand(String s){		
 		if (currOrder != null){
 			currOrder.setCommand(s);
-			if (s.equals("defend"))
-				state = NORM;
-			else if (s.equals("disband"))
+			if (s.equals("defend") || s.equals("disband") || s.contains("build"))
 				state = NORM;
 			else
 				state = COMM_SELECTED;
 		}
-		System.out.println(s + " command wus good");
 	}
 
 	/**
@@ -544,8 +551,8 @@ public class Canvas extends ECanvas{
 		displayTerritoryOwner = t.getOwnerName();
 		
 		if (state == NORM){
-			if (t.getUnit() != null)
-				currOrder = new Order(t);
+			if (t.getUnit() != null || currTurn.getSeason().equals("Build/Remove"))
+				currOrder = new Order(t);				
 		}
 		
 		else if (state == COMM_SELECTED){			
@@ -574,9 +581,12 @@ public class Canvas extends ECanvas{
 	 * Finalize order.
 	 */
 	public void finalizeOrder() {
-		System.out.println("order set wus good");
-		if (currOrder != null)
-			currOrder.pushOrder();
+		if (currOrder != null){
+			if (!currTurn.getSeason().equals("Build/Remove") || currOrder.getCommand().equals("disband"))
+				currOrder.pushOrder();
+			else 
+				currTurn.addBuildOrder(currOrder);
+		}
 		currOrder = null;
 		state = NORM;
 	}
@@ -585,7 +595,6 @@ public class Canvas extends ECanvas{
 	 * Discard order.
 	 */
 	public void discardOrder() {
-		System.out.println("discardin that muthasuckin order");
 		currOrder = null;
 		state = NORM;
 	}
@@ -599,6 +608,10 @@ public class Canvas extends ECanvas{
 		if (!unit.getTerritory().hasSC())
 			unit.getTerritory().setOwner(Territory.NEUTRAL);
 		unit.getTerritory().removeUnit();
+	}
+
+	public Player[] getPlayers() {
+		return players;
 	}
 
 }

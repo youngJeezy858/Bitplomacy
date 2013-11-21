@@ -82,10 +82,10 @@ public class Turn {
 			moveOrders.add(o);
 		else if (o.getCommand().equals("retreat"))
 			retreatOrders.add(o);
-		else if (o.getCommand().contains("build"))
-			buildOrders.add(o);
+		else if (o.getCommand().equals("disband"))
+			disbandOrders.add(o);
 		else if (o.getCommand().equals("idle")){
-			if (season.contains("Retreats"))
+			if (season.contains("Retreats") || season.equals("Build/Remove"))
 				disbandOrders.add(o);
 			else
 				blankOrders.add(o);
@@ -505,7 +505,61 @@ public class Turn {
 	}
 
 	public void resolveBuildRemove() {
+		for (Player p : Canvas.getC().getPlayers()){
+			while (p.getSupplyCount() != p.getNumUnits()){
+			
+				if (p.getSupplyCount() > p.getNumUnits()){
+					int i;
+					for (i = 0; i < buildOrders.size(); i++){
+						Order o = buildOrders.get(i);
+						if (o.getTerr1().getOwner() == p.getOwnerNum() && 
+								o.getUnit() == null &&
+								o.getTerr1().getHomeCity() == p.getOwnerNum()){
+							if (o.getCommand().contains("army") && o.getTerr1().isLand()){
+								Canvas.getC().createUnit(o.getTerr1(), true, p);
+								break;
+							}
+							else if (o.getCommand().contains("navy") && (!o.getTerr1().isLand() || o.getTerr1().hasCoast())){
+								Canvas.getC().createUnit(o.getTerr1(), false, p);
+								break;
+							}
+						}
+					}
+					if (i != buildOrders.size())
+						buildOrders.remove(i);
+					else
+						break;
+				}
+				
+				else if (p.getSupplyCount() < p.getNumUnits()){
+					int i;
+					for (i = 0; i < disbandOrders.size(); i++){
+						Order o = disbandOrders.get(i);
+						if (o.getUnit() != null && o.getUnit().getOwner() == p.getOwnerNum()){
+							Canvas.getC().removeUnit(o.getUnit());
+							break;
+						}
+					}
+					if (i != disbandOrders.size())
+						disbandOrders.remove(i);
+					else if (p.getAUnit() != null)
+						Canvas.getC().removeUnit(p.getAUnit());
+				}
+			}
+		}
+	}
 
+	public void addBuildOrder(Order currOrder) {
+		int i;
+		for (i = 0; i < buildOrders.size(); i++){
+			Order o = buildOrders.get(i);
+			if (o.getTerr1().equals(currOrder.getTerr1()))
+				break;
+		}
+		if (i != buildOrders.size())
+			buildOrders.set(i, currOrder);
+		else 
+			buildOrders.add(currOrder);
 	}
 
 }

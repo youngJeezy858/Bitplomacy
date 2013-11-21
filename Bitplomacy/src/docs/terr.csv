@@ -70,7 +70,7 @@ Tyrrhenian Sea	 false	 false	 false	115	205	229	503	673	/images/TyrrhenianSea.pn
 Ukraine	 true	 false	 false	193	193	193	772	440	/images/Ukraine.png
 Venice	 true	 true	 true	100	100	100	535	583	/images/Venice.png
 Vienna	 true	 true	 false	205	205	205	610	531	/images/Vienna.png
-Wales	 true	 true	 true	135	135	135	327	383	/images/Wa.png
+Wales	 true	 false	 true	135	135	135	327	383	/images/Wa.png
 Warsaw	 true	 true	 false	196	196	196	674	432	/images/Warsaw.png
 Western Medditerian Sea	 false	 false	 false	170	205	229	231	694	/images/WestMed.png
 York	 true	 false	 true	125	125	125	409	329	/images/York.png
