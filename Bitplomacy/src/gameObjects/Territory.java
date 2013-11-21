@@ -43,6 +43,8 @@ public class Territory extends ImageEntity {
 	
 	/** The owner. */
 	private int owner;
+
+	private int homeCity;
 	
 	/** The Constant NEUTRAL. */
 	public static final int NEUTRAL = 0;
@@ -100,6 +102,7 @@ public class Territory extends ImageEntity {
 		land = isLand;
 		unit = null;
 		adjacentTerritories = new ArrayList<String>();
+		homeCity = 0;
 	}
 	
 	/**
@@ -269,6 +272,7 @@ public class Territory extends ImageEntity {
 		return false;
 	}
 
+
 	/**
 	 * Checks for sc.
 	 *
@@ -299,14 +303,15 @@ public class Territory extends ImageEntity {
 	 */
 	public void setUnit(Unit u){
 		unit = u;
-		setOwner(u.getOwner());
+		if (!supplyCenter)
+			setOwner(u.getOwner());
 	}
 
 	/**
 	 * Removes the unit.
 	 */
 	public void removeUnit(){
-		if (!hasSC())
+		if (!supplyCenter)
 			setOwner(NEUTRAL);
 		unit = null;
 	}
@@ -345,5 +350,12 @@ public class Territory extends ImageEntity {
 	public boolean hasCoast() {
 		return hasCoast;
 	}
+
+	public void setHomeCity(int owner) {
+		homeCity = owner;
+	}
 	
+	public int getHomeCity(){
+		return homeCity;
+	}
 }

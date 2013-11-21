@@ -54,6 +54,25 @@ public class Player {
 		return name;
 	}
 	
+	public int getOwnerNum(){
+		int i = 8;
+		 if (name.equals("England"))
+			 i = 0;
+		else if (name.equals("Austria-Hungary"))
+			 i = 1;
+		else if (name.equals("Italy"))
+			 i = 2;
+		else if (name.equals("Turkey"))
+			 i = 3;
+		else if (name.equals("France"))
+			 i = 4;
+		else if (name.equals("Russia"))
+			 i = 5;
+		else if (name.equals("Germany"))
+			 i = 6;
+		return i;
+	}
+	
 	/**
 	 * Adjust num sc.
 	 *

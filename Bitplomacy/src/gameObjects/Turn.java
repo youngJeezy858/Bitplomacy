@@ -37,8 +37,11 @@ public class Turn {
 	private ArrayList<Order> retreatOrders;
 	
 	private ArrayList<Order> disbandOrders;
+ 
+	private ArrayList<Order> buildOrders;
 
 	private ArrayList<Territory> retreatingTerritories;
+	
 
 	/**
 	 * Instantiates a new turn.
@@ -57,6 +60,7 @@ public class Turn {
 		blankOrders = new ArrayList<Order>();
 		retreatOrders = new ArrayList<Order>();
 		disbandOrders = new ArrayList<Order>();
+		buildOrders = new ArrayList<Order>();
 		retreatingTerritories = new ArrayList<Territory>();
 	}
 	
@@ -78,6 +82,8 @@ public class Turn {
 			moveOrders.add(o);
 		else if (o.getCommand().equals("retreat"))
 			retreatOrders.add(o);
+		else if (o.getCommand().contains("build"))
+			buildOrders.add(o);
 		else if (o.getCommand().equals("idle")){
 			if (season.contains("Retreats"))
 				disbandOrders.add(o);
@@ -124,143 +130,6 @@ public class Turn {
 		movePassedFollowingUnits();
 	}
 	
-	public void resolveRetreats(){
-		for (Order o : disbandOrders){
-			for (Territory t : retreatingTerritories){
-				if (o.getTerr1().equals(t)){
-					Canvas.getC().removeUnit(o.getUnit());
-					break;
-				}
-			}
-		}
-		for (Order o : retreatOrders){
-			for (Territory t : retreatingTerritories){
-				if (o.getTerr1().equals(t)){
-					if (resolveRetreat(o))
-						o.adjudicate(Order.CHECKED_WAITING);
-					else
-						o.adjudicate(Order.FAILED);
-				}
-			}
-		}
-		
-		for (Order ro1 : retreatOrders){
-			if (hasRetreatConflict(ro1))
-				ro1.adjudicate(Order.FAILED);
-			else{
-				ro1.adjudicate(Order.PASSED);
-				ro1.getTerr1().removeUnit();
-				moveUnit(ro1);
-			}
-		}
-		for (Order o : retreatOrders){
-			if (o.getState() == Order.FAILED)
-				Canvas.getC().removeUnit(o.getUnit());
-		}
-		
-		for (Order ao : attackOrders){
-			if (ao.getState() == Order.CHECKED_WAITING){
-				ao.adjudicate(Order.PASSED);
-				ao.getTerr1().removeUnit();
-				moveUnit(ao);
-			}
-		}
-	}
-
-	private boolean hasRetreatConflict(Order o){
-		for (Order ro2 : retreatOrders){
-			if (o.getTerr1().equals(ro2.getTerr1()))
-				continue;
-			else if (ro2.getState() != Order.CHECKED_WAITING)
-				continue;
-			else if (ro2.getTerr2().equals(o.getTerr2()))
-				return true;
-		}
-		return false;
-	}
-	
-	private boolean resolveRetreat(Order o) {
-		if (o.getUnit().isLand() && !o.getTerr2().isLand())
-			return false;
-		else if (!o.getUnit().isLand() && o.getTerr2().isLand() && !o.getTerr2().hasCoast())
-			return false;
-		else if (o.getTerr2().getUnit() != null)
-			return false;
-		return o.getTerr1().isAdjacent(o.getTerr2());
-	}
-
-	private void movePassedFollowingUnits() {
-		for (Order ao : attackOrders){
-			if (ao.getState() == Order.PASSED || ao.getState() == Order.FOLLOWING || ao.getState() == Order.CHECKING)
-				ao.getTerr1().removeUnit();
-		}
-		for (Order mo : moveOrders){
-			if (mo.getState() == Order.PASSED || mo.getState() == Order.FOLLOWING || mo.getState() == Order.CHECKING)
-				mo.getTerr1().removeUnit();
-		}
-		for (Order ao : attackOrders)
-			moveUnit(ao);
-		for (Order mo : moveOrders)
-			moveUnit(mo);
-	}
-
-	private void moveUnit(Order o) {
-		if (o.getState() == Order.PASSED || o.getState() == Order.FOLLOWING || o.getState() == Order.CHECKING){
-			o.adjudicate(Order.PASSED);
-			o.getTerr2().setUnit(o.getUnit());
-			if (!o.getTerr2().hasSC())
-				o.getTerr2().setOwner(o.getUnit().getOwner());
-			o.getUnit().setTerritory(o.getTerr2());
-			o.adjudicate(Order.DONE);
-		}	
-	}
-
-	private void resolveConflicts() {
-		for (Order ao : attackOrders){
-			if (ao.getState() == Order.CHECKED_WAITING){
-				if (hasConflict(ao))
-					ao.adjudicate(Order.CHECKER);
-				else if (ao.getTerr2().getUnit() == null)
-					ao.adjudicate(Order.PASSED);
-			}
-		}
-		
-		for (Order mo : moveOrders){
-			if (mo.getState() == Order.CHECKED_WAITING){
-				if (hasConflict(mo))
-					mo.adjudicate(Order.CHECKER);
-				else if (mo.getTerr2().getUnit() == null)
-					mo.adjudicate(Order.PASSED);
-			}
-		}
-	}
-
-	private boolean hasConflict(Order o) {
-		for (Order ao : attackOrders){
-			if (ao.getState() != Order.CHECKED_WAITING && ao.getState() != Order.FOLLOWING && ao.getState() != Order.CHECKER)
-				continue;
-			else if (ao.getTerr1().equals(o.getTerr1()))
-				continue;
-			
-			else if (ao.getTerr2().equals(o.getTerr2())){
-				if (ao.getStrength() >= o.getStrength())
-					return true;
-			}
-		}
-		for (Order mo : moveOrders){
-			if (mo.getState() != Order.CHECKED_WAITING || mo.getState() != Order.FOLLOWING)
-				continue;
-			else if (mo.getTerr1().equals(o.getTerr1()))
-				continue;
-			
-			else if (mo.getTerr2().equals(o.getTerr2())){
-				if (mo.getStrength() >= o.getStrength())
-					return true;
-			}
-		}
-		return false;
-	}
-
 	/**
 	 * Check the syntax of the orders. Checks attack orders more deeply in case a support
 	 * order was cut off.  Executed first during adjudication.
@@ -358,9 +227,13 @@ public class Turn {
 				mo.adjudicate(Order.FOLLOWING);
 		}
 	}
-	
+
 	private int resolveMove(Order o){
-		if (o.getState() == Order.FAILED ||
+		
+		if (o.getState() == Order.CHECKING)
+			return 3;
+		
+		else if (o.getState() == Order.FAILED ||
 				(o.getUnit().isLand() && !o.getTerr2().isLand()) ||
 				(!o.getUnit().isLand() && o.getTerr2().isLand() && !o.getTerr2().hasCoast()) || 
 				!Order.findConvoyPath(o.getUnit(), o.getTerr2(), o.getConvoyUnits())){
@@ -386,6 +259,7 @@ public class Turn {
 					else
 						return 0;
 				}
+				o.adjudicate(Order.CHECKING);
 				int i = resolveMove(occupyingUnitOrder);
 				if (i == 1 || i == 3)
 					return 3;
@@ -396,9 +270,7 @@ public class Turn {
 		return 1;
 	}
 
-	/**
-	 * Resolve attack.
-	 */
+	
 	private void resolveAttacks() {
 		for (Order o : attackOrders){
 			int i = resolveAttack(o);
@@ -410,7 +282,7 @@ public class Turn {
 				o.adjudicate(Order.FOLLOWING);
 		}
 	}
-	
+
 	private int resolveAttack(Order o) {
 		if (o.getState() == Order.FAILED ||
 				(o.getUnit().isLand() && !o.getTerr2().isLand()) ||
@@ -487,8 +359,153 @@ public class Turn {
 		return 1;
 	}
 
+	private void resolveConflicts() {
+		for (Order ao : attackOrders){
+			if (ao.getState() == Order.CHECKED_WAITING){
+				if (hasConflict(ao))
+					ao.adjudicate(Order.CHECKER);
+				else if (ao.getTerr2().getUnit() == null)
+					ao.adjudicate(Order.PASSED);
+			}
+		}
+		
+		for (Order mo : moveOrders){
+			if (mo.getState() == Order.CHECKED_WAITING){
+				if (hasConflict(mo))
+					mo.adjudicate(Order.CHECKER);
+				else if (mo.getTerr2().getUnit() == null)
+					mo.adjudicate(Order.PASSED);
+			}
+		}
+	}
+
+	private boolean hasConflict(Order o) {
+		for (Order ao : attackOrders){
+			if (ao.getState() != Order.CHECKED_WAITING && ao.getState() != Order.FOLLOWING && ao.getState() != Order.CHECKER)
+				continue;
+			else if (ao.getTerr1().equals(o.getTerr1()))
+				continue;
+			
+			else if (ao.getTerr2().equals(o.getTerr2())){
+				if (ao.getStrength() >= o.getStrength())
+					return true;
+			}
+		}
+		for (Order mo : moveOrders){
+			if (mo.getState() != Order.CHECKED_WAITING || mo.getState() != Order.FOLLOWING)
+				continue;
+			else if (mo.getTerr1().equals(o.getTerr1()))
+				continue;
+			
+			else if (mo.getTerr2().equals(o.getTerr2())){
+				if (mo.getStrength() >= o.getStrength())
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private void movePassedFollowingUnits() {
+		for (Order ao : attackOrders){
+			if (ao.getState() == Order.PASSED || ao.getState() == Order.FOLLOWING || ao.getState() == Order.CHECKING)
+				ao.getTerr1().removeUnit();
+		}
+		for (Order mo : moveOrders){
+			if (mo.getState() == Order.PASSED || mo.getState() == Order.FOLLOWING || mo.getState() == Order.CHECKING)
+				mo.getTerr1().removeUnit();
+		}
+		for (Order ao : attackOrders)
+			moveUnit(ao);
+		for (Order mo : moveOrders)
+			moveUnit(mo);
+	}
+
+	public void resolveRetreats(){
+		for (Order o : disbandOrders){
+			for (Territory t : retreatingTerritories){
+				if (o.getTerr1().equals(t)){
+					Canvas.getC().removeUnit(o.getUnit());
+					break;
+				}
+			}
+		}
+		for (Order o : retreatOrders){
+			for (Territory t : retreatingTerritories){
+				if (o.getTerr1().equals(t)){
+					if (resolveRetreat(o))
+						o.adjudicate(Order.CHECKED_WAITING);
+					else
+						o.adjudicate(Order.FAILED);
+				}
+			}
+			if (o.getState() != Order.CHECKED_WAITING && o.getState() != Order.FAILED)
+				o.adjudicate(Order.DONE);
+		}
+		
+		for (Order ro1 : retreatOrders){
+			if (ro1.getState() == Order.DONE)
+				continue;
+			else if (hasRetreatConflict(ro1))
+				ro1.adjudicate(Order.CHECKER);
+			else{
+				ro1.adjudicate(Order.PASSED);
+				ro1.getTerr1().removeUnit();
+				moveUnit(ro1);
+			}
+		}
+		for (Order o : retreatOrders){
+			if (o.getState() == Order.FAILED || o.getState() == Order.CHECKER)
+				Canvas.getC().removeUnit(o.getUnit());
+		}
+		
+		for (Order ao : attackOrders){
+			if (ao.getState() == Order.CHECKED_WAITING){
+				ao.adjudicate(Order.PASSED);
+				ao.getTerr1().removeUnit();
+				moveUnit(ao);
+			}
+		}
+	}
+
+	private boolean hasRetreatConflict(Order o){
+		for (Order ro2 : retreatOrders){
+			if (o.getTerr1().equals(ro2.getTerr1()))
+				continue;
+			else if (ro2.getState() != Order.CHECKED_WAITING && ro2.getState() != Order.CHECKER)
+				continue;
+			else if (ro2.getTerr2().equals(o.getTerr2()))
+				return true;
+		}
+		return false;
+	}
+	
+	private boolean resolveRetreat(Order o) {
+		if (o.getUnit().isLand() && !o.getTerr2().isLand())
+			return false;
+		else if (!o.getUnit().isLand() && o.getTerr2().isLand() && !o.getTerr2().hasCoast())
+			return false;
+		else if (o.getTerr2().getUnit() != null)
+			return false;
+		return o.getTerr1().isAdjacent(o.getTerr2());
+	}
+
 	public void setSeason(String string) {
 		season = string;
+	}
+
+	private void moveUnit(Order o) {
+		if (o.getState() == Order.PASSED || o.getState() == Order.FOLLOWING || o.getState() == Order.CHECKING){
+			o.adjudicate(Order.PASSED);
+			o.getTerr2().setUnit(o.getUnit());
+			if (!o.getTerr2().hasSC())
+				o.getTerr2().setOwner(o.getUnit().getOwner());
+			o.getUnit().setTerritory(o.getTerr2());
+			o.adjudicate(Order.DONE);
+		}	
+	}
+
+	public void resolveBuildRemove() {
+		for ()
 	}
 
 }

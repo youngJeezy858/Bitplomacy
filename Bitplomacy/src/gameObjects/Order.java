@@ -75,7 +75,7 @@ public class Order {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		String s = terr1.getOwnerName() + " unit in \n" + terr1.getName() + "\n";
+		String s = Territory.getOwnerName(unit.getOwner()) + " unit in \n" + terr1.getName() + "\n";
 		if (command != "idle")
 			s += command + "\n";
 		if (supportedUnit != null)
@@ -231,7 +231,7 @@ public class Order {
 			return false;
 		if (unit.isLand() && !terr2.isLand())
 			return false;
-		if (terr2.getUnit() != null && terr2.getUnit().getOwner() == unit.getOwner())
+		if (supportedUnit.getOrder().equals("attack") && terr2.getUnit() != null && terr2.getUnit().getOwner() == unit.getOwner())
 			return false;
 		
 		String supportedCommand = supportedUnit.getOrder().command;
@@ -361,7 +361,10 @@ public class Order {
 		for (i = 0; i < convoyUnits.size(); i++){
 			if (currUnit.getTerritory().isAdjacent(convoyUnits.get(i).getTerritory())){
 				temp = convoyUnits.get(i);
-				temp.getOrder().adjudicate(Order.PASSED);
+				if (temp.getOrder().getState() != Order.FAILED)
+					temp.getOrder().adjudicate(Order.PASSED);
+				else 
+					temp = null;
 				break;
 			}
 		}
