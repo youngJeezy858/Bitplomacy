@@ -101,6 +101,8 @@ public class Canvas extends ECanvas{
 	
 	public static final int FINISH_ADJUDICATION = 6;
 
+	public static final int WINNER = 7;
+
 	
 	/* MasterMap contains the color keys for the individual territories.  It is 
 	 * referenced in the Territory */
@@ -116,6 +118,8 @@ public class Canvas extends ECanvas{
 	
 	/** The water unit. */
 	private SpriteSheet waterUnit;
+
+	private Player winningPlayer;
 	
 	/**
 	 * Instantiates a new canvas.
@@ -306,42 +310,52 @@ public class Canvas extends ECanvas{
 	 * @see com.erebos.engine.core.ECanvas#eRender(org.newdawn.slick.GameContainer, com.erebos.engine.core.EGame, org.newdawn.slick.Graphics)
 	 */
 	public void eRender(GameContainer gc, EGame eg, Graphics g) {
-			
-		//draw masterMap for color keys
-		g.drawImage(MasterMap, 0, 0);	
 		
-		g.setColor(Color.gray);
-		g.fillRect(1106, 0, 1400-1126, gc.getHeight());
-		
-		g.setColor(Color.black);
-		g.drawString("Country:", 1150, 20);
-		g.drawString("Owner:", 1150, 70);
-		
-		g.drawString("SUPPLY CENTER TOTALS", 1145, 120);
-		int i = 140;
-		for (Player p : players){
-			g.drawString(p.getName() + ": " + p.getSupplyCount(), 1145, i);
-			i = i + 20;
+		if (state != WINNER) {
+			// draw masterMap for color keys
+			g.drawImage(MasterMap, 0, 0);
+
+			g.setColor(Color.gray);
+			g.fillRect(1106, 0, 1400 - 1126, gc.getHeight());
+
+			g.setColor(Color.black);
+			g.drawString("Country:", 1150, 20);
+			g.drawString("Owner:", 1150, 70);
+
+			g.drawString("SUPPLY CENTER TOTALS", 1145, 120);
+			int i = 140;
+			for (Player p : players) {
+				g.drawString(p.getName() + ": " + p.getSupplyCount(), 1145, i);
+				i = i + 20;
+			}
+
+			g.setColor(Color.blue);
+			if (currOrder != null)
+				g.drawString(currOrder.toString(), 1130, 290);
+			g.setColor(Color.black);
+
+			g.drawString(displayTerritoryName, 1145, 40);
+			g.drawString(displayTerritoryOwner, 1145, 90);
+
+			for (Commands c : commands)
+				c.draw();
+			for (Territory t : territories)
+				t.eDraw();
+			g.drawImage(Borders, 0, 0);
+			for (Territory t : territories)
+				t.uDraw();
+
+			g.setFont(font);
+			g.drawString(currTurn.toString(), 10, 10);
 		}
-		
-		g.setColor(Color.blue);
-		if (currOrder != null)
-			g.drawString(currOrder.toString(), 1130, 290);
-		g.setColor(Color.black);
-		
-		g.drawString(displayTerritoryName, 1145, 40);
-		g.drawString(displayTerritoryOwner, 1145, 90);		
-		
-		for (Commands c : commands)
-			c.draw();
-		for (Territory t: territories)
-			t.eDraw();
-		g.drawImage(Borders, 0, 0);
-		for (Territory t: territories)
-			t.uDraw();
-		
-		g.setFont(font);
-		g.drawString(currTurn.toString(), 10, 10);
+		else{
+			g.setColor(Color.green);
+			g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
+			g.setColor(Color.black);
+			g.setFont(font);
+			g.drawString(winningPlayer.getName(), 30, 30);
+			g.drawString("WINS!!!", 100, 130);
+		}
 
 	}
 
@@ -426,6 +440,13 @@ public class Canvas extends ECanvas{
 			currTurn = new Turn("Build/Remove", i);
 			commands = buildRemoveCommands;
 			adjustNumSC();
+			for (Player p : players){
+				if (p.getSupplyCount() >= 24){
+					state = WINNER;
+					winningPlayer = p;
+					font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
+				}
+			}
 		}
 		else{
 			i++;
@@ -523,7 +544,10 @@ public class Canvas extends ECanvas{
 		for (Player p : players)
 			p.resetOrders();
 		adjustTurn();
-		state = NORM;
+		if (winningPlayer != null)
+			state = WINNER;
+		else
+			state = NORM;
 	}
 
 	/*
