@@ -396,7 +396,7 @@ public class Canvas extends ECanvas{
 		for (Player p : players){
 			i = 0;
 	    	for (Territory t : territories){
-	    		if (t.getUnit() != null && t.hasSC() && t.getUnit().getOwner() == p.getOwnerNum())
+	    		if (t.getOwner() == p.getOwnerNum() && t.hasSC())
 	    			i++;
 	    	}
 			p.adjustNumSC(i);
