@@ -77,12 +77,13 @@ public class Order {
 	public static final int CHECKING = 7;
 		
 	/**
-	 * Instantiates a new order.
+	 * Constructor for a new Order. Sets the unit to the input Territory's unit so potentially the unit could
+	 * be null. 
 	 *
-	 * @param t1 the t1
+	 * @param t the Territory where the Order initiated from
 	 */
-	public Order(Territory t1){
-		currentTerritory = t1;
+	public Order(Territory t){
+		currentTerritory = t;
 		unit = currentTerritory.getUnit();
 		strength = 1;
 		command = "idle";
@@ -115,32 +116,34 @@ public class Order {
 	}
 
 	/**
-	 * Adds the convoy unit.
+	 * Adds a unit that is convoying to the convoyUnits list.
 	 *
-	 * @param u the u
+	 * @param u the convoying navy Unit to be added
 	 */
 	public void addConvoyUnit(Unit u){
 		convoyUnits.add(u);
 	}
 
 	/**
-	 * Adjudicate.
+	 * Sets the state of the Order. Ideally one will use the static int fields
+	 * of this class as input.
 	 *
-	 * @param i the i
+	 * @param i the state of the Order
 	 */
 	public void adjudicate(int i){
 		state = i;
 	}
 
 	/**
-	 * Execute.
+	 * Adds the order to the game's current Turn so it may be adjudicated there.
 	 */
 	public void execute(){
 		Canvas.getC().addOrder(this);	
 	}
 
 	/**
-	 * Gets the command.
+	 * Gets the String value of the command. Commands include: move, attack, defend, 
+	 * support, convoy, build army, build navy, retreat, and disband.
 	 *
 	 * @return the command
 	 */
@@ -149,7 +152,7 @@ public class Order {
 	}
 
 	/**
-	 * Gets the convoy destination.
+	 * Gets the convoy destination of an attack or move Order.
 	 *
 	 * @return the convoy destination
 	 */
@@ -158,7 +161,7 @@ public class Order {
 	}
 
 	/**
-	 * Gets the strength.
+	 * Gets the strength of an attack, move, or defend Order.
 	 *
 	 * @return the strength
 	 */
@@ -167,7 +170,7 @@ public class Order {
 	}
 
 	/**
-	 * Gets the supported unit.
+	 * Gets the unit being supported of a support Order.
 	 *
 	 * @return the supported unit
 	 */
@@ -176,25 +179,25 @@ public class Order {
 	}
 
 	/**
-	 * Gets the terr1.
+	 * Gets the Territory where the Order was initialized.
 	 *
-	 * @return the terr1
+	 * @return the starting Territory
 	 */
-	public Territory getTerr1() {
+	public Territory getStartingTerritory() {
 		return currentTerritory;
 	}
 
 	/**
-	 * Gets the terr2.
+	 * Gets the Territory where the command will be acted upon.
 	 *
-	 * @return the terr2
+	 * @return the destination Territory
 	 */
-	public Territory getTerr2() {
+	public Territory getDestinationTerritory() {
 		return destinationTerritory;
 	}
 
 	/**
-	 * Gets the unit.
+	 * Gets the unit that will execute the Order.
 	 *
 	 * @return the unit
 	 */
@@ -203,14 +206,14 @@ public class Order {
 	}
 
 	/**
-	 * Increment strength.
+	 * Increments the int value of strength by one.
 	 */
 	public void incrementStrength(){
 		strength++;
 	}
 
 	/**
-	 * Gets the state.
+	 * Gets the state of the Order as an int
 	 *
 	 * @return the state
 	 */
@@ -218,15 +221,18 @@ public class Order {
 		return state;
 	}
 
+	//TODO: Do I want to abstract this class??? 
 	/**
-	 * Checks if is valid order.
+	 * Checks if the syntax of the Order is order.  Used during adjudication.  Will
+	 * Check attack and convoy Orders more thoroughly to resolve dislodged convoys
+	 * early during adjudication.  Otherwise it will simply check if an Order
 	 *
-	 * @return true, if is valid order
+	 * @return true, if syntax is valid
 	 */
 	public boolean isValidOrder(){
 		
 		if (command.equals("attack") && destinationTerritory != null && !destinationTerritory.equals(currentTerritory))
-			return currentTerritory.isValidAttack(destinationTerritory, convoyUnits);
+			return true;
 		else if (command.equals("move") && destinationTerritory != null && !destinationTerritory.equals(currentTerritory))
 			return true;
 		else if (command.equals("support") && supportedUnit != null && destinationTerritory != null && !destinationTerritory.equals(currentTerritory))
@@ -234,33 +240,12 @@ public class Order {
 		else if (command.equals("defend"))
 			return true;
 		else if (command.equals("convoy") && destinationTerritory != null && convoyDestination != null && !destinationTerritory.equals(currentTerritory)
-				&& !unit.isLand() && !currentTerritory.isLand() && destinationTerritory.getUnit() != null && 
+				&& !unit.isArmy() && !currentTerritory.isLand() && destinationTerritory.getUnit() != null && 
 				(convoyDestination.isLand() || (!convoyDestination.isLand() && convoyDestination.getUnit() != null)))
 			return true;
 		else
 			return false;
 		
-	}
-
-	/**
-	 * Checks if is valid support.
-	 *
-	 * @return true, if is valid support
-	 */
-	public boolean isValidSupport() {
-		
-		if (!unit.isLand() && destinationTerritory.isLand() && !destinationTerritory.hasCoast())
-			return false;
-		if (unit.isLand() && !destinationTerritory.isLand())
-			return false;
-		if (supportedUnit.getOrder().equals("attack") && destinationTerritory.getUnit() != null && destinationTerritory.getUnit().getOwner() == unit.getOwner())
-			return false;
-		
-		String supportedCommand = supportedUnit.getOrder().command;
-		if (!(supportedCommand.equals("attack") || supportedCommand.equals("move") || supportedCommand.equals("defend"))) 
-			return false;
-		
-		return currentTerritory.isAdjacent(destinationTerritory);
 	}
 
 	/**
@@ -273,7 +258,7 @@ public class Order {
 	}
 
 	/**
-	 * Sets the convoy destination.
+	 * Sets the convoy destination of a convoy Command.
 	 *
 	 * @param t the new convoy destination
 	 */
@@ -282,127 +267,58 @@ public class Order {
 	}
 
 	/**
-	 * Sets the support.
+	 * Sets the supported unit.
 	 *
-	 * @param u the new support
+	 * @param u the unit being supported
 	 */
 	public void setSupport(Unit u) {
 		supportedUnit = u;
 	}
 
 	/**
-	 * Sets the terr1.
+	 * Sets the Territory where the order was initialized.
 	 *
-	 * @param t the new terr1
+	 * @param t the Territory
 	 */
-	public void setTerr1(Territory t){
+	public void setStartingTerritory(Territory t){
 		currentTerritory = t;
 	}
 
 	/**
-	 * Sets the terr2.
+	 * Sets the Territory where the order will be acted upon.
 	 *
-	 * @param t2 the new terr2
+	 * @param t the Territory
 	 */
-	public void setTerr2(Territory t2){
-		destinationTerritory = t2;
-	}
-
-	/**
-	 * Expecting convoy.
-	 *
-	 * @return true, if successful
-	 */
-	public boolean expectingConvoy() {
-		if (!currentTerritory.isAdjacent(destinationTerritory) && unit.isLand() && destinationTerritory.isLand())
-			return true;
-		return false;
-	}
-
-	/**
-	 * Push order.
-	 */
-	public void pushOrder() {
-		unit.setOrder(this);
-	}
-
-	/**
-	 * Check convoying units.
-	 *
-	 * @return true, if successful
-	 */
-	public boolean checkConvoyingUnits() {	
-		Order o = convoyUnits.get(0).getOrder();
-		if (!o.getCommand().equals("convoy") || !o.getTerr2().equals(currentTerritory))
-			return false;
-		o = convoyUnits.get(convoyUnits.size()).getOrder();
-		if (!o.getCommand().equals("convoy") || !o.getConvoyDestination().equals(destinationTerritory))
-			return false;
-		for (int i = 1; i < convoyUnits.size(); i++) {
-			o = convoyUnits.get(i).getOrder();
-			if (!o.getCommand().equals("convoy")
-					|| !o.getTerr2().equals(convoyUnits.get(i-1).getOrder()))
-				return false;
-		}
-		return true;
+	public void setDestinationTerritory(Territory t){
+		destinationTerritory = t;
 	}
 	
 	/**
-	 * Equals.
+	 * Checks if the input String is equal to the command field.
 	 *
 	 * @param command the command
-	 * @return true, if successful
+	 * @return true, if input is equal to the command.
 	 */
-	public boolean equals(String command){
+	public boolean isCommandEqual(String command){
 		return this.command.equals(command);
 	}
 
 	/**
-	 * Gets the convoy units.
+	 * Gets the list of units that are convoying this attack or move Order.
 	 *
-	 * @return the convoy units
+	 * @return the convoying units list
 	 */
 	public ArrayList<Unit> getConvoyUnits() {
 		return convoyUnits;
 	}
-	
+
 	/**
-	 * Find convoy path.
-	 *
-	 * @param currUnit the curr unit
-	 * @param t the t
-	 * @param convoyUnits the convoy units
-	 * @return true, if successful
+	 * Checks if the starting Territory is adjacent to the destination Territory.
+	 * 
+	 * @return true, if territories are adjacent
 	 */
-	public static boolean findConvoyPath(Unit currUnit, Territory t, ArrayList<Unit> convoyUnits) {
-		
-		if (convoyUnits.size() == 0){
-			if (currUnit.getTerritory().isAdjacent(t))
-				return true;
-			else
-				return false;
-		}
-		
-		Unit temp = null;
-		int i;
-		for (i = 0; i < convoyUnits.size(); i++){
-			if (currUnit.getTerritory().isAdjacent(convoyUnits.get(i).getTerritory())){
-				temp = convoyUnits.get(i);
-				if (temp.getOrder().getState() != Order.FAILED)
-					temp.getOrder().adjudicate(Order.PASSED);
-				else 
-					temp = null;
-				break;
-			}
-		}
-		
-		if (temp == null)
-			return false;
-		else{
-			convoyUnits.remove(i);
-			return findConvoyPath(temp, t, convoyUnits);
-		}
-		
+	public boolean isAdjacent() {
+		return currentTerritory.isAdjacent(destinationTerritory);
 	}
 	
 }

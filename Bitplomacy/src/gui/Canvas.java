@@ -272,9 +272,9 @@ public class Canvas extends ECanvas{
 	 * @param p the p
 	 */
 	private void createStartingUnit(Territory t, SpriteSheet ss, boolean isLand, Player p){
-		t.setOwner(p.getOwnerNum());
-		t.setHomeCity(p.getOwnerNum());
-		Unit temp = new Unit(ss, p.getOwnerNum() - 1, isLand, t);
+		t.setOwner(p.getOwnerKey());
+		t.setHomeCity(p.getOwnerKey());
+		Unit temp = new Unit(ss, p.getOwnerKey() - 1, isLand, t);
 		t.setUnit(temp);
 		p.addUnit(t.getUnit());
 	}
@@ -289,9 +289,9 @@ public class Canvas extends ECanvas{
 	public void createUnit(Territory t, boolean isLand, Player p){
 		Unit temp = null;
 		if (isLand)
-			temp = new Unit(landUnit, p.getOwnerNum() - 1, isLand, t);
+			temp = new Unit(landUnit, p.getOwnerKey() - 1, isLand, t);
 		else
-			temp = new Unit(waterUnit, p.getOwnerNum() - 1, isLand, t);
+			temp = new Unit(waterUnit, p.getOwnerKey() - 1, isLand, t);
 		t.setUnit(temp);
 		p.addUnit(t.getUnit());
 	}
@@ -327,7 +327,7 @@ public class Canvas extends ECanvas{
 			g.drawString("SUPPLY CENTER TOTALS", 1145, 120);
 			int i = 140;
 			for (Player p : players) {
-				g.drawString(p.getName() + ": " + p.getSupplyCount(), 1145, i);
+				g.drawString(p.getName() + ": " + p.getSupplyCenterCount(), 1145, i);
 				i = i + 20;
 			}
 
@@ -412,10 +412,10 @@ public class Canvas extends ECanvas{
 		for (Player p : players){
 			i = 0;
 	    	for (Territory t : territories){
-	    		if (t.getOwner() == p.getOwnerNum() && t.hasSC())
+	    		if (t.getOwner() == p.getOwnerKey() && t.hasSC())
 	    			i++;
 	    	}
-			p.adjustNumSC(i);
+			p.setSupplyCenterCount(i);
 		}
 	}
 
@@ -443,7 +443,7 @@ public class Canvas extends ECanvas{
 			commands = buildRemoveCommands;
 			adjustNumSC();
 			for (Player p : players){
-				if (p.getSupplyCount() >= 24){
+				if (p.getSupplyCenterCount() >= 24){
 					state = WINNER;
 					winningPlayer = p;
 					font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
@@ -572,7 +572,7 @@ public class Canvas extends ECanvas{
 		}
 		
 		else if (state == COMM_SELECTED){			
-			currOrder.setTerr2(t);
+			currOrder.setDestinationTerritory(t);
 			if (currOrder.getCommand().equals("attack") || currOrder.getCommand().equals("move"))
 				state = SELECT_CONVOY_UNITS;
 			else if (currOrder.getCommand().equals("support"))
@@ -599,7 +599,7 @@ public class Canvas extends ECanvas{
 	public void finalizeOrder() {
 		if (currOrder != null){
 			if (!currTurn.getSeason().equals("Build/Remove") || currOrder.getCommand().equals("disband"))
-				currOrder.pushOrder();
+				currOrder.getUnit().setOrder(currOrder);
 			else 
 				currTurn.addBuildOrder(currOrder);
 		}

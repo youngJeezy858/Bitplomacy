@@ -1,6 +1,4 @@
 package gameObjects;
-import gui.Canvas;
-
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -8,127 +6,119 @@ import org.newdawn.slick.SpriteSheet;
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Territory.
+ * The Class Territory contains an image for drawing the Territory to the screen and
+ * contains objects that a Territory encapsulates. 
  */
 public class Territory extends ImageEntity {
 
-	/** The terr. */
-	private EAnimation terr;
+	/** Used for drawing the Territory image */
+	private EAnimation territoryImage;
 	
-	/** The ss. */
+	/** The sprite sheet to display each country's ownership  */
 	private SpriteSheet ss;
 	
-	/** The name. */
+	/** The name of the Territory */
 	private String name;
 	
+	//TODO: Color keys have to go. Explore alpha more
 	/** The color key. */
 	private Color colorKey;
 	
-	/** The supply center. */
-	private boolean supplyCenter;
+	/** Does this Territory have a supply center? */
+	private boolean hasSupplyCenter;
 	
-	/** The land. */
-	private boolean land;
+	/** Is this a Land Territory (water otherwise) */
+	private boolean isLand;
 	
-	/** The has coast. */
+	/** Does this Territory have a coast? */
 	private boolean hasCoast;
 	
-	/** The unit. */
+	/** The unit currently occupying this Territory */
 	private Unit unit;
 	
-	/** The adjacent territories. */
+	/** The list of Territories that are adjacent to this one. */
 	private ArrayList<String> adjacentTerritories;
 	
-	/** The owner. */
+	/** The current owner (Player) . */
 	private int owner;
 
-	/** The home city. */
+	/** The owner value of this Territory. Player's can only build Units in their home cities. */
 	private int homeCity;
 	
-	/** The Constant NEUTRAL. */
+	/** To set the owner as NEUTRAL. */
 	public static final int NEUTRAL = 0;
 	
-	/** The Constant ENGLAND. */
+	/** To set the owner as ENGLAND. */
 	public static final int ENGLAND = 1;
 	
-	/** The Constant AUSTRIA_HUNGARY. */
+	/** To set the owner as AUSTRIA_HUNGARY. */
 	public static final int AUSTRIA_HUNGARY = 2;
 	
-	/** The Constant ITALY. */
+	/** To set the owner as ITALY. */
 	public static final int ITALY = 3;
 	
-	/** The Constant TURKEY. */
+	/** To set the owner as TURKEY. */
 	public static final int TURKEY = 4;
 	
-	/** The Constant FRANCE. */
+	/** To set the owner as FRANCE. */
 	public static final int FRANCE = 5;
 	
-	/** The Constant RUSSIA. */
+	/** To set the owner as RUSSIA. */
 	public static final int RUSSIA = 6;
 	
-	/** The Constant GERMANY. */
+	/** To set the owner as GERMANY. */
 	public static final int GERMANY = 7;
 	
-
-	/*
-	 * Constructor method for the Territory class.
-	 * 
-	 * @param terr -> SpriteSheet image of the Territory
-	 * @param name -> the name of a Territory as a String
-	 * @param isLand -> boolean value to determine if a Territory is land or water
-	 * @param hasSC -> boolean value to determine if a Territory has a supply center or not
-	 * @param color -> the color that acts as the Territory's key when referencing the master map
-	 */
+	
 	/**
-	 * Instantiates a new territory.
+	 * Instantiates a new territory. By default it sets the Territory as NEUTRAL.
 	 *
-	 * @param terr the terr
+	 * @param ss the sprite sheet
 	 * @param name the name
-	 * @param isLand the is land
-	 * @param hasSC the has sc
-	 * @param hasCoast the has coast
-	 * @param color the color
+	 * @param isLand true, if land
+	 * @param hasSC true, if Territory has supply center
+	 * @param hasCoast true, if Territory has coast
+	 * @param color the color key
 	 */
-	public Territory(SpriteSheet terr, String name, boolean isLand, boolean hasSC, boolean hasCoast, Color color){
-		super(terr);
-		ss = terr;
+	public Territory(SpriteSheet ss, String name, boolean isLand, boolean hasSC, boolean hasCoast, Color color){
+		super(ss);
+		this.ss = ss;
 		owner = NEUTRAL;
-		this.terr = new EAnimation(terr.getSprite(owner, 0));
+		this.territoryImage = new EAnimation(ss.getSprite(owner, 0));
 		this.name = name;
 		this.hasCoast = hasCoast;
 		colorKey = color;
-		supplyCenter = hasSC;
-		land = isLand;
+		hasSupplyCenter = hasSC;
+		this.isLand = isLand;
 		unit = null;
 		adjacentTerritories = new ArrayList<String>();
 		homeCity = 0;
 	}
 	
 	/**
-	 * Adds the adjacent.
+	 * Adds an adjacent Territory to the list. Uses Strings since
+	 * they are less intensive than instantiating new Territories in
+	 * every Territory.
 	 *
-	 * @param t the t
+	 * @param t the Territory as a String
 	 */
 	public void addAdjacent(String t){
 		adjacentTerritories.add(t);
 	}
 	
-	/*
-	 * Draws the territory to the map
-	 */
 	/**
-	 * E draw.
+	 * Draws the Territory to the screen.
 	 */
 	public void eDraw(){
-		terr.draw(this.getX(), this.getY());
+		territoryImage.draw(this.getX(), this.getY());
 	}
 	
 	/**
-	 * Equals.
+	 * Checks if a Territory equals another. Specifically it checks
+	 * the names of each Territory.
 	 *
-	 * @param t the t
+	 * @param t the Territory 
 	 * @return true, if successful
 	 */
 	public boolean equals(Territory t){
@@ -148,7 +138,7 @@ public class Territory extends ImageEntity {
 	}
 	
 	/**
-	 * Gets the owner.
+	 * Gets the owner as an int.
 	 *
 	 * @return the owner
 	 */
@@ -156,8 +146,9 @@ public class Territory extends ImageEntity {
 		return owner;
 	}
 	
+	//TODO: Choose one and stick with it.
 	/**
-	 * Gets the owner name.
+	 * Gets the owner as a String.
 	 *
 	 * @return the owner name
 	 */
@@ -210,23 +201,23 @@ public class Territory extends ImageEntity {
 	}
 	
 	/**
-	 * Gets the unit.
+	 * Gets the unit occupying the Territory. 
 	 *
-	 * @return the unit
+	 * @return the unit, null if none occupying
 	 */
 	public Unit getUnit() {
 		return unit;
 	}
 
 	/**
-	 * Checks if is adjacent.
+	 * Checks if another Territory is adjacent.
 	 *
-	 * @param terr the terr
-	 * @return true, if is adjacent
+	 * @param t the Territory
+	 * @return true, if it is adjacent
 	 */
-	public boolean isAdjacent(Territory terr){
+	public boolean isAdjacent(Territory t){
 		for (String s : adjacentTerritories){
-			if (terr.getName().equals(s)){
+			if (t.getName().equals(s)){
 		 		return true;
 			}
 		 }
@@ -234,19 +225,19 @@ public class Territory extends ImageEntity {
 	}
 
 	/**
-	 * Checks if is land.
+	 * Checks if this is a land Territory.
 	 *
-	 * @return true, if is land
+	 * @return true, if land, false if water
 	 */
 	public boolean isLand(){
-		return land;
+		return isLand;
 	}
 
 	/**
-	 * Checks if is mouse over.
+	 * Checks if the input color matches the colorkey. Used to see if the mouse is over this Territory. 
 	 *
-	 * @param c the c
-	 * @return true, if is mouse over
+	 * @param c the color to be checked
+	 * @return true, if mouse is over this Territory
 	 */
 	public boolean isMouseOver(Color c){
 		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen())
@@ -255,70 +246,47 @@ public class Territory extends ImageEntity {
 	}
 
 	/**
-	 * Checks if is valid attack.
-	 *
-	 * @param t the t
-	 * @param convoyUnits the convoy units
-	 * @return true, if is valid attack
-	 */
-	public boolean isValidAttack(Territory t, ArrayList<Unit> convoyUnits) {		
-		if (unit.isLand() && !t.land)
-			return false;
-		else if (t.land && !unit.isLand() && !t.hasCoast)
-			return false;
-		else if (isAdjacent(t) && convoyUnits.size() == 0)
-			return true;
-		else if (convoyUnits.size() > 0)
-			return true;
-		return false;
-	}
-
-
-	/**
-	 * Checks for sc.
+	 * Checks is this Territory has a supply center
 	 *
 	 * @return true, if successful
 	 */
 	public boolean hasSC(){
-		return supplyCenter;
+		return hasSupplyCenter;
 	}
 	
-	/*
-	 * Sets the owner of the Territory.  See class fields for int codes of each team.
-	 * @param owner -> the owner of the Territory represented as an int value.
-	 */
 	/**
-	 * Sets the owner.
+	 * Sets the owner
 	 *
 	 * @param owner the new owner
 	 */
 	public void setOwner(int owner){
 		this.owner = owner;
-		terr = new EAnimation(ss.getSprite(owner, 0));
+		territoryImage = new EAnimation(ss.getSprite(owner, 0));
 	}
 
 	/**
-	 * Sets the unit.
+	 * Sets the unit occupying this Territory.
 	 *
 	 * @param u the new unit
 	 */
 	public void setUnit(Unit u){
 		unit = u;
-		if (!supplyCenter)
+		if (!hasSupplyCenter)
 			setOwner(u.getOwner());
 	}
 
 	/**
-	 * Removes the unit.
+	 * Removes the occupying unit. Will set the owner of the Territory to
+	 * NEUTRAL if it does not have a supply center.
 	 */
 	public void removeUnit(){
-		if (!supplyCenter)
+		if (!hasSupplyCenter)
 			setOwner(NEUTRAL);
 		unit = null;
 	}
 
 	/**
-	 * U draw.
+	 * Draws the occupying Unit if there is one.
 	 */
 	public void uDraw(){
 		if (unit != null)
@@ -326,25 +294,7 @@ public class Territory extends ImageEntity {
 	}
 
 	/**
-	 * Find vacant.
-	 *
-	 * @return the territory
-	 */
-	public Territory findVacant() {
-		for (String s : adjacentTerritories){
-			Territory t = Canvas.getC().getT(s);
-			if (t.getUnit() == null){
-				if (unit.isLand() && t.land)
-					return t;
-				else if (!unit.isLand() && (t.hasCoast || !t.land))
-					return t;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Checks for coast.
+	 * Checks if there is a coast on this Territory.
 	 *
 	 * @return true, if successful
 	 */
@@ -353,20 +303,21 @@ public class Territory extends ImageEntity {
 	}
 
 	/**
-	 * Sets the home city.
+	 * Sets this Territory as a home city for a player.
 	 *
-	 * @param owner the new home city
+	 * @param owner the owner
 	 */
 	public void setHomeCity(int owner) {
 		homeCity = owner;
 	}
-	
+
 	/**
-	 * Gets the home city.
-	 *
-	 * @return the home city
+	 * Checks if this Territory is a home city of the input owner's 
+	 * @param owner the owner
+	 * @return true, if successful 
 	 */
-	public int getHomeCity(){
-		return homeCity;
+	public boolean isHomeCity(int owner) {
+		return owner == homeCity;
 	}
+
 }
