@@ -4,57 +4,76 @@ import java.util.ArrayList;
 
 import gui.Canvas;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Order.
+ * Contains objects that are involved for an order of a unit.  Orders include: 
+ * move, attack, defend, support, convoy, build army, build navy, retreat, and disband.
  */
 public class Order {
 
-	/** The terr1. */
-	private Territory terr1;
+	/** The initial territory of the Order. Selected first in the process of creating an Order. */
+	private Territory currentTerritory;
 	
-	/** The terr2. */
-	private Territory terr2;
+	/** The destination of the command. Selected second in the process of creating an Order.
+	 * Can be null for some orders. */
+	private Territory destinationTerritory;
 	
-	/** The convoy destination. */
+	/** Used for a convoy Order. Specifies where the army being convoyed should be convoyed to 
+	 * by the convoying navy. Will be null if not a Convoy Order. */
 	private Territory convoyDestination;
 	
-	/** The unit. */
+	/** The unit executing the Order. */
 	private Unit unit;
 	
-	/** The supported unit. */
+	/** If the Order is support this will be the unit that is being supported. Will conatin a 
+	 * null value if the order is not a support. */
 	private Unit supportedUnit;
 	
-	/** The convoy units. */
+	/** Used for an attack or move Order. If the attack/move is being convoyed, this will contain a
+	 * list of units that are convoying. Will contain an empty list otherwise. */
 	private ArrayList<Unit> convoyUnits;
 	
-	/** The command. */
+	/** Commands include: move, attack, defend, support, convoy, build army, build navy, 
+	 * retreat, and disband. */
 	private String command;
 	
-	/** The strength. */
+	/** The strength an attack, move, or defend order. Initialized at 1. Used during adjudication 
+	 * to see if one of those 3 moves failed or passed. If the order is supported it will be 
+	 * incremented by one for each supporting unit. */
 	private int strength;
 	
-	/** The state. */
+	/** The current state of the Order. Primarily used during adjudication. Check the static int 
+	 * fields for descriptions of each. */
 	private int state;
 	
-	/** The Constant NOT_CHECKED. */
+	/** Initial state of all Orders. */
 	public static final int NOT_CHECKED = 0;
 	
-	/** The Constant CHECKED_WAITING. */
+	/** After the syntax of the Order is checked during adjudication, it will set to this state. */
 	public static final int CHECKED_WAITING = 1;
 	
-	/** The Constant FAILED. */
+	/** Order is set to this state if it fails any of the checks during adjudication. */
 	public static final int FAILED = 2;
 	
-	/** The Constant PASSED. */
+	/** Once adjudication is complete, all orders that do not have a state of FAILED are set to
+	 * this state. An Order is only executed if it has a state of PASSED at the end of adjudication.*/
 	public static final int PASSED = 3;
 
+	// TODO: Decide if this FOLLOWING field is necessary in Order (Check Turn)
+	/** This may not be necessary. */
 	public static final int FOLLOWING = 4;
 
+	/** Primarily used during the retreat phase. If a retreat/disband is not necessary for a unit,
+	 * the Order state is set to DONE so it will be skipped. */
 	public static final int DONE = 5;
 
+	/** Primarily used for resolving move/attack/retreat conflicts. If a valid Order is determined to have
+	 * a move conflict which causes it to fail, the Order state is set to CHECKER. This is so other Orders
+	 * are still compared to this order when resolving conflicts. */
 	public static final int CHECKER = 6;
 
+	/** Used for solving the revolving 3+ unit move problem. If a unit is moving/attacking another unit 
+	 * which is also moving, it is set to this state. So if that unit is also moving into another territory
+	 * with a unit that is moving into the first there will not be an endless loop. */
 	public static final int CHECKING = 7;
 		
 	/**
@@ -63,8 +82,8 @@ public class Order {
 	 * @param t1 the t1
 	 */
 	public Order(Territory t1){
-		terr1 = t1;
-		unit = terr1.getUnit();
+		currentTerritory = t1;
+		unit = currentTerritory.getUnit();
 		strength = 1;
 		command = "idle";
 		state = NOT_CHECKED;
@@ -78,13 +97,13 @@ public class Order {
 		String s = "";
 		if (unit != null)
 			s = Territory.getOwnerName(unit.getOwner()) + " unit in ";
-		s = terr1.getOwnerName() + " unit in \n" + terr1.getName() + "\n";
+		s = currentTerritory.getOwnerName() + " unit in \n" + currentTerritory.getName() + "\n";
 		if (command != "idle")
 			s += command + "\n";
 		if (supportedUnit != null)
 			s += "for " + Territory.getOwnerName(supportedUnit.getOwner()) + "\nat ";
-		if (terr2 != null)
-			s += terr2.getName() + "\n";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName() + "\n";
 		if (convoyUnits.size() > 0){
 			s += "by way of \n";
 			for (Unit u : convoyUnits)
@@ -162,7 +181,7 @@ public class Order {
 	 * @return the terr1
 	 */
 	public Territory getTerr1() {
-		return terr1;
+		return currentTerritory;
 	}
 
 	/**
@@ -171,7 +190,7 @@ public class Order {
 	 * @return the terr2
 	 */
 	public Territory getTerr2() {
-		return terr2;
+		return destinationTerritory;
 	}
 
 	/**
@@ -206,16 +225,16 @@ public class Order {
 	 */
 	public boolean isValidOrder(){
 		
-		if (command.equals("attack") && terr2 != null && !terr2.equals(terr1))
-			return terr1.isValidAttack(terr2, convoyUnits);
-		else if (command.equals("move") && terr2 != null && !terr2.equals(terr1))
+		if (command.equals("attack") && destinationTerritory != null && !destinationTerritory.equals(currentTerritory))
+			return currentTerritory.isValidAttack(destinationTerritory, convoyUnits);
+		else if (command.equals("move") && destinationTerritory != null && !destinationTerritory.equals(currentTerritory))
 			return true;
-		else if (command.equals("support") && supportedUnit != null && terr2 != null && !terr2.equals(terr1))
+		else if (command.equals("support") && supportedUnit != null && destinationTerritory != null && !destinationTerritory.equals(currentTerritory))
 			return true;
 		else if (command.equals("defend"))
 			return true;
-		else if (command.equals("convoy") && terr2 != null && convoyDestination != null && !terr2.equals(terr1)
-				&& !unit.isLand() && !terr1.isLand() && terr2.getUnit() != null && 
+		else if (command.equals("convoy") && destinationTerritory != null && convoyDestination != null && !destinationTerritory.equals(currentTerritory)
+				&& !unit.isLand() && !currentTerritory.isLand() && destinationTerritory.getUnit() != null && 
 				(convoyDestination.isLand() || (!convoyDestination.isLand() && convoyDestination.getUnit() != null)))
 			return true;
 		else
@@ -230,18 +249,18 @@ public class Order {
 	 */
 	public boolean isValidSupport() {
 		
-		if (!unit.isLand() && terr2.isLand() && !terr2.hasCoast())
+		if (!unit.isLand() && destinationTerritory.isLand() && !destinationTerritory.hasCoast())
 			return false;
-		if (unit.isLand() && !terr2.isLand())
+		if (unit.isLand() && !destinationTerritory.isLand())
 			return false;
-		if (supportedUnit.getOrder().equals("attack") && terr2.getUnit() != null && terr2.getUnit().getOwner() == unit.getOwner())
+		if (supportedUnit.getOrder().equals("attack") && destinationTerritory.getUnit() != null && destinationTerritory.getUnit().getOwner() == unit.getOwner())
 			return false;
 		
 		String supportedCommand = supportedUnit.getOrder().command;
 		if (!(supportedCommand.equals("attack") || supportedCommand.equals("move") || supportedCommand.equals("defend"))) 
 			return false;
 		
-		return terr1.isAdjacent(terr2);
+		return currentTerritory.isAdjacent(destinationTerritory);
 	}
 
 	/**
@@ -277,7 +296,7 @@ public class Order {
 	 * @param t the new terr1
 	 */
 	public void setTerr1(Territory t){
-		terr1 = t;
+		currentTerritory = t;
 	}
 
 	/**
@@ -286,7 +305,7 @@ public class Order {
 	 * @param t2 the new terr2
 	 */
 	public void setTerr2(Territory t2){
-		terr2 = t2;
+		destinationTerritory = t2;
 	}
 
 	/**
@@ -295,7 +314,7 @@ public class Order {
 	 * @return true, if successful
 	 */
 	public boolean expectingConvoy() {
-		if (!terr1.isAdjacent(terr2) && unit.isLand() && terr2.isLand())
+		if (!currentTerritory.isAdjacent(destinationTerritory) && unit.isLand() && destinationTerritory.isLand())
 			return true;
 		return false;
 	}
@@ -314,10 +333,10 @@ public class Order {
 	 */
 	public boolean checkConvoyingUnits() {	
 		Order o = convoyUnits.get(0).getOrder();
-		if (!o.getCommand().equals("convoy") || !o.getTerr2().equals(terr1))
+		if (!o.getCommand().equals("convoy") || !o.getTerr2().equals(currentTerritory))
 			return false;
 		o = convoyUnits.get(convoyUnits.size()).getOrder();
-		if (!o.getCommand().equals("convoy") || !o.getConvoyDestination().equals(terr2))
+		if (!o.getCommand().equals("convoy") || !o.getConvoyDestination().equals(destinationTerritory))
 			return false;
 		for (int i = 1; i < convoyUnits.size(); i++) {
 			o = convoyUnits.get(i).getOrder();
@@ -338,6 +357,11 @@ public class Order {
 		return this.command.equals(command);
 	}
 
+	/**
+	 * Gets the convoy units.
+	 *
+	 * @return the convoy units
+	 */
 	public ArrayList<Unit> getConvoyUnits() {
 		return convoyUnits;
 	}

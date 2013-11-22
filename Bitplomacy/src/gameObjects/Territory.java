@@ -44,6 +44,7 @@ public class Territory extends ImageEntity {
 	/** The owner. */
 	private int owner;
 
+	/** The home city. */
 	private int homeCity;
 	
 	/** The Constant NEUTRAL. */
@@ -351,10 +352,20 @@ public class Territory extends ImageEntity {
 		return hasCoast;
 	}
 
+	/**
+	 * Sets the home city.
+	 *
+	 * @param owner the new home city
+	 */
 	public void setHomeCity(int owner) {
 		homeCity = owner;
 	}
 	
+	/**
+	 * Gets the home city.
+	 *
+	 * @return the home city
+	 */
 	public int getHomeCity(){
 		return homeCity;
 	}

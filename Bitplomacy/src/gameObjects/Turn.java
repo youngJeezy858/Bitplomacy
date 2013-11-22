@@ -36,10 +36,13 @@ public class Turn {
 	/** The retreat orders. */
 	private ArrayList<Order> retreatOrders;
 	
+	/** The disband orders. */
 	private ArrayList<Order> disbandOrders;
  
+	/** The build orders. */
 	private ArrayList<Order> buildOrders;
 
+	/** The retreating territories. */
 	private ArrayList<Territory> retreatingTerritories;
 	
 
@@ -181,6 +184,12 @@ public class Turn {
 		}
 	}
 
+	/**
+	 * Checks if is support cut.
+	 *
+	 * @param so the so
+	 * @return true, if is support cut
+	 */
 	private boolean isSupportCut(Order so) {
 		for (Order ao : attackOrders){
 			if (ao.getState() != Order.CHECKED_WAITING)
@@ -228,6 +237,12 @@ public class Turn {
 		}
 	}
 
+	/**
+	 * Resolve move.
+	 *
+	 * @param o the o
+	 * @return the int
+	 */
 	private int resolveMove(Order o){
 		
 		if (o.getState() == Order.CHECKING)
@@ -271,6 +286,9 @@ public class Turn {
 	}
 
 	
+	/**
+	 * Resolve attacks.
+	 */
 	private void resolveAttacks() {
 		for (Order o : attackOrders){
 			int i = resolveAttack(o);
@@ -283,6 +301,12 @@ public class Turn {
 		}
 	}
 
+	/**
+	 * Resolve attack.
+	 *
+	 * @param o the o
+	 * @return the int
+	 */
 	private int resolveAttack(Order o) {
 		if (o.getState() == Order.FAILED ||
 				(o.getUnit().isLand() && !o.getTerr2().isLand()) ||
@@ -359,6 +383,9 @@ public class Turn {
 		return 1;
 	}
 
+	/**
+	 * Resolve conflicts.
+	 */
 	private void resolveConflicts() {
 		for (Order ao : attackOrders){
 			if (ao.getState() == Order.CHECKED_WAITING){
@@ -379,6 +406,12 @@ public class Turn {
 		}
 	}
 
+	/**
+	 * Checks for conflict.
+	 *
+	 * @param o the o
+	 * @return true, if successful
+	 */
 	private boolean hasConflict(Order o) {
 		for (Order ao : attackOrders){
 			if (ao.getState() != Order.CHECKED_WAITING && ao.getState() != Order.FOLLOWING && ao.getState() != Order.CHECKER)
@@ -405,6 +438,9 @@ public class Turn {
 		return false;
 	}
 
+	/**
+	 * Move passed following units.
+	 */
 	private void movePassedFollowingUnits() {
 		for (Order ao : attackOrders){
 			if (ao.getState() == Order.PASSED || ao.getState() == Order.FOLLOWING || ao.getState() == Order.CHECKING)
@@ -420,6 +456,9 @@ public class Turn {
 			moveUnit(mo);
 	}
 
+	/**
+	 * Resolve retreats.
+	 */
 	public void resolveRetreats(){
 		for (Order o : disbandOrders){
 			for (Territory t : retreatingTerritories){
@@ -467,6 +506,12 @@ public class Turn {
 		}
 	}
 
+	/**
+	 * Checks for retreat conflict.
+	 *
+	 * @param o the o
+	 * @return true, if successful
+	 */
 	private boolean hasRetreatConflict(Order o){
 		for (Order ro2 : retreatOrders){
 			if (o.getTerr1().equals(ro2.getTerr1()))
@@ -479,6 +524,12 @@ public class Turn {
 		return false;
 	}
 	
+	/**
+	 * Resolve retreat.
+	 *
+	 * @param o the o
+	 * @return true, if successful
+	 */
 	private boolean resolveRetreat(Order o) {
 		if (o.getUnit().isLand() && !o.getTerr2().isLand())
 			return false;
@@ -489,10 +540,20 @@ public class Turn {
 		return o.getTerr1().isAdjacent(o.getTerr2());
 	}
 
+	/**
+	 * Sets the season.
+	 *
+	 * @param string the new season
+	 */
 	public void setSeason(String string) {
 		season = string;
 	}
 
+	/**
+	 * Move unit.
+	 *
+	 * @param o the o
+	 */
 	private void moveUnit(Order o) {
 		if (o.getState() == Order.PASSED || o.getState() == Order.FOLLOWING || o.getState() == Order.CHECKING){
 			o.adjudicate(Order.PASSED);
@@ -504,6 +565,9 @@ public class Turn {
 		}	
 	}
 
+	/**
+	 * Resolve build remove.
+	 */
 	public void resolveBuildRemove() {
 		for (Player p : Canvas.getC().getPlayers()){
 			while (p.getSupplyCount() != p.getNumUnits()){
@@ -549,6 +613,11 @@ public class Turn {
 		}
 	}
 
+	/**
+	 * Adds the build order.
+	 *
+	 * @param currOrder the curr order
+	 */
 	public void addBuildOrder(Order currOrder) {
 		int i;
 		for (i = 0; i < buildOrders.size(); i++){

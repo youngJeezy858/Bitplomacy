@@ -54,6 +54,11 @@ public class Player {
 		return name;
 	}
 	
+	/**
+	 * Gets the owner num.
+	 *
+	 * @return the owner num
+	 */
 	public int getOwnerNum(){
 		int i = 8;
 		 if (name.equals("England"))
@@ -75,9 +80,8 @@ public class Player {
 	
 	/**
 	 * Adjust num sc.
-	 * @param i2 
 	 *
-	 * @param num the num
+	 * @param i the i
 	 */
 	public void adjustNumSC(int i){
 		supplyCenterCount = i;
@@ -99,6 +103,11 @@ public class Player {
 			u.resetOrder();
 	}
 	
+	/**
+	 * Removes the unit.
+	 *
+	 * @param t the t
+	 */
 	public void removeUnit(Territory t){
 		int i;
 		boolean blah = false;
@@ -112,10 +121,20 @@ public class Player {
 			units.remove(i);
 	}
 
+	/**
+	 * Gets the num units.
+	 *
+	 * @return the num units
+	 */
 	public int getNumUnits() {
 		return units.size();
 	}
 
+	/**
+	 * Gets the a unit.
+	 *
+	 * @return the a unit
+	 */
 	public Unit getAUnit() {
 		if (units.size() == 0)
 			return null;

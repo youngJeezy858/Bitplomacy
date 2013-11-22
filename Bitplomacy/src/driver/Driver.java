@@ -10,14 +10,12 @@ import gui.Canvas;
 import com.erebos.engine.core.*;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Driver.
+ * Contains the main method for running the game. 
  */
 public class Driver extends EGame
 {
 
-	
 	/**
 	 * Instantiates a new driver.
 	 */
@@ -48,7 +46,8 @@ public class Driver extends EGame
 	}
 	
 	/**
-	 * Copy natives.
+	 * Copy natives.  Determines what OS you're running and implements the proper natives.
+	 * Will be removed once I get the newest jar of Erebos
 	 *
 	 * @param destDir the dest dir
 	 */
