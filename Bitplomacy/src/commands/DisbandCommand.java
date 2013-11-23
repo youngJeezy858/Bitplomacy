@@ -1,6 +1,8 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+import orders.DisbandOrder;
+
 /**
  * The Class RemoveUnitCommand.
  */
@@ -22,7 +24,7 @@ public class DisbandCommand extends Commands {
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("disband");
+		GameCanvas.getC().setOrder(new DisbandOrder(GameCanvas.getC().getCurrentTerritory()));
 	}
 
 }

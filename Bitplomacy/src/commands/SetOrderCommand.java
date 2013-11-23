@@ -1,6 +1,7 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+
 /**
  * The Class SetOrderCommand.
  */
@@ -22,7 +23,7 @@ public class SetOrderCommand extends Commands {
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().finalizeOrder();
+		GameCanvas.getC().finalizeOrder();
 	}
 
 }

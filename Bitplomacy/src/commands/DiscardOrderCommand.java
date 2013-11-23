@@ -1,6 +1,7 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+
 /**
  * The Class DiscardOrderCommand.
  */
@@ -22,7 +23,7 @@ public class DiscardOrderCommand extends Commands {
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().discardOrder();
+		GameCanvas.getC().discardOrder();
 	}
 
 }

@@ -1,6 +1,8 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+import orders.DefendOrder;
+
 /**
  * The Class DefendCommand.
  */
@@ -22,7 +24,7 @@ public class DefendCommand extends Commands{
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("defend");
+		GameCanvas.getC().setOrder(new DefendOrder(GameCanvas.getC().getCurrentTerritory()));
 	}
 
 }

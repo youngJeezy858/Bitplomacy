@@ -1,6 +1,8 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+import orders.SupportOrder;
+
 /**
  * The Class SupportCommand.
  */
@@ -22,7 +24,8 @@ public class SupportCommand extends Commands{
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("support");
+		GameCanvas.getC().setOrder(new SupportOrder(GameCanvas.getC().getCurrentTerritory()));
+		GameCanvas.getC().setState(GameCanvas.COMM_SELECTED);
 	}
 
 }

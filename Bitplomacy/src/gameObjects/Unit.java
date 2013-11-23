@@ -1,8 +1,12 @@
 package gameObjects;
 
-import gui.Canvas;
+
+import orders.BlankOrder;
+import orders.Order;
 
 import org.newdawn.slick.SpriteSheet;
+
+import canvases.GameCanvas;
 
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
@@ -85,10 +89,10 @@ public class Unit extends ImageEntity{
 		if (order != null)
 			order.execute();
 		else{
-			Order o = new Order(territory);
+			BlankOrder o = new BlankOrder(territory);
 			o.setDestinationTerritory(territory);
 			order = o;
-			Canvas.getC().addOrder(o);
+			GameCanvas.getC().addOrder(o);
 		}
 	}
 

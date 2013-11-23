@@ -1,6 +1,7 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+
 /**
  * The Class SubmitCommand.
  */
@@ -22,7 +23,7 @@ public class SubmitCommand extends Commands{
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().submit();		
+		GameCanvas.getC().submit();		
 	}
 
 }

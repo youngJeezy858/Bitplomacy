@@ -1,6 +1,8 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+import orders.BuildArmyOrder;
+
 /**
  * The Class BuildArmyCommand.
  */
@@ -22,7 +24,7 @@ public class BuildArmyCommand extends Commands {
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("build army");
+		GameCanvas.getC().setOrder(new BuildArmyOrder(GameCanvas.getC().getCurrentTerritory()));
 	}
 
 }

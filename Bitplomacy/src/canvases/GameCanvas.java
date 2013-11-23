@@ -1,12 +1,13 @@
-package gui;
+package canvases;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
-import gameObjects.Order;
 import gameObjects.Player;
 import gameObjects.Territory;
-import gameObjects.Turn;
 import gameObjects.Unit;
+
+import orders.Order;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
@@ -17,18 +18,25 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
 
+import phases.BuildPhase;
+import phases.Phase;
+import phases.PlanningPhase;
+import phases.RetreatPhase;
+
+
 import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
 
+import commands.Commands;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class Canvas.
  */
-public class Canvas extends ECanvas{
+public class GameCanvas extends ECanvas{
 
 	/** Singleton variable for the Canvas. */
-	private static Canvas c = null;
+	private static GameCanvas c = null;
 	
 	/** Used to draw images for territories and methods to manipulate a Territory. */
 	private Territory[] territories;
@@ -39,43 +47,20 @@ public class Canvas extends ECanvas{
 	/** Used to draw the individual commands and has abstract methods to execute commands. */
 	private Commands[] commands;
 	
-	/** commands used during Summer and Winter. */
-	private Commands[] regularCommands = { new AttackCommand(1166, 635, 100),
-			new DefendCommand(1126, 729, 150),
-			new SupportCommand(1212, 729, 50),
-			new ConvoyCommand(1296, 729, 250),
-			new SubmitCommand(1152, 546, 200),
-			new MoveCommand(1258, 635, 25),
-			new SetOrderCommand(1152, 450, 75),
-			new DiscardOrderCommand(1269, 450, 125)};
-	
-	/** commands used during the Build/Remove phase. */
-	private Commands[] buildRemoveCommands = { new BuildArmyCommand(1166, 635, 100),
-			new BuildNavyCommand(1258, 635, 25),
-			new DisbandCommand(1212, 729, 50),
-			new SubmitCommand(1152, 546, 200),
-			new SetOrderCommand(1152, 450, 75),
-			new DiscardOrderCommand(1269, 450, 125)};
-	
-
-	/** The retreat disband commands. */
-	private Commands[] retreatDisbandCommands = { new DisbandCommand(1166, 635, 100),
-			new RetreatCommand(1258, 635, 25),
-			new SubmitCommand(1152, 546, 200),
-			new SetOrderCommand(1152, 450, 75),
-			new DiscardOrderCommand(1269, 450, 125)};
-	
 	/** The display territory name. */
 	private String displayTerritoryName;
 	
 	/** The display territory owner. */
 	private String displayTerritoryOwner;
+
+	/** The Territory currently selected */
+	private Territory currTerritory;
 	
 	/** The curr order. */
 	private Order currOrder;
 	
 	/** The curr turn. */
-	private Turn currTurn;
+	private Phase currPhase;
 	
 	/** The font. */
 	private TrueTypeFont font;
@@ -90,22 +75,16 @@ public class Canvas extends ECanvas{
 	public static final int COMM_SELECTED = 1;
 	
 	/** The Constant SELECT_SUPPORT. */
-	public static final int SELECT_SUPPORT = 2;
+	public static final int SELECT_UNIT = 2;
 	
 	/** The Constant SELECT_CONVOY_DESTINATION. */
 	public static final int SELECT_CONVOY_DESTINATION = 3;
 	
-	/** The Constant SELECT_CONVOY_UNITS. */
-	public static final int SELECT_CONVOY_UNITS = 4;
-  
-	/** The Constant SELECT_RETREAT_DESTINATION. */
-	public static final int SELECT_RETREAT_DESTINATION = 5;
-	
 	/** The Constant FINISH_ADJUDICATION. */
-	public static final int FINISH_ADJUDICATION = 6;
+	public static final int FINISH_ADJUDICATION = 4;
 
 	/** The Constant WINNER. */
-	public static final int WINNER = 7;
+	public static final int WINNER = 5;
 
 	
 	/** MasterMap contains the color keys for the individual territories.  It is 
@@ -128,7 +107,7 @@ public class Canvas extends ECanvas{
 	/**
 	 * Instantiates a new canvas.
 	 */
-	private Canvas(){
+	private GameCanvas(){
 		super(1);
 		state = NORM;
 	}
@@ -141,6 +120,7 @@ public class Canvas extends ECanvas{
 		
 		displayTerritoryName = "";
 		displayTerritoryOwner = "";
+	    font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true);
 		
 		players = new Player[7];
 		players[0] = new Player("England");
@@ -153,39 +133,16 @@ public class Canvas extends ECanvas{
 		
 		MasterMap=EAnimation.loadImage("/images/MasterMap.png");
 		Borders=EAnimation.loadImage("/images/Borders.png");
-		
-		regularCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/AttackIcon.png")));
-		regularCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
-		regularCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
-		regularCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/ConvoyIcon.png")));
-		regularCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
-		regularCommands[5].setEA(new EAnimation(EAnimation.loadImage("/images/MoveIcon.png")));
-		regularCommands[6].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
-		regularCommands[7].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
-
-		buildRemoveCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/BuildArmyIcon.png")));
-		buildRemoveCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/BuildNavyIcon.png")));
-		buildRemoveCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
-		buildRemoveCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
-		buildRemoveCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
-		buildRemoveCommands[5].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
-		
-		retreatDisbandCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
-		retreatDisbandCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/RetreatIcon.png")));
-		retreatDisbandCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
-		retreatDisbandCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
-		retreatDisbandCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
 
 		Image temp = EAnimation.loadImage("/images/LandUnitUpdated.png");
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		temp = EAnimation.loadImage("/images/WaterUnitUpdated.png");
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		
-		currTurn = new Turn("Spring/Summer", 1900);
-		commands = regularCommands;
+		currPhase = new PlanningPhase("Spring/Summer", 1900);
 		
 		//define territories
-		Scanner sc = new Scanner(Canvas.class.getResourceAsStream("/docs/terr.csv"));
+		Scanner sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/terr.csv"));
 		sc.nextLine();
 		int lines = 0;
 		while (sc.hasNextLine()){
@@ -193,7 +150,7 @@ public class Canvas extends ECanvas{
 			sc.nextLine();
 		}
 		sc.close();
-		sc = new Scanner(Canvas.class.getResourceAsStream("/docs/terr.csv"));
+		sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/terr.csv"));
 		sc.nextLine();
 		int i = 0;
 		territories = new Territory[lines];
@@ -211,11 +168,11 @@ public class Canvas extends ECanvas{
 		sc.close();
 		
 		//define adjacent territories
-		sc = new Scanner(Canvas.class.getResourceAsStream("/docs/adjacentTerr.csv"));
+		sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/adjacentTerr.csv"));
 		sc.nextLine();
 		while (sc.hasNextLine()){
 			String s[] = sc.nextLine().split("\t");
-			Territory t = getT(s[0]);
+			Territory t = getTerritory(s[0]);
 			for (i = 1; i < s.length; i++)
 				t.addAdjacent(s[i]);
 		}	
@@ -223,8 +180,6 @@ public class Canvas extends ECanvas{
 		
 	    setBoard();
 	    adjustNumSC();
-
-	    font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true);
 	}
 
 	/**
@@ -233,34 +188,34 @@ public class Canvas extends ECanvas{
 	 * team. 
 	 */
 	private void setBoard() {
-		createStartingUnit(getT("Edinburgh"), waterUnit, false, players[Territory.ENGLAND-1]);
-		createStartingUnit(getT("Liverpool"), landUnit, true, players[Territory.ENGLAND-1]);
-		createStartingUnit(getT("London"), waterUnit, false, players[Territory.ENGLAND-1]);
+		createStartingUnit(getTerritory("Edinburgh"), waterUnit, false, players[Territory.ENGLAND-1]);
+		createStartingUnit(getTerritory("Liverpool"), landUnit, true, players[Territory.ENGLAND-1]);
+		createStartingUnit(getTerritory("London"), waterUnit, false, players[Territory.ENGLAND-1]);
 
-		createStartingUnit(getT("Vienna"), landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
-		createStartingUnit(getT("Budapest"), landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
-		createStartingUnit(getT("Trieste"), waterUnit, false, players[Territory.AUSTRIA_HUNGARY-1]);
+		createStartingUnit(getTerritory("Vienna"), landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
+		createStartingUnit(getTerritory("Budapest"), landUnit, true, players[Territory.AUSTRIA_HUNGARY-1]);
+		createStartingUnit(getTerritory("Trieste"), waterUnit, false, players[Territory.AUSTRIA_HUNGARY-1]);
 
-		createStartingUnit(getT("Paris"), landUnit, true, players[Territory.FRANCE-1]);
-		createStartingUnit(getT("Brest"), waterUnit, false, players[Territory.FRANCE-1]);
-		createStartingUnit(getT("Marseilles"), landUnit, true, players[Territory.FRANCE-1]);
+		createStartingUnit(getTerritory("Paris"), landUnit, true, players[Territory.FRANCE-1]);
+		createStartingUnit(getTerritory("Brest"), waterUnit, false, players[Territory.FRANCE-1]);
+		createStartingUnit(getTerritory("Marseilles"), landUnit, true, players[Territory.FRANCE-1]);
 
-		createStartingUnit(getT("Berlin"), landUnit, true, players[Territory.GERMANY-1]);
-		createStartingUnit(getT("Kiel"), waterUnit, false, players[Territory.GERMANY-1]);
-		createStartingUnit(getT("Munich"), landUnit, true, players[Territory.GERMANY-1]);
+		createStartingUnit(getTerritory("Berlin"), landUnit, true, players[Territory.GERMANY-1]);
+		createStartingUnit(getTerritory("Kiel"), waterUnit, false, players[Territory.GERMANY-1]);
+		createStartingUnit(getTerritory("Munich"), landUnit, true, players[Territory.GERMANY-1]);
 
-		createStartingUnit(getT("Venice"), landUnit, true, players[Territory.ITALY-1]);
-		createStartingUnit(getT("Rome"), landUnit, true, players[Territory.ITALY-1]);
-		createStartingUnit(getT("Naples"), waterUnit, false, players[Territory.ITALY-1]);
+		createStartingUnit(getTerritory("Venice"), landUnit, true, players[Territory.ITALY-1]);
+		createStartingUnit(getTerritory("Rome"), landUnit, true, players[Territory.ITALY-1]);
+		createStartingUnit(getTerritory("Naples"), waterUnit, false, players[Territory.ITALY-1]);
 
-		createStartingUnit(getT("St. Petersburgh"), waterUnit, false, players[Territory.RUSSIA-1]);
-		createStartingUnit(getT("Moscow"), landUnit, true, players[Territory.RUSSIA-1]);
-		createStartingUnit(getT("Sevastopal"), waterUnit, false, players[Territory.RUSSIA-1]);
-		createStartingUnit(getT("Warsaw"), landUnit, true, players[Territory.RUSSIA-1]);
+		createStartingUnit(getTerritory("St. Petersburgh"), waterUnit, false, players[Territory.RUSSIA-1]);
+		createStartingUnit(getTerritory("Moscow"), landUnit, true, players[Territory.RUSSIA-1]);
+		createStartingUnit(getTerritory("Sevastopal"), waterUnit, false, players[Territory.RUSSIA-1]);
+		createStartingUnit(getTerritory("Warsaw"), landUnit, true, players[Territory.RUSSIA-1]);
 
-		createStartingUnit(getT("Ankara"), waterUnit, false, players[Territory.TURKEY-1]);
-		createStartingUnit(getT("Constantinople"), landUnit, true, players[Territory.TURKEY-1]);
-		createStartingUnit(getT("Smyrna"),landUnit, true, players[Territory.TURKEY-1]);
+		createStartingUnit(getTerritory("Ankara"), waterUnit, false, players[Territory.TURKEY-1]);
+		createStartingUnit(getTerritory("Constantinople"), landUnit, true, players[Territory.TURKEY-1]);
+		createStartingUnit(getTerritory("Smyrna"),landUnit, true, players[Territory.TURKEY-1]);
 	}
 	
 	/**
@@ -348,7 +303,7 @@ public class Canvas extends ECanvas{
 				t.uDraw();
 
 			g.setFont(font);
-			g.drawString(currTurn.toString(), 10, 10);
+			g.drawString(currPhase.toString(), 10, 10);
 		}
 		else{
 			g.setColor(Color.green);
@@ -397,7 +352,7 @@ public class Canvas extends ECanvas{
 	 * @param o the o
 	 */
 	public void addOrder(Order o){
-		currTurn.addOrder(o);
+		currPhase.addOrder(o);
 	}
 
 	/**
@@ -424,23 +379,20 @@ public class Canvas extends ECanvas{
 	 */
 	private void adjustTurn() {
 		
-		String s = currTurn.getSeason();
-		int i = currTurn.getYear();
-		if (s.equals("Spring/Summer")){
-			currTurn.setSeason("Summer Retreats");
-			commands = retreatDisbandCommands;
-		}
-		else if (s.equals("Summer Retreats")){
-			currTurn = new Turn("Fall/Winter", i);
-			commands = regularCommands;
-		}
-		else if (s.equals("Fall/Winter")){
-			currTurn.setSeason("Winter Retreats");
-			commands = retreatDisbandCommands;
-		}
+		String s = currPhase.getSeason();
+		int i = currPhase.getYear();
+		
+		if (s.equals("Spring/Summer"))
+			currPhase = new RetreatPhase("Summer Retreats", i, ((PlanningPhase)currPhase).getRetreatingUnits());
+		
+		else if (s.equals("Summer Retreats"))
+			currPhase = new PlanningPhase("Fall/Winter", i);
+		
+		else if (s.equals("Fall/Winter"))
+			currPhase = new RetreatPhase("Winter Retreats", i, ((PlanningPhase)currPhase).getRetreatingUnits());
+
 		else if (s.equals("Winter Retreats")){
-			currTurn = new Turn("Build/Remove", i);
-			commands = buildRemoveCommands;
+			currPhase = new BuildPhase("Build/Remove", i);
 			adjustNumSC();
 			for (Player p : players){
 				if (p.getSupplyCenterCount() >= 24){
@@ -450,10 +402,10 @@ public class Canvas extends ECanvas{
 				}
 			}
 		}
+		
 		else{
 			i++;
-			currTurn = new Turn("Spring/Summer", i);
-			commands = regularCommands;
+			currPhase = new PlanningPhase("Spring/Summer", i);
 		}
 	}
 
@@ -462,9 +414,9 @@ public class Canvas extends ECanvas{
 	 *
 	 * @return the c
 	 */
-	public static Canvas getC() {
+	public static GameCanvas getC() {
 		if (c == null)
-			c = new Canvas();
+			c = new GameCanvas();
 		return c;
 	}
 
@@ -502,7 +454,7 @@ public class Canvas extends ECanvas{
 	 * @param name the name
 	 * @return the t
 	 */
-	public Territory getT(String name){
+	private Territory getTerritory(String name){
 		for (Territory t : territories){
 			if (t.getName().equals(name))
 				return t;
@@ -532,18 +484,11 @@ public class Canvas extends ECanvas{
 		currOrder = null;
 		for (Player p : players)
 			p.executeOrders();
-		if (currTurn.getSeason().contains("Retreats"))
-			currTurn.resolveRetreats();
-		else if (currTurn.getSeason().equals("Build/Remove"))
-			currTurn.resolveBuildRemove();
-		else
-			currTurn.resolveOrders();
+		currPhase.adjudicate();
 		for (Player p : players)
 			p.resetOrders();
 		adjustTurn();
-		if (winningPlayer != null)
-			state = WINNER;
-		else
+		if (winningPlayer == null)
 			state = NORM;
 	}
 
@@ -567,30 +512,26 @@ public class Canvas extends ECanvas{
 		displayTerritoryOwner = t.getOwnerName();
 		
 		if (state == NORM){
-			if (t.getUnit() != null || currTurn.getSeason().equals("Build/Remove"))
-				currOrder = new Order(t);				
+			if (t.getUnit() != null || currPhase.getSeason().equals("Build/Remove"))
+				currTerritory = t;
 		}
 		
 		else if (state == COMM_SELECTED){			
 			currOrder.setDestinationTerritory(t);
-			if (currOrder.getCommand().equals("attack") || currOrder.getCommand().equals("move"))
-				state = SELECT_CONVOY_UNITS;
-			else if (currOrder.getCommand().equals("support"))
-				state = SELECT_SUPPORT;
+			if (currOrder.getCommand().equals("attack") || currOrder.getCommand().equals("move") 
+					|| currOrder.getCommand().equals("support"))
+				state = SELECT_UNIT;
 			else if (currOrder.getCommand().equals("convoy"))
 				state = SELECT_CONVOY_DESTINATION;
 		}
 		
-		else if (state == SELECT_SUPPORT){
+		else if (state == SELECT_UNIT){
 			if (t.getUnit() != null)
-				currOrder.setSupport(t.getUnit()); 
+				currOrder.addAdditionalTerritory(t); 
 		}
+		
 		else if (state == SELECT_CONVOY_DESTINATION)
-			currOrder.setConvoyDestination(t);
-		else if (state == SELECT_CONVOY_UNITS){
-			if (t.getUnit() != null)
-				currOrder.addConvoyUnit(t.getUnit());
-		}
+			currOrder.addAdditionalTerritory(t);
 	}
 
 	/**
@@ -598,10 +539,10 @@ public class Canvas extends ECanvas{
 	 */
 	public void finalizeOrder() {
 		if (currOrder != null){
-			if (!currTurn.getSeason().equals("Build/Remove") || currOrder.getCommand().equals("disband"))
-				currOrder.getUnit().setOrder(currOrder);
+			if (!currPhase.getSeason().equals("Build/Remove") || currOrder.getCommand().equals("disband"))
+				currOrder.setUnitOrder();
 			else 
-				currTurn.addBuildOrder(currOrder);
+				currPhase.addBuildOrder(currOrder);
 		}
 		currOrder = null;
 		state = NORM;
@@ -613,13 +554,6 @@ public class Canvas extends ECanvas{
 	public void discardOrder() {
 		currOrder = null;
 		state = NORM;
-	}
-
-	/**
-	 * Ready for retreats.
-	 */
-	public void readyForRetreats() {
-		commands = retreatDisbandCommands;
 	}
 
 	/**
@@ -641,6 +575,22 @@ public class Canvas extends ECanvas{
 	 */
 	public Player[] getPlayers() {
 		return players;
+	}
+
+	public void setOrder(Order o) {
+		currOrder = o;
+	}
+
+	public Territory getCurrentTerritory() {
+		return currTerritory;
+	}
+
+	public void setCommands(Commands[] planningCommands) {
+		commands = planningCommands;
+	}
+
+	public PlanningPhase getPhase() {
+		return (PlanningPhase) currPhase;
 	}
 
 }

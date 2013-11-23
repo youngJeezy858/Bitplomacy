@@ -1,7 +1,10 @@
-package gui;
+package commands;
+
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
+
+import canvases.GameCanvas;
 
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
@@ -52,7 +55,7 @@ public abstract class Commands extends ImageEntity{
 	 * Update.
 	 */
 	public void update(){
-		Color c = Canvas.getC().getCurrentColor();
+		Color c = GameCanvas.getC().getCurrentColor();
 		if (c.getRed()==0 && c.getBlue()==colorKey && c.getGreen()==0 && Mouse.isButtonDown(0))
 			execute();
 	}

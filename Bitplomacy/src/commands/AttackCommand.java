@@ -1,6 +1,8 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+import orders.AttackOrder;
+
 /**
  * The Class AttackCommand.
  */
@@ -22,7 +24,8 @@ public class AttackCommand extends Commands{
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("attack");
+		GameCanvas.getC().setOrder(new AttackOrder(GameCanvas.getC().getCurrentTerritory()));
+		GameCanvas.getC().setState(GameCanvas.COMM_SELECTED);
 	}
 
 }

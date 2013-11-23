@@ -1,6 +1,8 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+import orders.ConvoyOrder;
+
 /**
  * The Class ConvoyCommand.
  */
@@ -22,7 +24,8 @@ public class ConvoyCommand extends Commands{
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("convoy");
+		GameCanvas.getC().setOrder(new ConvoyOrder(GameCanvas.getC().getCurrentTerritory()));
+		GameCanvas.getC().setState(GameCanvas.COMM_SELECTED);
 	}
 
 }

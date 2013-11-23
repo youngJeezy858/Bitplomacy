@@ -1,6 +1,8 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+import orders.BuildNavyOrder;
+
 /**
  * The Class BuildNavyCommand.
  */
@@ -22,7 +24,7 @@ public class BuildNavyCommand extends Commands {
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("build navy");
+		GameCanvas.getC().setOrder(new BuildNavyOrder(GameCanvas.getC().getCurrentTerritory()));
 	}
 
 }

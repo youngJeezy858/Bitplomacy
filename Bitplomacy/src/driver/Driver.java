@@ -5,7 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipInputStream;
-import gui.Canvas;
+
+import canvases.GameCanvas;
 
 import com.erebos.engine.core.*;
 
@@ -23,7 +24,7 @@ public class Driver extends EGame
 	{
 		super("Bitplomacy");
 		setShowFPS(true);
-		addCanvas(Canvas.getC());
+		addCanvas(GameCanvas.getC());
 	}
 
 	/**

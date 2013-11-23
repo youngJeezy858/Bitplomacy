@@ -1,6 +1,8 @@
-package gui;
+package commands;
 
-// TODO: Auto-generated Javadoc
+import canvases.GameCanvas;
+import orders.RetreatOrder;
+
 /**
  * The Class RetreatCommand.
  */
@@ -22,7 +24,8 @@ public class RetreatCommand extends Commands{
 	 */
 	@Override
 	public void execute() {
-		Canvas.getC().setCommand("retreat");
+		GameCanvas.getC().setOrder(new RetreatOrder(GameCanvas.getC().getCurrentTerritory()));
+		GameCanvas.getC().setState(GameCanvas.COMM_SELECTED);
 	}
 
 }
