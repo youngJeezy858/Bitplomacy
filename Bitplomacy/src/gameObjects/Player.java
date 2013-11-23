@@ -2,89 +2,96 @@ package gameObjects;
 
 import java.util.ArrayList;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Player.
+ * The Class Player represents on of the 7 countries on the map.
  */
 public class Player {
 
-	/** The units. */
+	/** The list of Units a Player controls */
 	private ArrayList<Unit> units;
 	
-	/** The name. */
+	/** The name of the Player's country */
 	private String name;
 	
 	/** The supply center count. */
 	private int supplyCenterCount;
 	
+	/** */
+	private int ownerKey;
+	
 	/**
-	 * Instantiates a new player.
+	 * Instantiates a new player. Sets the key value of the player automatically.
 	 *
-	 * @param name the name
+	 * @param name the name of the country
 	 */
 	public Player(String name){
 		this.name = name;
+		ownerKey = Territory.NEUTRAL;
+		 if (name.equals("England"))
+			 ownerKey = Territory.ENGLAND;
+		else if (name.equals("Austria-Hungary"))
+			 ownerKey = Territory.AUSTRIA_HUNGARY;
+		else if (name.equals("Italy"))
+			 ownerKey = Territory.ITALY;
+		else if (name.equals("Turkey"))
+			 ownerKey = Territory.TURKEY;
+		else if (name.equals("France"))
+			 ownerKey = Territory.FRANCE;
+		else if (name.equals("Russia"))
+			 ownerKey = Territory.RUSSIA;
+		else if (name.equals("Germany"))
+			 ownerKey = Territory.GERMANY;
 		units = new ArrayList<Unit>();
 	}
 	
 	/**
-	 * Adds the unit.
+	 * Adds a Unit to the Player's Unit list
 	 *
-	 * @param u the u
+	 * @param u the Unit to be added
 	 */
 	public void addUnit(Unit u){
 		units.add(u);
 	}
 	
 	/**
-	 * Gets the supply count.
+	 * Gets the number of supply centers currently controlled by the Player.
 	 *
-	 * @return the supply count
+	 * @return the supply center count
 	 */
-	public int getSupplyCount(){
+	public int getSupplyCenterCount(){
 		return supplyCenterCount;
 	}
 	
 	/**
-	 * Gets the name.
+	 * Gets the name of the Player's country
 	 *
-	 * @return the name
+	 * @return the country name
 	 */
 	public String getName(){
 		return name;
 	}
 	
-	public int getOwnerNum(){
-		int i = 8;
-		 if (name.equals("England"))
-			 i = 1;
-		else if (name.equals("Austria-Hungary"))
-			 i = 2;
-		else if (name.equals("Italy"))
-			 i = 3;
-		else if (name.equals("Turkey"))
-			 i = 4;
-		else if (name.equals("France"))
-			 i = 5;
-		else if (name.equals("Russia"))
-			 i = 6;
-		else if (name.equals("Germany"))
-			 i = 7;
-		return i;
+	/**
+	 * Gets the owner as an int value. Check the static int fields found
+	 * in the Territory class for specific values of each country.
+	 *
+	 * @return the owner's int value
+	 */
+	public int getOwnerKey(){
+		return ownerKey;
 	}
 	
 	/**
-	 * Adjust num sc.
-	 * @param i2 
+	 * Sets the number of supply centers a Player controls.
 	 *
-	 * @param num the num
+	 * @param sc the number of supply centers
 	 */
-	public void adjustNumSC(int i){
-		supplyCenterCount = i;
+	public void setSupplyCenterCount(int sc){
+		supplyCenterCount = sc;
 	}
 
 	/**
-	 * Execute orders.
+	 * Executes every Units' order that are owned by the Player.
 	 */
 	public void executeOrders() {
 		for (Unit u : units)
@@ -92,13 +99,18 @@ public class Player {
 	}
 
 	/**
-	 * Reset orders.
+	 * Sets every Units' order to null.
 	 */
 	public void resetOrders() {
 		for (Unit u : units)
-			u.resetOrder();
+			u.setOrder(null);
 	}
 	
+	/**
+	 * Removes a Unit from the Player's Unit list. 
+	 *
+	 * @param t the current Territory of the Unit
+	 */
 	public void removeUnit(Territory t){
 		int i;
 		boolean blah = false;
@@ -112,10 +124,20 @@ public class Player {
 			units.remove(i);
 	}
 
+	/**
+	 * Gets the total count of Units the Player has currently 
+	 *
+	 * @return the unit count
+	 */
 	public int getNumUnits() {
 		return units.size();
 	}
 
+	/**
+	 * Gets the first Unit from the Unit list.  Returns null if the Player has none.
+	 *
+	 * @return the unit
+	 */
 	public Unit getAUnit() {
 		if (units.size() == 0)
 			return null;

@@ -27,20 +27,19 @@ import com.erebos.engine.graphics.EAnimation;
  */
 public class Canvas extends ECanvas{
 
-	/* Singleton variable for the Canvas */
-	/** The c. */
+	/** Singleton variable for the Canvas. */
 	private static Canvas c = null;
 	
-	/** The territories. */
+	/** Used to draw images for territories and methods to manipulate a Territory. */
 	private Territory[] territories;
 	
-	/** The players. */
+	/** The teams as  - 7 total. */
 	private Player[] players;
 	
-	/** The commands. */
+	/** Used to draw the individual commands and has abstract methods to execute commands. */
 	private Commands[] commands;
 	
-	/** The regular commands. */
+	/** commands used during Summer and Winter. */
 	private Commands[] regularCommands = { new AttackCommand(1166, 635, 100),
 			new DefendCommand(1126, 729, 150),
 			new SupportCommand(1212, 729, 50),
@@ -50,7 +49,7 @@ public class Canvas extends ECanvas{
 			new SetOrderCommand(1152, 450, 75),
 			new DiscardOrderCommand(1269, 450, 125)};
 	
-	/** The build remove commands. */
+	/** commands used during the Build/Remove phase. */
 	private Commands[] buildRemoveCommands = { new BuildArmyCommand(1166, 635, 100),
 			new BuildNavyCommand(1258, 635, 25),
 			new DisbandCommand(1212, 729, 50),
@@ -58,6 +57,8 @@ public class Canvas extends ECanvas{
 			new SetOrderCommand(1152, 450, 75),
 			new DiscardOrderCommand(1269, 450, 125)};
 	
+
+	/** The retreat disband commands. */
 	private Commands[] retreatDisbandCommands = { new DisbandCommand(1166, 635, 100),
 			new RetreatCommand(1258, 635, 25),
 			new SubmitCommand(1152, 546, 200),
@@ -97,28 +98,31 @@ public class Canvas extends ECanvas{
 	/** The Constant SELECT_CONVOY_UNITS. */
 	public static final int SELECT_CONVOY_UNITS = 4;
   
+	/** The Constant SELECT_RETREAT_DESTINATION. */
 	public static final int SELECT_RETREAT_DESTINATION = 5;
 	
+	/** The Constant FINISH_ADJUDICATION. */
 	public static final int FINISH_ADJUDICATION = 6;
 
+	/** The Constant WINNER. */
 	public static final int WINNER = 7;
 
 	
-	/* MasterMap contains the color keys for the individual territories.  It is 
-	 * referenced in the Territory */
-	/** The Master map. */
+	/** MasterMap contains the color keys for the individual territories.  It is 
+	 * referenced in the Territory 
+	 * */
 	private Image MasterMap;
 	
 	/** The Borders. */
 	private Image Borders;
 		
-	/* SpriteSheets for Units */
-	/** The land unit. */
+	/** SpriteSheets for Units. */
 	private SpriteSheet landUnit;
 	
 	/** The water unit. */
 	private SpriteSheet waterUnit;
 
+	/** The winning player. */
 	private Player winningPlayer;
 	
 	/**
@@ -223,13 +227,10 @@ public class Canvas extends ECanvas{
 	    font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true);
 	}
 
-	/*
+	/**
 	 * Sets up the play area for a 7 teams.  Specifically it
 	 * sets ownership for territories and generate units for each 
 	 * team. 
-	 */
-	/**
-	 * Sets the board.
 	 */
 	private void setBoard() {
 		createStartingUnit(getT("Edinburgh"), waterUnit, false, players[Territory.ENGLAND-1]);
@@ -266,37 +267,38 @@ public class Canvas extends ECanvas{
 	 * Creates the unit.
 	 *
 	 * @param t the t
-	 * @param owner the owner
 	 * @param ss the ss
 	 * @param isLand the is land
 	 * @param p the p
 	 */
 	private void createStartingUnit(Territory t, SpriteSheet ss, boolean isLand, Player p){
-		t.setOwner(p.getOwnerNum());
-		t.setHomeCity(p.getOwnerNum());
-		Unit temp = new Unit(ss, p.getOwnerNum() - 1, isLand, t);
+		t.setOwner(p.getOwnerKey());
+		t.setHomeCity(p.getOwnerKey());
+		Unit temp = new Unit(ss, p.getOwnerKey() - 1, isLand, t);
 		t.setUnit(temp);
 		p.addUnit(t.getUnit());
 	}
 	
+	/**
+	 * Creates the unit.
+	 *
+	 * @param t the t
+	 * @param isLand the is land
+	 * @param p the p
+	 */
 	public void createUnit(Territory t, boolean isLand, Player p){
 		Unit temp = null;
 		if (isLand)
-			temp = new Unit(landUnit, p.getOwnerNum() - 1, isLand, t);
+			temp = new Unit(landUnit, p.getOwnerKey() - 1, isLand, t);
 		else
-			temp = new Unit(waterUnit, p.getOwnerNum() - 1, isLand, t);
+			temp = new Unit(waterUnit, p.getOwnerKey() - 1, isLand, t);
 		t.setUnit(temp);
 		p.addUnit(t.getUnit());
 	}
 
-	/*
-	 * Used to generate a SpriteSheet of a territory.  Assumes that your SpriteSheet has 8 sprites.
-	 * @param String location -> the file path of the image
-	 * @returns -> a Spritesheet of the image
-	 */
 	/**
-	 * SS factory.
-	 *
+	 * Used to generate a SpriteSheet of a territory.  Assumes that your SpriteSheet has 8 sprites.
+	 * 
 	 * @param location the location
 	 * @return the sprite sheet
 	 */
@@ -325,7 +327,7 @@ public class Canvas extends ECanvas{
 			g.drawString("SUPPLY CENTER TOTALS", 1145, 120);
 			int i = 140;
 			for (Player p : players) {
-				g.drawString(p.getName() + ": " + p.getSupplyCount(), 1145, i);
+				g.drawString(p.getName() + ": " + p.getSupplyCenterCount(), 1145, i);
 				i = i + 20;
 			}
 
@@ -410,10 +412,10 @@ public class Canvas extends ECanvas{
 		for (Player p : players){
 			i = 0;
 	    	for (Territory t : territories){
-	    		if (t.getOwner() == p.getOwnerNum() && t.hasSC())
+	    		if (t.getOwner() == p.getOwnerKey() && t.hasSC())
 	    			i++;
 	    	}
-			p.adjustNumSC(i);
+			p.setSupplyCenterCount(i);
 		}
 	}
 
@@ -441,7 +443,7 @@ public class Canvas extends ECanvas{
 			commands = buildRemoveCommands;
 			adjustNumSC();
 			for (Player p : players){
-				if (p.getSupplyCount() >= 24){
+				if (p.getSupplyCenterCount() >= 24){
 					state = WINNER;
 					winningPlayer = p;
 					font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
@@ -466,14 +468,9 @@ public class Canvas extends ECanvas{
 		return c;
 	}
 
-	/*
+	/**
 	 * Gets the Color from the current mouse location.  Used to access color keys.
 	 * 
-	 * @returns Color -> the Color at the current mouse position
-	 */
-	/**
-	 * Gets the current color.
-	 *
 	 * @return the current color
 	 */
 	public Color getCurrentColor(){
@@ -550,11 +547,6 @@ public class Canvas extends ECanvas{
 			state = NORM;
 	}
 
-	/*
-	 * Sets the current state of the game.  Used for updating the game.
-	 * 
-	 * @param s -> the state of the game as an int value.  See class fields for state descriptions
-	 */
 	/**
 	 * Sets the state.
 	 *
@@ -580,7 +572,7 @@ public class Canvas extends ECanvas{
 		}
 		
 		else if (state == COMM_SELECTED){			
-			currOrder.setTerr2(t);
+			currOrder.setDestinationTerritory(t);
 			if (currOrder.getCommand().equals("attack") || currOrder.getCommand().equals("move"))
 				state = SELECT_CONVOY_UNITS;
 			else if (currOrder.getCommand().equals("support"))
@@ -607,7 +599,7 @@ public class Canvas extends ECanvas{
 	public void finalizeOrder() {
 		if (currOrder != null){
 			if (!currTurn.getSeason().equals("Build/Remove") || currOrder.getCommand().equals("disband"))
-				currOrder.pushOrder();
+				currOrder.getUnit().setOrder(currOrder);
 			else 
 				currTurn.addBuildOrder(currOrder);
 		}
@@ -623,10 +615,18 @@ public class Canvas extends ECanvas{
 		state = NORM;
 	}
 
+	/**
+	 * Ready for retreats.
+	 */
 	public void readyForRetreats() {
 		commands = retreatDisbandCommands;
 	}
 
+	/**
+	 * Removes the unit.
+	 *
+	 * @param unit the unit
+	 */
 	public void removeUnit(Unit unit) {
 		players[unit.getOwner()-1].removeUnit(unit.getTerritory());
 		if (!unit.getTerritory().hasSC())
@@ -634,6 +634,11 @@ public class Canvas extends ECanvas{
 		unit.getTerritory().removeUnit();
 	}
 
+	/**
+	 * Gets the players.
+	 *
+	 * @return the players
+	 */
 	public Player[] getPlayers() {
 		return players;
 	}

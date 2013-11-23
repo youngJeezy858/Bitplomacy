@@ -7,28 +7,24 @@ import org.newdawn.slick.SpriteSheet;
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Unit.
  */
 public class Unit extends ImageEntity{
 
-	/** The land. */
-	private boolean land;
+	/** Is this Unit an army? */
+	private boolean isArmy;
 	
-	/** The image. */
+	/** What actually draws the Unit to the screen */
 	private EAnimation image;
 	
-	/** The ss. */
-	private SpriteSheet ss;
+	/** The current Territory of the Unit */
+	private Territory territory;
 	
-	/** The cur terr. */
-	private Territory curTerr;
-	
-	/** The order. */
+	/** The current Order of the Unit */
 	private Order order;
 	
-	/** The owner. */
+	/** The owner of the Unit */
 	private int owner;
 	
 	/**
@@ -41,10 +37,9 @@ public class Unit extends ImageEntity{
 	 */
 	public Unit(SpriteSheet ss, int owner, boolean land, Territory t){
 		super(ss);
-		this.land = land;
-		this.ss = ss;
+		this.isArmy = land;
 		image = new EAnimation(ss.getSprite(owner, 0));
-		curTerr = t;
+		territory = t;
 		this.owner = owner + 1;
 	}
 	
@@ -56,57 +51,49 @@ public class Unit extends ImageEntity{
 	}
 	
 	/**
-	 * Checks if is land.
+	 * Checks if Unit is an army.
 	 *
-	 * @return true, if is land
+	 * @return true, if army, false if navy
 	 */
-	public boolean isLand(){
-		return land;
+	public boolean isArmy(){
+		return isArmy;
 	}
 	
 	/**
-	 * Sets the owner.
-	 *
-	 * @param owner the new owner
-	 */
-	public void setOwner(int owner){
-		image = new EAnimation(ss.getSprite(owner, 0));
-	}
-	
-	/**
-	 * Gets the territory.
+	 * Gets the current Territory of this Unit.
 	 *
 	 * @return the territory
 	 */
 	public Territory getTerritory(){
-		return curTerr;
+		return territory;
 	}
 	
 	/**
-	 * Sets the territory.
+	 * Sets the current Territory
 	 *
 	 * @param t the new territory
 	 */
 	public void setTerritory(Territory t){
-		curTerr = t;
+		territory = t;
 	}
 
 	/**
-	 * Execute order.
+	 * Execute the current Order for this Unit. Will submit a blank Order
+	 * if none was given.
 	 */
 	public void executeOrder() {
 		if (order != null)
 			order.execute();
 		else{
-			Order o = new Order(curTerr);
-			o.setTerr2(curTerr);
+			Order o = new Order(territory);
+			o.setDestinationTerritory(territory);
 			order = o;
 			Canvas.getC().addOrder(o);
 		}
 	}
 
 	/**
-	 * Sets the order.
+	 * Sets the current Order.
 	 *
 	 * @param o the new order
 	 */
@@ -124,32 +111,12 @@ public class Unit extends ImageEntity{
 	}
 
 	/**
-	 * Gets the order.
+	 * Gets the current Order.
 	 *
 	 * @return the order
 	 */
 	public Order getOrder() {
 		return order;
 	}
-	
-	/**
-	 * Reset order.
-	 */
-	public void resetOrder(){
-		order = null;
-	}
 
-	/**
-	 * Retreat.
-	 */
-	public void retreat() {
-		Territory t = curTerr.findVacant();
-		if (t == null)
-			curTerr.setUnit(null);
-		else{
-			curTerr = t;
-			t.setUnit(this);
-		}
-		
-	}
 }
