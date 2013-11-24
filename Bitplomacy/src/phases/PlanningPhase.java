@@ -58,6 +58,15 @@ public class PlanningPhase extends Phase{
 	
 	public PlanningPhase(String season, int year) {
 		super(season, year);
+		
+		supportOrders = new ArrayList<SupportOrder>();
+		defendOrders = new ArrayList<DefendOrder>();
+		attackOrders = new ArrayList<AttackOrder>();
+		moveOrders = new ArrayList<MoveOrder>();
+		convoyOrders = new ArrayList<ConvoyOrder>();
+		blankOrders = new ArrayList<BlankOrder>();
+		retreatingUnits = new ArrayList<Order>();
+	
 		planningCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/AttackIcon.png")));
 		planningCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
 		planningCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
@@ -93,6 +102,10 @@ public class PlanningPhase extends Phase{
 		return retreatingUnits;
 	}
 
+	public ArrayList<AttackOrder> getAttackOrders(){
+		return attackOrders;
+	}
+	
 	@Override
 	public void adjudicate() {
 		checkSyntax();

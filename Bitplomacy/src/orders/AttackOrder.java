@@ -2,8 +2,8 @@ package orders;
 
 import java.util.ArrayList;
 
+import phases.PlanningPhase;
 import canvases.GameCanvas;
-
 import gameObjects.Territory;
 import gameObjects.Unit;
 
@@ -14,6 +14,7 @@ public class AttackOrder extends Order {
 	public AttackOrder(Territory t) {
 		super(t);
 		command = "attack";
+		convoyPath = new ArrayList<Territory>();
 	}
 
 	@Override
@@ -75,7 +76,8 @@ public class AttackOrder extends Order {
 					if (occupyingUnitOrder.getStrength() >= strength)
 						return FAILED;
 					else {
-						GameCanvas.getC().getPhase().addRetreat(occupyingUnitOrder);
+						PlanningPhase pp = (PlanningPhase) GameCanvas.getC().getPhase();
+						pp.addRetreat(occupyingUnitOrder);
 						return CHECKED_WAITING;
 					}
 				}
@@ -96,7 +98,8 @@ public class AttackOrder extends Order {
 				if (i != CHECKED_WAITING){
 					if (strength > 1){
 						occupyingUnitOrder.setState(FAILED);
-						GameCanvas.getC().getPhase().addRetreat(occupyingUnitOrder);
+						PlanningPhase pp = (PlanningPhase) GameCanvas.getC().getPhase();
+						pp.addRetreat(occupyingUnitOrder);
 						if (i == PASSED)
 							occupyingUnitOrder.getDestinationTerritory().getUnit().getOrder().setState(FAILED);
 						return CHECKED_WAITING;
@@ -113,7 +116,8 @@ public class AttackOrder extends Order {
 			
 			else if (occupyingUnitOrder.equals("defend") && occupyingUnitOrder.getState() != FAILED){
 				if (strength > occupyingUnitOrder.getStrength()){
-					GameCanvas.getC().getPhase().addRetreat(occupyingUnitOrder);
+					PlanningPhase pp = (PlanningPhase) GameCanvas.getC().getPhase();
+					pp.addRetreat(occupyingUnitOrder);
 					return CHECKED_WAITING;
 				}
 				else
@@ -122,7 +126,8 @@ public class AttackOrder extends Order {
 			
 			else {
 				if (strength > 1) {
-					GameCanvas.getC().getPhase().addRetreat(occupyingUnitOrder);
+					PlanningPhase pp = (PlanningPhase) GameCanvas.getC().getPhase();
+					pp.addRetreat(occupyingUnitOrder);
 					return CHECKED_WAITING;
 				} else
 					return FAILED;

@@ -1,6 +1,5 @@
 package canvases;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import gameObjects.Player;
@@ -383,13 +382,15 @@ public class GameCanvas extends ECanvas{
 		int i = currPhase.getYear();
 		
 		if (s.equals("Spring/Summer"))
-			currPhase = new RetreatPhase("Summer Retreats", i, ((PlanningPhase)currPhase).getRetreatingUnits());
+			currPhase = new RetreatPhase("Summer Retreats", i, 
+					((PlanningPhase)currPhase).getRetreatingUnits(), ((PlanningPhase) currPhase).getAttackOrders());
 		
 		else if (s.equals("Summer Retreats"))
 			currPhase = new PlanningPhase("Fall/Winter", i);
 		
 		else if (s.equals("Fall/Winter"))
-			currPhase = new RetreatPhase("Winter Retreats", i, ((PlanningPhase)currPhase).getRetreatingUnits());
+			currPhase = new RetreatPhase("Winter Retreats", i, 
+					((PlanningPhase)currPhase).getRetreatingUnits(), ((PlanningPhase) currPhase).getAttackOrders());
 
 		else if (s.equals("Winter Retreats")){
 			currPhase = new BuildPhase("Build/Remove", i);
@@ -542,7 +543,7 @@ public class GameCanvas extends ECanvas{
 			if (!currPhase.getSeason().equals("Build/Remove") || currOrder.getCommand().equals("disband"))
 				currOrder.setUnitOrder();
 			else 
-				currPhase.addBuildOrder(currOrder);
+				((BuildPhase) currPhase).addBuildOrder(currOrder);
 		}
 		currOrder = null;
 		state = NORM;
@@ -589,8 +590,8 @@ public class GameCanvas extends ECanvas{
 		commands = planningCommands;
 	}
 
-	public PlanningPhase getPhase() {
-		return (PlanningPhase) currPhase;
+	public Phase getPhase() {
+		return currPhase;
 	}
 
 }

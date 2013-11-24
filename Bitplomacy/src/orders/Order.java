@@ -1,7 +1,6 @@
 package orders;
 
 import canvases.GameCanvas;
-
 import gameObjects.Territory;
 import gameObjects.Unit;
 
