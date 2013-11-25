@@ -30,4 +30,11 @@ public class BuildArmyOrder extends Order {
 		return false;
 	}
 	
+	public String toString(){
+		String s = currentTerritory.getName() + "\n";
+		s += command + "\n";
+		s += "for " + currentTerritory.getOwnerName();
+		return s;
+	}
+	
 }

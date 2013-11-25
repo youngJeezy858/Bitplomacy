@@ -33,5 +33,11 @@ public class DisbandOrder extends Order {
 		if (i != retreatingUnits.size())
 			retreatingUnits.remove(i);
 	}
+	
+	public String toString() {
+		String s = currentTerritory.getName() + "\n";
+		s += command;
+		return s;
+	}
 
 }

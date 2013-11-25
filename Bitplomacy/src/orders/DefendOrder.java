@@ -18,5 +18,11 @@ public class DefendOrder extends Order {
 	public void addAdditionalTerritory(Territory t) {
 		//do nothing
 	}
+	
+	public String toString() {
+		String s = currentTerritory.getName() + "\n";
+		s += command;
+		return s;
+	}
 
 }

@@ -19,4 +19,11 @@ public class BuildNavyOrder extends Order {
 		//do nothing
 	}
 
+	public String toString(){
+		String s = currentTerritory.getName() + "\n";
+		s += command + "\n";
+		s += "for " + currentTerritory.getOwnerName();
+		return s;
+	}
+	
 }

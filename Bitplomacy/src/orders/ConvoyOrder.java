@@ -36,4 +36,22 @@ public class ConvoyOrder extends Order{
 		convoyDestination = t;
 	}
 
+	public String toString() {
+		String s = currentTerritory.getName() + "\n";
+		s += command + "\n";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName() + "\n";
+		else{
+			s += "[SELECT TERRITORY\n TO CONVOY]";
+			return s;
+		}
+		if (convoyDestination != null) 
+			s += "to " + convoyDestination.getName();
+		else
+			s += "[SELECT DESTINATION\n OF CONVOY]";
+		return s;
+	}
+
+	
+	
 }

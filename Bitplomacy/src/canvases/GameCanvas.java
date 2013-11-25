@@ -30,7 +30,7 @@ import commands.Commands;
 
 
 /**
- * The Class Canvas.
+ * Used to display and update the map and commands during an actual game. 
  */
 public class GameCanvas extends ECanvas{
 
@@ -46,7 +46,7 @@ public class GameCanvas extends ECanvas{
 	/** Used to draw the individual commands and has abstract methods to execute commands. */
 	private Commands[] commands;
 	
-	/** The display territory name. */
+	/** The Territory name that is currently selected. */
 	private String displayTerritoryName;
 	
 	/** The display territory owner. */

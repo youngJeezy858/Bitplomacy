@@ -45,5 +45,23 @@ public class SupportOrder extends Order {
 	public void support() {
 		supported.getUnit().getOrder().incrementStrength();
 	}
+	
+	public String toString(){
+		String s = currentTerritory.getName() + "\n";
+		s += command + "\n";
+		if (supported != null && supported.equals(destinationTerritory))
+			s += "unit defending " + supported.getName();
+		else if (supported != null){
+			s += "unit at " + supported.getName() + "\n";
+			s += "to " + destinationTerritory.getName();
+		}
+		else if (destinationTerritory != null){
+			s += "to " + destinationTerritory.getName() + "\n";
+			s += "[SELECT UNIT\n TO SUPPORT]";
+		}
+		else
+			s += "[SELECT DESTINATION\n OF SUPPORT]";
+		return s;
+	}
 
 }

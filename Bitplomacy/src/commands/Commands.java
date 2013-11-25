@@ -9,7 +9,8 @@ import canvases.GameCanvas;
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
-// TODO: Auto-generated Javadoc
+
+//TODO: Need a better command GUI. One that pops up right at your button click.
 /**
  * The Class Commands.
  */
@@ -56,7 +57,8 @@ public abstract class Commands extends ImageEntity{
 	 */
 	public void update(){
 		Color c = GameCanvas.getC().getCurrentColor();
-		if (c.getRed()==0 && c.getBlue()==colorKey && c.getGreen()==0 && Mouse.isButtonDown(0))
+		if (c.getRed()==0 && c.getBlue()==colorKey && c.getGreen()==0 
+				&& Mouse.isButtonDown(0) && GameCanvas.getC().getCurrentTerritory() != null)
 			execute();
 	}
 	

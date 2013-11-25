@@ -42,5 +42,15 @@ public class RetreatOrder extends Order {
 		else
 			retreatingUnits.remove(i);
 	}
+	
+	public String toString(){
+		String s = currentTerritory.getName() + "\n";
+		s += command + "\n";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName();
+		else 
+			s += "[SELECT DESTINATION\n OF RETREAT]";
+		return s;
+	}
 		
 }

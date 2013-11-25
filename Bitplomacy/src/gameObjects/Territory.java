@@ -146,40 +146,12 @@ public class Territory extends ImageEntity {
 		return owner;
 	}
 	
-	//TODO: Choose one and stick with it.
 	/**
 	 * Gets the owner as a String.
 	 *
 	 * @return the owner name
 	 */
 	public String getOwnerName(){
-		String s = null;
-		if (owner == 0)
-			s = "Neutral";
-		else if (owner == 1)
-			s = "England";
-		else if (owner == 2)
-			s = "Austria-Hungary";
-		else if (owner == 3)
-			s = "Italy";
-		else if (owner == 4)
-			s = "Turkey";
-		else if (owner == 5)
-			s = "France";
-		else if (owner == 6)
-			s = "Russia";
-		else if (owner == 7)
-			s = "Germany";
-		return s;
-	}
-	
-	/**
-	 * Gets the owner name.
-	 *
-	 * @param owner the owner
-	 * @return the owner name
-	 */
-	public static String getOwnerName(int owner){
 		String s = null;
 		if (owner == 0)
 			s = "Neutral";

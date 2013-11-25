@@ -122,4 +122,20 @@ public class MoveOrder extends Order {
 		state = Order.DONE;
 	}
 
+	public String toString() {
+		String s = currentTerritory.getName() + "\n";
+		s += command + "\n";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName() + "\n";
+		else
+			s += "[SELECT TERRITORY\n TO MOVE TO]";
+		if (convoyPath.size() != 0) {
+			for (Territory t : convoyPath)
+				s += "by way of " + t.getName() + "\n";
+		}
+		return s;
+	}
+	
+	
+
 }

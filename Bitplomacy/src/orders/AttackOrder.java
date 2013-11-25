@@ -174,5 +174,19 @@ public class AttackOrder extends Order {
 		unit.setTerritory(destinationTerritory);
 		state = Order.DONE;
 	}
+	
+	public String toString(){
+		String s = currentTerritory.getName() + "\n";
+		s += command + "\n";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName() + "\n";
+		else 
+			s += "[SELECT TERRITORY\n TO ATTACK]";
+		if (convoyPath.size() != 0){
+			for (Territory t : convoyPath)
+				s += "by way of " + t.getName() + "\n"; 
+		}
+		return s;
+	}
 
 }

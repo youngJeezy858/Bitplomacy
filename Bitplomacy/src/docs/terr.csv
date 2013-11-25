@@ -67,7 +67,7 @@ Tunis	 true	 true	 true	75	75	75	480	785	/images/Tunis.png
 Tuscony	 true	 false	 true	95	95	95	525	637	/images/Tus.png
 Tyrol	 true	 false	 false	30	30	30	532	541	/images/Tyrol.png
 Tyrrhenian Sea	 false	 false	 false	115	205	229	503	673	/images/TyrrhenianSea.png
-Ukraine	 true	 false	 false	193	193	193	772	440	/images/Ukraine.png
+Ukraine	 true	 false	 true	193	193	193	772	440	/images/Ukraine.png
 Venice	 true	 true	 true	100	100	100	535	583	/images/Venice.png
 Vienna	 true	 true	 false	205	205	205	610	531	/images/Vienna.png
 Wales	 true	 false	 true	135	135	135	327	383	/images/Wa.png
