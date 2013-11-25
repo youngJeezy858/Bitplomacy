@@ -2,7 +2,6 @@ package gameObjects;
 
 
 import orders.BlankOrder;
-import orders.DisbandOrder;
 import orders.Order;
 
 import org.newdawn.slick.SpriteSheet;
@@ -89,14 +88,8 @@ public class Unit extends ImageEntity{
 	public void executeOrder() {
 		if (order != null)
 			order.execute();
-		else if (!GameCanvas.getC().getPhase().getSeason().equals("Build/Remove")){
+		else {
 			BlankOrder o = new BlankOrder(territory);
-			o.setDestinationTerritory(territory);
-			order = o;
-			GameCanvas.getC().addOrder(o);
-		}
-		else{
-			DisbandOrder o = new DisbandOrder(territory);
 			o.setDestinationTerritory(territory);
 			order = o;
 			GameCanvas.getC().addOrder(o);

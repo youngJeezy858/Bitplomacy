@@ -15,8 +15,8 @@ public class AttackCommand extends Commands{
 	 * @param y the y
 	 * @param color the color
 	 */
-	public AttackCommand(float x, float y, int color) {
-		super(x, y, color);
+	public AttackCommand(float x, float y) {
+		super(x, y);
 	}
 
 	/* (non-Javadoc)
@@ -24,8 +24,10 @@ public class AttackCommand extends Commands{
 	 */
 	@Override
 	public void execute() {
-		GameCanvas.getC().setOrder(new AttackOrder(GameCanvas.getC().getCurrentTerritory()));
-		GameCanvas.getC().setState(GameCanvas.COMM_SELECTED);
+		if (GameCanvas.getC().getCurrentTerritory() != null){
+			GameCanvas.getC().setOrder(new AttackOrder(GameCanvas.getC().getCurrentTerritory()));
+			GameCanvas.getC().setState(GameCanvas.COMM_SELECTED);
+		}
 	}
 
 }

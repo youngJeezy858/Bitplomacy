@@ -19,11 +19,11 @@ import commands.SubmitCommand;
 public class RetreatPhase extends Phase{
 
 	/** The retreat disband commands. */
-	private Commands[] retreatDisbandCommands = { new DisbandCommand(1166, 635, 100),
-			new RetreatCommand(1258, 635, 25),
-			new SubmitCommand(1152, 546, 200),
-			new SetOrderCommand(1152, 450, 75),
-			new DiscardOrderCommand(1269, 450, 125)};
+	private Commands[] retreatDisbandCommands = { new DisbandCommand(1166, 635),
+			new RetreatCommand(1258, 635),
+			new SubmitCommand(1152, 546),
+			new SetOrderCommand(1152, 450),
+			new DiscardOrderCommand(1269, 450)};
 	
 	/** The retreat orders. */
 	private ArrayList<RetreatOrder> retreatOrders;
@@ -61,7 +61,7 @@ public class RetreatPhase extends Phase{
 				if (o.getCommand().equals("retreat"))
 					retreatOrders.add((RetreatOrder) o);
 				else
-					disbandOrders.add((DisbandOrder) o);
+					disbandOrders.add(new DisbandOrder(o.getStartingTerritory()));
 			}
 		}	
 	}

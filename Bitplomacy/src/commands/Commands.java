@@ -1,10 +1,7 @@
 package commands;
 
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
-
-import canvases.GameCanvas;
 
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
@@ -19,20 +16,16 @@ public abstract class Commands extends ImageEntity{
 	/** The ea. */
 	private EAnimation ea;
 	
-	/** The color key. */
-	private int colorKey;
 	
 	/**
 	 * Instantiates a new commands.
 	 *
 	 * @param x the x
 	 * @param y the y
-	 * @param color the color
 	 */
-	public Commands(float x, float y, int color) {
+	public Commands(float x, float y) {
 		setX(x);
 		setY(y);
-		colorKey = color;
 	}
 	
 	/* (non-Javadoc)
@@ -55,10 +48,11 @@ public abstract class Commands extends ImageEntity{
 	/**
 	 * Update.
 	 */
-	public void update(){
-		Color c = GameCanvas.getC().getCurrentColor();
-		if (c.getRed()==0 && c.getBlue()==colorKey && c.getGreen()==0 
-				&& Mouse.isButtonDown(0) && GameCanvas.getC().getCurrentTerritory() != null)
+	public void update(int mx, int my){
+		mx = (int) (mx - getX());
+		my = (int) (my - getY());
+		Color c = ea.getImage(0).getColor(mx, my);
+		if (c.a != 0)
 			execute();
 	}
 	

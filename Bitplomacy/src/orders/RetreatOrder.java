@@ -25,16 +25,26 @@ public class RetreatOrder extends Order {
 		int i;
 		for (i = 0; i < retreatingUnits.size(); i++){
 			if (currentTerritory.equals(retreatingUnits.get(i).getStartingTerritory())){
-				if (unit.isArmy() && !destinationTerritory.isLand())
+				if (unit.isArmy() && !destinationTerritory.isLand()){
 					state = FAILED;
-				else if (!unit.isArmy() && destinationTerritory.isLand() && !destinationTerritory.hasCoast())
+					break;
+				}
+				else if (!unit.isArmy() && destinationTerritory.isLand() && !destinationTerritory.hasCoast()){
 					state = FAILED;
-				else if (destinationTerritory.getUnit() != null)
+					break;
+				}
+				else if (destinationTerritory.getUnit() != null){
 					state = FAILED;
-				else if (isAdjacent())
+					break;
+				}
+				else if (isAdjacent()){
 					state = FAILED;
-				else
+					break;
+				}
+				else{
 					state = CHECKED_WAITING;
+					break;
+				}
 			}
 		}
 		if (state != CHECKED_WAITING && state != FAILED)

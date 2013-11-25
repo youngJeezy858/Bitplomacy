@@ -15,8 +15,8 @@ public class BuildNavyCommand extends Commands {
 	 * @param y the y
 	 * @param color the color
 	 */
-	public BuildNavyCommand(float x, float y, int color) {
-		super(x, y, color);
+	public BuildNavyCommand(float x, float y) {
+		super(x, y);
 	}
 
 	/* (non-Javadoc)
@@ -24,7 +24,8 @@ public class BuildNavyCommand extends Commands {
 	 */
 	@Override
 	public void execute() {
-		GameCanvas.getC().setOrder(new BuildNavyOrder(GameCanvas.getC().getCurrentTerritory()));
+		if (GameCanvas.getC().getCurrentTerritory() != null)
+			GameCanvas.getC().setOrder(new BuildNavyOrder(GameCanvas.getC().getCurrentTerritory()));
 	}
 
 }

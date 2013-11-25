@@ -25,14 +25,14 @@ import commands.SupportCommand;
 
 public class PlanningPhase extends Phase{
 
-	private Commands[] planningCommands = { new AttackCommand(1166, 635, 100),
-			new DefendCommand(1126, 729, 150),
-			new SupportCommand(1212, 729, 50),
-			new ConvoyCommand(1296, 729, 250),
-			new SubmitCommand(1152, 546, 200),
-			new MoveCommand(1258, 635, 25),
-			new SetOrderCommand(1152, 450, 75),
-			new DiscardOrderCommand(1269, 450, 125)};
+	private Commands[] planningCommands = { new AttackCommand(1166, 635),
+			new DefendCommand(1126, 729),
+			new SupportCommand(1212, 729),
+			new ConvoyCommand(1296, 729),
+			new SubmitCommand(1152, 546),
+			new MoveCommand(1258, 635),
+			new SetOrderCommand(1152, 450),
+			new DiscardOrderCommand(1269, 450)};
 	
 	/** The support orders. */
 	private ArrayList<SupportOrder> supportOrders;

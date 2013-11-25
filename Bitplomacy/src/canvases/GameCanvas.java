@@ -84,12 +84,6 @@ public class GameCanvas extends ECanvas{
 
 	/** The Constant WINNER. */
 	public static final int WINNER = 5;
-
-	
-	/** MasterMap contains the color keys for the individual territories.  It is 
-	 * referenced in the Territory 
-	 * */
-	private Image MasterMap;
 	
 	/** The Borders. */
 	private Image Borders;
@@ -130,7 +124,6 @@ public class GameCanvas extends ECanvas{
 		players[5] = new Player("Russia");
 		players[6] = new Player("Germany");
 		
-		MasterMap=EAnimation.loadImage("/images/MasterMap.png");
 		Borders=EAnimation.loadImage("/images/Borders.png");
 
 		Image temp = EAnimation.loadImage("/images/LandUnitUpdated.png");
@@ -158,8 +151,7 @@ public class GameCanvas extends ECanvas{
 			String s2[] = s.split("\t");
 			SpriteSheet ss = SSFactory(s2[9]);
 			territories[i] = new Territory(ss, s2[0], new Boolean(s2[1].trim()), 
-					new Boolean(s2[2].trim()), new Boolean(s2[3].trim()), 
-					new Color(new Integer(s2[4]), new Integer(s2[5]), new Integer(s2[6])));
+					new Boolean(s2[2].trim()), new Boolean(s2[3].trim()));
 			territories[i].setX(new Integer(s2[7]));
 			territories[i].setY(new Integer(s2[8]));
 			i++;
@@ -178,7 +170,7 @@ public class GameCanvas extends ECanvas{
 		sc.close();
 		
 	    setBoard();
-	    adjustNumSC();
+	    adjustNumSC();	
 	}
 
 	/**
@@ -269,7 +261,7 @@ public class GameCanvas extends ECanvas{
 		
 		if (state != WINNER) {
 			// draw masterMap for color keys
-			g.drawImage(MasterMap, 0, 0);
+			//g.drawImage(MasterMap, 0, 0);
 
 			g.setColor(Color.gray);
 			g.fillRect(1106, 0, 1400 - 1126, gc.getHeight());
@@ -327,9 +319,9 @@ public class GameCanvas extends ECanvas{
 			int my = Math.abs(Mouse.getY() - 831);
 			
 			for (Territory t : territories) {
-				if (mx >= t.getX() && mx <= t.getWidth() + t.getX()
+				if (mx >= t.getX() && mx <= t.getWidth()/8 + t.getX()
 						&& my >= t.getY() && my <= t.getHeight() + t.getY() &&
-						t.isMouseOver(getCurrentColor())){
+						t.isMouseOver(mx, my)){
 					updateTerritory(t);
 					return;
 				}
@@ -338,7 +330,7 @@ public class GameCanvas extends ECanvas{
 			for (Commands c : commands) {
 				if (mx >= c.getX() && mx <= c.getWidth() + c.getX()
 						&& my >= c.getY() && my <= c.getHeight() + c.getY()){
-					c.update();
+					c.update(mx, my);
 					return;
 				}
 			}
@@ -381,16 +373,33 @@ public class GameCanvas extends ECanvas{
 		String s = currPhase.getSeason();
 		int i = currPhase.getYear();
 		
-		if (s.equals("Spring/Summer"))
-			currPhase = new RetreatPhase("Summer Retreats", i, 
-					((PlanningPhase)currPhase).getRetreatingUnits(), ((PlanningPhase) currPhase).getAttackOrders());
+		if (s.equals("Spring/Summer")){
+			if (((PlanningPhase) currPhase).getRetreatingUnits().size() != 0)
+				currPhase = new RetreatPhase("Summer Retreats", i, 
+						((PlanningPhase)currPhase).getRetreatingUnits(), ((PlanningPhase) currPhase).getAttackOrders());
+			else
+				currPhase = new PlanningPhase("Fall/Winter", i);
+		}
 		
 		else if (s.equals("Summer Retreats"))
 			currPhase = new PlanningPhase("Fall/Winter", i);
 		
-		else if (s.equals("Fall/Winter"))
-			currPhase = new RetreatPhase("Winter Retreats", i, 
-					((PlanningPhase)currPhase).getRetreatingUnits(), ((PlanningPhase) currPhase).getAttackOrders());
+		else if (s.equals("Fall/Winter")){
+			if (((PlanningPhase) currPhase).getRetreatingUnits().size() != 0)
+				currPhase = new RetreatPhase("Winter Retreats", i, 
+						((PlanningPhase)currPhase).getRetreatingUnits(), ((PlanningPhase) currPhase).getAttackOrders());
+			else{
+				currPhase = new BuildPhase("Build/Remove", i);
+				adjustNumSC();
+				for (Player p : players){
+					if (p.getSupplyCenterCount() >= 24){
+						state = WINNER;
+						winningPlayer = p;
+						font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
+					}
+				}
+			}
+		}
 
 		else if (s.equals("Winter Retreats")){
 			currPhase = new BuildPhase("Build/Remove", i);
@@ -419,17 +428,7 @@ public class GameCanvas extends ECanvas{
 		if (c == null)
 			c = new GameCanvas();
 		return c;
-	}
-
-	/**
-	 * Gets the Color from the current mouse location.  Used to access color keys.
-	 * 
-	 * @return the current color
-	 */
-	public Color getCurrentColor(){
-		return new Color(MasterMap.getColor(Mouse.getX(), Math.abs(Mouse.getY()-831)));
-	}
-	
+	}	
 	
 	/**
 	 * Gets the order.

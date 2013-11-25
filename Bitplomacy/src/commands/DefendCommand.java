@@ -15,8 +15,8 @@ public class DefendCommand extends Commands{
 	 * @param y the y
 	 * @param color the color
 	 */
-	public DefendCommand(float x, float y, int color) {
-		super(x, y, color);
+	public DefendCommand(float x, float y) {
+		super(x, y);
 	}
 
 	/* (non-Javadoc)
@@ -24,7 +24,8 @@ public class DefendCommand extends Commands{
 	 */
 	@Override
 	public void execute() {
-		GameCanvas.getC().setOrder(new DefendOrder(GameCanvas.getC().getCurrentTerritory()));
+		if (GameCanvas.getC().getCurrentTerritory() != null)
+			GameCanvas.getC().setOrder(new DefendOrder(GameCanvas.getC().getCurrentTerritory()));
 	}
 
 }

@@ -1,7 +1,6 @@
 package gameObjects;
 import java.util.ArrayList;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.SpriteSheet;
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
@@ -23,7 +22,6 @@ public class Territory extends ImageEntity {
 	
 	//TODO: Color keys have to go. Explore alpha more
 	/** The color key. */
-	private Color colorKey;
 	
 	/** Does this Territory have a supply center? */
 	private boolean hasSupplyCenter;
@@ -81,14 +79,13 @@ public class Territory extends ImageEntity {
 	 * @param hasCoast true, if Territory has coast
 	 * @param color the color key
 	 */
-	public Territory(SpriteSheet ss, String name, boolean isLand, boolean hasSC, boolean hasCoast, Color color){
+	public Territory(SpriteSheet ss, String name, boolean isLand, boolean hasSC, boolean hasCoast){
 		super(ss);
 		this.ss = ss;
 		owner = NEUTRAL;
 		this.territoryImage = new EAnimation(ss.getSprite(owner, 0));
 		this.name = name;
 		this.hasCoast = hasCoast;
-		colorKey = color;
 		hasSupplyCenter = hasSC;
 		this.isLand = isLand;
 		unit = null;
@@ -207,14 +204,19 @@ public class Territory extends ImageEntity {
 
 	/**
 	 * Checks if the input color matches the colorkey. Used to see if the mouse is over this Territory. 
+	 * @param my 
+	 * @param mx 
 	 *
 	 * @param c the color to be checked
 	 * @return true, if mouse is over this Territory
 	 */
-	public boolean isMouseOver(Color c){
-		if (c.getRed()==colorKey.getRed() && c.getBlue()==colorKey.getBlue() && c.getGreen()==colorKey.getGreen())
+	public boolean isMouseOver(int mx, int my){
+		mx = (int) (mx - getX());
+		my = (int) (my - getY());
+		if (ss.getColor(mx, my).a == 0)
+			return false;
+		else
 			return true;
-		return false;
 	}
 
 	/**

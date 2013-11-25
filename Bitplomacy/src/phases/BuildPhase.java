@@ -21,12 +21,12 @@ import orders.Order;
 public class BuildPhase extends Phase{
 
 	/** commands used during the Build/Remove phase. */
-	private Commands[] buildRemoveCommands = { new BuildArmyCommand(1166, 635, 100),
-			new BuildNavyCommand(1258, 635, 25),
-			new DisbandCommand(1212, 729, 50),
-			new SubmitCommand(1152, 546, 200),
-			new SetOrderCommand(1152, 450, 75),
-			new DiscardOrderCommand(1269, 450, 125)};
+	private Commands[] buildRemoveCommands = { new BuildArmyCommand(1166, 635),
+			new BuildNavyCommand(1258, 635),
+			new DisbandCommand(1212, 729),
+			new SubmitCommand(1152, 546),
+			new SetOrderCommand(1152, 450),
+			new DiscardOrderCommand(1269, 450)};
 	
 	/** The disband orders. */
 	private ArrayList<DisbandOrder> disbandOrders;
@@ -51,7 +51,7 @@ public class BuildPhase extends Phase{
 
 	@Override
 	public void addOrder(Order o) {
-		disbandOrders.add((DisbandOrder) o);
+		disbandOrders.add(new DisbandOrder(o.getStartingTerritory()));
 	}
 
 	@Override

@@ -14,8 +14,8 @@ public class DiscardOrderCommand extends Commands {
 	 * @param y the y
 	 * @param color the color
 	 */
-	public DiscardOrderCommand(float x, float y, int color) {
-		super(x, y, color);
+	public DiscardOrderCommand(float x, float y) {
+		super(x, y);
 	}
 
 	/* (non-Javadoc)
