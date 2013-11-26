@@ -235,7 +235,8 @@ public class Territory extends ImageEntity {
 	 */
 	public void setOwner(int owner){
 		this.owner = owner;
-		territoryImage = new EAnimation(ss.getSprite(owner, 0));
+		if (isLand)
+			territoryImage = new EAnimation(ss.getSprite(owner, 0));
 	}
 
 	/**
@@ -263,8 +264,12 @@ public class Territory extends ImageEntity {
 	 * Draws the occupying Unit if there is one.
 	 */
 	public void uDraw(){
-		if (unit != null)
-			unit.draw(this.getX()+(this.getWidth()/16)-16, this.getY()+(this.getHeight()/2)-24);
+		if (unit != null){
+			if (isLand)
+				unit.draw(this.getX()+(this.getWidth()/16)-16, this.getY()+(this.getHeight()/2)-24);
+			else 
+				unit.draw(this.getX()+(this.getWidth()/2)-16, this.getY()+(this.getHeight()/2)-24);
+		}
 	}
 
 	/**

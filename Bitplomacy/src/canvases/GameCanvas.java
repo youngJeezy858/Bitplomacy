@@ -84,10 +84,7 @@ public class GameCanvas extends ECanvas{
 
 	/** The Constant WINNER. */
 	public static final int WINNER = 5;
-	
-	/** The Borders. */
-	private Image Borders;
-		
+			
 	/** SpriteSheets for Units. */
 	private SpriteSheet landUnit;
 	
@@ -124,8 +121,6 @@ public class GameCanvas extends ECanvas{
 		players[5] = new Player("Russia");
 		players[6] = new Player("Germany");
 		
-		Borders=EAnimation.loadImage("/images/Borders.png");
-
 		Image temp = EAnimation.loadImage("/images/LandUnitUpdated.png");
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		temp = EAnimation.loadImage("/images/WaterUnitUpdated.png");
@@ -149,11 +144,11 @@ public class GameCanvas extends ECanvas{
 		while (sc.hasNextLine()){
 			String s = sc.nextLine();
 			String s2[] = s.split("\t");
-			SpriteSheet ss = SSFactory(s2[9]);
+			SpriteSheet ss = SSFactory(s2[6], new Boolean(s2[1].trim()));
 			territories[i] = new Territory(ss, s2[0], new Boolean(s2[1].trim()), 
 					new Boolean(s2[2].trim()), new Boolean(s2[3].trim()));
-			territories[i].setX(new Integer(s2[7]));
-			territories[i].setY(new Integer(s2[8]));
+			territories[i].setX(new Integer(s2[4]));
+			territories[i].setY(new Integer(s2[5]));
 			i++;
 		}
 		sc.close();
@@ -197,11 +192,11 @@ public class GameCanvas extends ECanvas{
 
 		createStartingUnit(getTerritory("Venice"), landUnit, true, players[Territory.ITALY-1]);
 		createStartingUnit(getTerritory("Rome"), landUnit, true, players[Territory.ITALY-1]);
-		createStartingUnit(getTerritory("Naples"), waterUnit, false, players[Territory.ITALY-1]);
+		createStartingUnit(getTerritory("Napoli"), waterUnit, false, players[Territory.ITALY-1]);
 
-		createStartingUnit(getTerritory("St. Petersburgh"), waterUnit, false, players[Territory.RUSSIA-1]);
+		createStartingUnit(getTerritory("St. Petersburg"), waterUnit, false, players[Territory.RUSSIA-1]);
 		createStartingUnit(getTerritory("Moscow"), landUnit, true, players[Territory.RUSSIA-1]);
-		createStartingUnit(getTerritory("Sevastopal"), waterUnit, false, players[Territory.RUSSIA-1]);
+		createStartingUnit(getTerritory("Sevastopol"), waterUnit, false, players[Territory.RUSSIA-1]);
 		createStartingUnit(getTerritory("Warsaw"), landUnit, true, players[Territory.RUSSIA-1]);
 
 		createStartingUnit(getTerritory("Ankara"), waterUnit, false, players[Territory.TURKEY-1]);
@@ -246,11 +241,16 @@ public class GameCanvas extends ECanvas{
 	 * Used to generate a SpriteSheet of a territory.  Assumes that your SpriteSheet has 8 sprites.
 	 * 
 	 * @param location the location
+	 * @param boolean1 
 	 * @return the sprite sheet
 	 */
-	private SpriteSheet SSFactory(String location){
+	private SpriteSheet SSFactory(String location, Boolean isLand){
 		Image temp = EAnimation.loadImage(location);
-		SpriteSheet ss = new SpriteSheet(temp, temp.getWidth()/8, temp.getHeight());
+		SpriteSheet ss;
+		if (isLand)
+			ss = new SpriteSheet(temp, temp.getWidth()/8, temp.getHeight());
+		else
+			ss = new SpriteSheet(temp, temp.getWidth(), temp.getHeight());		
 		return ss;
 	}
 
@@ -260,8 +260,6 @@ public class GameCanvas extends ECanvas{
 	public void eRender(GameContainer gc, EGame eg, Graphics g) {
 		
 		if (state != WINNER) {
-			// draw masterMap for color keys
-			//g.drawImage(MasterMap, 0, 0);
 
 			g.setColor(Color.gray);
 			g.fillRect(1106, 0, 1400 - 1126, gc.getHeight());
@@ -289,7 +287,6 @@ public class GameCanvas extends ECanvas{
 				c.draw();
 			for (Territory t : territories)
 				t.eDraw();
-			g.drawImage(Borders, 0, 0);
 			for (Territory t : territories)
 				t.uDraw();
 
@@ -319,7 +316,8 @@ public class GameCanvas extends ECanvas{
 			int my = Math.abs(Mouse.getY() - 831);
 			
 			for (Territory t : territories) {
-				if (mx >= t.getX() && mx <= t.getWidth()/8 + t.getX()
+				if (mx >= t.getX() && 
+						((t.isLand() && mx <= t.getWidth()/8 + t.getX()) || (!t.isLand() && mx <= t.getWidth() + t.getX()))
 						&& my >= t.getY() && my <= t.getHeight() + t.getY() &&
 						t.isMouseOver(mx, my)){
 					updateTerritory(t);
