@@ -12,6 +12,7 @@ public class MoveOrder extends Order {
 	public MoveOrder(Territory t) {
 		super(t);
 		command = "move";
+		convoyPath = new ArrayList<Territory>();
 	}
 
 	@Override

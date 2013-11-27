@@ -121,7 +121,8 @@ public class GameCanvas extends ECanvas{
 		players[5] = new Player("Russia");
 		players[6] = new Player("Germany");
 		
-		Image temp = EAnimation.loadImage("/images/LandUnitUpdated.png");
+		Image temp = EAnimation.loadImage("/images/ArmyUnit.png");
+		System.out.println(temp.getWidth()/7 + " " + temp.getHeight());
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		temp = EAnimation.loadImage("/images/WaterUnitUpdated.png");
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
