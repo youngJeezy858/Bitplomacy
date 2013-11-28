@@ -1,77 +1,77 @@
-	Regular Coordinates		North Coast Coordinates		South Coast Coordinates	
-Territory Name	x coord	y coord	x coord	y coord	x coord	y coord
-Adriatic Sea						
-Aegean Sea						
-Albania						
-Ankara						
-Apula						
-Armenia						
-Baltic Sea						
-Barent's Sea						
-Belgium						
-Berlin						
-Black Sea						
-Bohemia						
-Brest						
-Budapest						
-Bulgaria						
-Burgundy						
-Clyde						
-Constantinople						
-Denmark						
-Eastern Mediterranean Sea						
-Edinburgh						
-English Channel						
-Finland						
-Galicia						
-Gascony						
-Greece						
-Gulf of Bothnia						
-Gulf of Lyon						
-Heligoland						
-Holland						
-Ionian Sea						
-Irish Sea						
-Kiel						
-Livonia						
-Liverpool						
-London						
-Marseilles						
-Mid Atlantic Ocean						
-Moscow						
-Munich						
-North Africa						
-Napoli						
-North Atlantic Ocean						
-North Sea						
-Norway						
-Norwegian Sea						
-Paris						
-Picardy						
-Piemonte						
-Portugal						
-Prussia						
-Rome						
-Ruhr						
-Rumania						
-Serbia						
-Sevastopol						
-Silesia						
-Skaggerak						
-Smyrna						
-Spain						
-St. Petersburg						
-Sweden						
-Syria						
-Trieste						
-Tunisia						
-Tuscany						
-Tyrol						
-Tyrrhenian Sea						
-Ukraine						
-Venice						
-Vienna						
-Wales						
-Warsaw						
-Western Mediterranean Sea						
-York						
+,Regular Coordinates,,North Coast Coordinates,,South Coast Coordinates,
+Territory Name,x-coord,y-coord,x-coord,y-coord,x-coord,y-coord
+"Adriatic Sea						",41,50,,,,
+"Aegean Sea						",23,67,,,,
+"Albania						",0,15,,,,
+"Ankara						",76,12,,,,
+"Apula						",25,12,,,,
+"Armenia						",33,61,,,,
+"Baltic Sea						",69,33,,,,
+"Barent's Sea						",68,27,,,,
+"Belgium						",24,13,,,,
+"Berlin						",29,23,,,,
+"Black Sea						",58,61,,,,
+"Bohemia						",20,4,,,,
+"Brest						",32,44,,,,
+"Budapest						",49,10,,,,
+"Bulgaria						",13,16,,,,
+"Burgundy						",41,27,,,,
+"Clyde						",0,14,,,,
+"Constantinople						",53,22,,,,
+"Denmark						",2,7,,,,
+"Eastern Mediterranean Sea						",129,26,,,,
+"Edinburgh						",3,31,,,,
+"English Channel						",16,19,,,,
+"Finland						",29,124,,,,
+"Galicia						",69,36,,,,
+"Gascony						",11,11,,,,
+"Greece						",29,61,,,,
+"Gulf of Bothnia						",25,111,,,,
+"Gulf of Lyon						",71,43,,,,
+"Heligoland						",8,18,,,,
+"Holland						",13,1,,,,
+"Ionian Sea						",104,52,,,,
+"Irish Sea						",15,77,,,,
+"Kiel						",24,31,,,,
+"Livonia						",37,40,,,,
+"Liverpool						",0,35,,,,
+"London						",6,18,,,,
+"Marseilles						",55,11,,,,
+"Mid Atlantic Ocean						",105,55,,,,
+"Moscow						",123,73,,,,
+"Munich						",39,28,,,,
+"North Africa						",53,48,,,,
+"Napoli						",16,16,,,,
+"North Atlantic Ocean						",34,238,,,,
+"North Sea						",29,52,,,,
+"Norway						",40,161,,,,
+"Norwegian Sea						",154,101,,,,
+"Paris						",21,8,,,,
+"Picardy						",11,11,,,,
+"Piemonte						",9,3,,,,
+"Portugal						",4,51,,,,
+"Prussia						",65,32,,,,
+"Rome						",15,24,,,,
+"Ruhr						",3,35,,,,
+"Rumania						",20,49,,,,
+"Serbia						",4,4,,,,
+"Sevastopol						",129,94,,,,
+"Silesia						",57,21,,,,
+"Skaggerak						",0,3,,,,
+"Smyrna						",93,35,,,,
+"Spain						",36,87,,,,
+"St. Petersburg						",155,228,,,,
+"Sweden						",29,144,,,,
+"Syria						",71,25,,,,
+"Trieste						",45,47,,,,
+"Tunisia						",8,1,,,,
+"Tuscany						",10,15,,,,
+"Tyrol						",3,23,,,,
+"Tyrrhenian Sea						",41,66,,,,
+"Ukraine						",32,55,,,,
+"Venice						",1,18,,,,
+"Vienna						",44,2,,,,
+"Wales						",33,30,,,,
+"Warsaw						",56,21,,,,
+"Western Mediterranean Sea						",106,18,,,,
+"York						",1,23,,,,
