@@ -37,7 +37,15 @@ public class RetreatOrder extends Order {
 					state = FAILED;
 					break;
 				}
-				else if (isAdjacent()){
+				else if (currentTerritory.isInSC() && !currentTerritory.isAdjacentSC(destinationTerritory)){
+					state = FAILED;
+					break;
+				}
+				else if (currentTerritory.isInNC() && !currentTerritory.isAdjacentNC(destinationTerritory)){
+					state = FAILED;
+					break;
+				}
+				else if (!isAdjacent()){
 					state = FAILED;
 					break;
 				}

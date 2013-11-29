@@ -117,10 +117,12 @@ public class MoveOrder extends Order {
 	
 	public void moveUnit() {
 		destinationTerritory.setUnit(unit);
-		if (destinationTerritory.isAdjacentNC(currentTerritory))
-			destinationTerritory.setNC(true);
-		else if (destinationTerritory.isAdjacentSC(currentTerritory))
-			destinationTerritory.setSC(true);
+		if (!unit.isArmy()) {
+			if (destinationTerritory.isAdjacentNC(currentTerritory))
+				destinationTerritory.setNC(true);
+			else if (destinationTerritory.isAdjacentSC(currentTerritory))
+				destinationTerritory.setSC(true);
+		}
 		if (!destinationTerritory.hasSC())
 			destinationTerritory.setOwner(unit.getOwner());
 		unit.setTerritory(destinationTerritory);

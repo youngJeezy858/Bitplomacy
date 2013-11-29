@@ -70,10 +70,14 @@ public abstract class Phase {
 		if (o.getState() == Order.PASSED || o.getState() == Order.FOLLOWING || o.getState() == Order.CHECKING){
 			o.setState(Order.PASSED);
 			o.getDestinationTerritory().setUnit(o.getUnit());
-			if (o.getDestinationTerritory().isAdjacentNC(o.getStartingTerritory()))
-				o.getDestinationTerritory().setNC(true);
-			else if (o.getDestinationTerritory().isAdjacentSC(o.getStartingTerritory()))
-				o.getDestinationTerritory().setSC(true);
+			if (!o.getUnit().isArmy()) {
+				if (o.getDestinationTerritory().isAdjacentNC(
+						o.getStartingTerritory()))
+					o.getDestinationTerritory().setNC(true);
+				else if (o.getDestinationTerritory().isAdjacentSC(
+						o.getStartingTerritory()))
+					o.getDestinationTerritory().setSC(true);
+			}
 			if (!o.getDestinationTerritory().hasSC())
 				o.getDestinationTerritory().setOwner(o.getUnit().getOwner());
 			o.getUnit().setTerritory(o.getDestinationTerritory());

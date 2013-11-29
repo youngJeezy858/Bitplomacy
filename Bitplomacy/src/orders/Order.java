@@ -179,7 +179,7 @@ public abstract class Order {
 	 */
 	public boolean isAdjacent() {
 		if (!unit.isArmy() && destinationTerritory.hasCoasts()){
-			return currentTerritory.isAdjacentNC(destinationTerritory) || currentTerritory.isAdjacentSC(destinationTerritory);
+			return destinationTerritory.isAdjacentNC(currentTerritory) || destinationTerritory.isAdjacentSC(currentTerritory);
 		}
 		return currentTerritory.isAdjacent(destinationTerritory);
 	}

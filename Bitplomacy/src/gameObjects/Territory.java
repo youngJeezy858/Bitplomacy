@@ -20,9 +20,6 @@ public class Territory extends ImageEntity {
 	/** The name of the Territory */
 	private String name;
 	
-	//TODO: Color keys have to go. Explore alpha more
-	/** The color key. */
-	
 	/** Does this Territory have a supply center? */
 	private boolean hasSupplyCenter;
 	
@@ -400,5 +397,13 @@ public class Territory extends ImageEntity {
 	
 	public void setNC(boolean b) {
 		isInNC = b;
+	}
+
+	public boolean isInSC() {
+		return isInSC;
+	}
+	
+	public boolean isInNC() {
+		return isInNC;
 	}
 }

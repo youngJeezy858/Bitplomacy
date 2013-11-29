@@ -80,7 +80,7 @@ public class RetreatPhase extends Phase{
 				continue;
 			else if (hasRetreatConflict(ro))
 				ro.setState(Order.CHECKER);
-			else{
+			else if (ro.getState() == Order.CHECKED_WAITING){
 				ro.setState(Order.PASSED);
 				ro.getStartingTerritory().removeUnit();
 				moveUnit(ro);
