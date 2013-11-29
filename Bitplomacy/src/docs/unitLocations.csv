@@ -14,7 +14,7 @@ Territory Name,x-coord,y-coord,x-coord,y-coord,x-coord,y-coord
 "Bohemia						",20,4,,,,
 "Brest						",32,44,,,,
 "Budapest						",49,10,,,,
-"Bulgaria						",13,16,,,,
+"Bulgaria						",13,16,66,17,46,48
 "Burgundy						",41,27,,,,
 "Clyde						",0,14,,,,
 "Constantinople						",53,22,,,,
@@ -59,8 +59,8 @@ Territory Name,x-coord,y-coord,x-coord,y-coord,x-coord,y-coord
 "Silesia						",57,21,,,,
 "Skaggerak						",0,3,,,,
 "Smyrna						",93,35,,,,
-"Spain						",36,87,,,,
-"St. Petersburg						",155,228,,,,
+"Spain						",36,87,58,11,54,131
+"St. Petersburg						",155,228,70,143,8,246
 "Sweden						",29,144,,,,
 "Syria						",71,25,,,,
 "Trieste						",45,47,,,,
