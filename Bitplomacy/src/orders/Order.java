@@ -178,6 +178,9 @@ public abstract class Order {
 	 * @return true, if territories are adjacent
 	 */
 	public boolean isAdjacent() {
+		if (!unit.isArmy() && destinationTerritory.hasCoasts()){
+			return currentTerritory.isAdjacentNC(destinationTerritory) || currentTerritory.isAdjacentSC(destinationTerritory);
+		}
 		return currentTerritory.isAdjacent(destinationTerritory);
 	}
 	

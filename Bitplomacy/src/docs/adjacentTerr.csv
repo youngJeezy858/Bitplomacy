@@ -1,76 +1,76 @@
-Territory Name	Adjacent Territories									
-Adriatic Sea	Trieste	Venice	Apula	Ionian Sea	Albania					
-Aegean Sea	Bulgaria	Greece	Ionian Sea	Eastern Mediterranean Sea	Smyrna	Constantinople	Black Sea			
-Albania	Ankara	Ionian Sea	Greece	Serbia	Trieste					
-Ankara	Black Sea	Constantinople	Smyrna	Armenia	Sevastopol					
-Apula	Adriatic Sea	Venice	Rome	Napoli	Ionian Sea					
-Armenia	Ankara	Syria	Smyrna	Sevastopol						
-Baltic Sea	Gulf of Bothnia	Livonia	Prussia	Berlin	Kiel	Skaggerak	Sweden			
-Barent's Sea	Norwegian Sea	Norway	St. Petersburg							
-Belgium	English Channel	Holland	Ruhr	Burgundy	Picardy					
-Berlin	Baltic Sea	Kiel	Munich	Silesia	Prussia					
-Black Sea	Sevastopol	Rumania	Bulgaria	Constantinople	Ankara	Ukraine	Aegean Sea			
-Bohemia	Silesia	Munich	Tyrol	Vienna	Galicia					
-Brest	English Channel	Mid Atlantic Ocean	Gascony	Paris	Picardy					
-Budapest	Vienna	Galicia	Rumania	Serbia	Trieste	Tyrol				
-Bulgaria	Rumania	Black Sea	Aegean Sea	Constantinople	Greece	Serbia				
-Burgundy	Belgium	Picardy	Paris	Gascony	Marseilles	Munich	Ruhr			
-Clyde	Mid Atlantic Ocean	Liverpool	Edinburgh	Norwegian Sea						
-Constantinople	Bulgaria	Black Sea	Ankara	Smyrna	Aegean Sea					
-Denmark	Skaggerak	North Sea	Heligoland	Kiel						
-Eastern Mediterranean Sea	Aegean Sea	Ionian Sea	Syria	Smyrna						
-Edinburgh	Clyde	Liverpool	York	North Sea	Norwegian Sea					
-English Channel	Irish Sea	Wales	London	North Sea	Belgium	Picardy	Brest	Mid Atlantic Ocean		
-Finland	Norway	Sweden	Gulf of Bothnia	St. Petersburg						
-Galicia	Bohemia	Silesia	Warsaw	Ukraine	Rumania	Budapest	Vienna			
-Gascony	Mid Atlantic Ocean	Brest	Paris	Burgundy	Marseilles	Spain				
-Greece	Albania	Serbia	Bulgaria	Aegean Sea	Ionian Sea					
-Gulf of Bothnia	Baltic Sea	Livonia	St. Petersburg	Finland	Sweden					
-Gulf of Lyon	Spain	Western Mediterranean Sea	Tyrrhenian Sea	Tuscany	Piemonte	Marseilles				
-Heligoland	Denmark	Kiel	Holland	North Sea						
-Holland	Heligoland	Kiel	Ruhr	Belgium	North Sea					
-Ionian Sea	Apula	Adriatic Sea	Albania	Greece	Aegean Sea	Eastern Mediterranean Sea	Napoli	Tyrrhenian Sea	Tunisia	
-Irish Sea	North Atlantic Ocean	Liverpool	Wales	English Channel	Mid Atlantic Ocean					
-Kiel	Heligoland	Denmark	Baltic Sea	Berlin	Munich	Ruhr	Holland			
-Livonia	Gulf of Bothnia	St. Petersburg	Moscow	Warsaw	Prussia	Baltic Sea				
-Liverpool	Irish Sea	North Atlantic Ocean	Clyde	Edinburgh	York	Wales				
-London	Wales	York	North Sea	English Channel						
-Marseilles	Gascony	Burgundy	Piemonte	Gulf of Lyon	Spain					
-Mid Atlantic Ocean	North Atlantic Ocean	Irish Sea	English Channel	Brest	Gascony	Spain	Portugal	Western Mediterranean Sea	North Africa	
-Moscow	Livonia	Warsaw	Ukraine	Sevastopol	St. Petersburg					
-Munich	Ruhr	Burgundy	Tyrol	Bohemia	Silesia	Berlin	Kiel			
-North Africa	Western Mediterranean Sea	Mid Atlantic Ocean	Tunisia							
-Napoli	Rome	Apula	Ionian Sea	Tyrrhenian Sea						
-North Atlantic Ocean	Liverpool	Clyde	Norwegian Sea	Irish Sea	Mid Atlantic Ocean					
-North Sea	Norwegian Sea	Edinburgh	York	London	English Channel	Holland	Heligoland	Skaggerak	Denmark	Norway
-Norway	Norwegian Sea	Barent's Sea	Sweden	Skaggerak	North Sea					
-Norwegian Sea	North Atlantic Ocean	Clyde	Edinburgh	North Sea	Norway	Barent's Sea				
-Paris	Picardy	Brest	Gascony	Burgundy						
-Picardy	English Channel	Belgium	Burgundy	Paris	Brest					
-Piemonte	Gulf of Lyon	Marseilles	Tyrol	Venice	Tuscany					
-Portugal	Mid Atlantic Ocean	Spain								
-Prussia	Baltic Sea	Berlin	Silesia	Warsaw	Livonia					
-Rome	Tuscany	Venice	Apula	Napoli	Tyrrhenian Sea					
-Ruhr	Belgium	Holland	Kiel	Munich	Burgundy					
-Rumania	Budapest	Serbia	Bulgaria	Black Sea	Ukraine	Galicia				
-Serbia	Albania	Trieste	Budapest	Rumania	Bulgaria	Greece				
-Sevastopol	Moscow	Ukraine	Black Sea	Ankara	Armenia					
-Silesia	Berlin	Prussia	Warsaw	Galicia	Bohemia	Munich				
-Skaggerak	North Sea	Norway	Sweden	Baltic Sea	Denmark					
-Smyrna	Aegean Sea	Constantinople	Ankara	Armenia	Syria	Eastern Mediterranean Sea				
-Spain	Portugal	Mid Atlantic Ocean	Western Mediterranean Sea	Gulf of Lyon	Gascony	Marseilles				
-St. Petersburg	Barent's Sea	Finland	Gulf of Bothnia	Livonia	Moscow					
-Sweden	Norway	Finland	Gulf of Bothnia	Baltic Sea	Skaggerak					
-Syria	Smyrna	Armenia	Eastern Mediterranean Sea							
-Trieste	Venice	Tyrol	Vienna	Budapest	Serbia	Albania	Adriatic Sea			
-Tunisia	North Africa	Western Mediterranean Sea	Tyrrhenian Sea	Ionian Sea						
-Tuscany	Gulf of Lyon	Piemonte	Venice	Rome	Tyrrhenian Sea					
-Tyrol	Munich	Bohemia	Vienna	Trieste	Venice	Piemonte				
-Tyrrhenian Sea	Western Mediterranean Sea	Gulf of Lyon	Tuscany	Rome	Napoli	Ionian Sea	Tunisia			
-Ukraine	Galicia	Warsaw	Moscow	Sevastopol	Rumania	Black Sea				
-Venice	Tuscany	Piemonte	Tyrol	Trieste	Adriatic Sea	Apula	Rome			
-Vienna	Bohemia	Galicia	Budapest	Trieste	Tyrol					
-Wales	Irish Sea	Liverpool	London	English Channel						
-Warsaw	Prussia	Livonia	Moscow	Ukraine	Galicia	Silesia				
-Western Mediterranean Sea	Spain	Gulf of Lyon	Tyrrhenian Sea	Tunisia	North Africa					
-York	Edinburgh	Liverpool	London	North Sea						
+Territory Name	Adjacent Territories															
+Adriatic Sea	Trieste	Venice	Apula	Ionian Sea	Albania											
+Aegean Sea	Bulgaria	Greece	Ionian Sea	Eastern Mediterranean Sea	Smyrna	Constantinople	Black Sea									
+Albania	Ankara	Ionian Sea	Greece	Serbia	Trieste											
+Ankara	Black Sea	Constantinople	Smyrna	Armenia	Sevastopol											
+Apula	Adriatic Sea	Venice	Rome	Napoli	Ionian Sea											
+Armenia	Ankara	Syria	Smyrna	Sevastopol												
+Baltic Sea	Gulf of Bothnia	Livonia	Prussia	Berlin	Kiel	Skaggerak	Sweden									
+Barent's Sea	Norwegian Sea	Norway	St. Petersburg													
+Belgium	English Channel	Holland	Ruhr	Burgundy	Picardy											
+Berlin	Baltic Sea	Kiel	Munich	Silesia	Prussia											
+Black Sea	Sevastopol	Rumania	Bulgaria	Constantinople	Ankara	Ukraine	Aegean Sea									
+Bohemia	Silesia	Munich	Tyrol	Vienna	Galicia											
+Brest	English Channel	Mid Atlantic Ocean	Gascony	Paris	Picardy											
+Budapest	Vienna	Galicia	Rumania	Serbia	Trieste	Tyrol										
+Bulgaria	Rumania	Black Sea	Aegean Sea	Constantinople	Greece	Serbia	southCoast	Constantinople	Greece	Aegean Sea	northCoast	Black Sea	Rumania	Constantinople		
+Burgundy	Belgium	Picardy	Paris	Gascony	Marseilles	Munich	Ruhr									
+Clyde	Mid Atlantic Ocean	Liverpool	Edinburgh	Norwegian Sea												
+Constantinople	Bulgaria	Black Sea	Ankara	Smyrna	Aegean Sea											
+Denmark	Skaggerak	North Sea	Heligoland	Kiel												
+Eastern Mediterranean Sea	Aegean Sea	Ionian Sea	Syria	Smyrna												
+Edinburgh	Clyde	Liverpool	York	North Sea	Norwegian Sea											
+English Channel	Irish Sea	Wales	London	North Sea	Belgium	Picardy	Brest	Mid Atlantic Ocean								
+Finland	Norway	Sweden	Gulf of Bothnia	St. Petersburg												
+Galicia	Bohemia	Silesia	Warsaw	Ukraine	Rumania	Budapest	Vienna									
+Gascony	Mid Atlantic Ocean	Brest	Paris	Burgundy	Marseilles	Spain										
+Greece	Albania	Serbia	Bulgaria	Aegean Sea	Ionian Sea											
+Gulf of Bothnia	Baltic Sea	Livonia	St. Petersburg	Finland	Sweden											
+Gulf of Lyon	Spain	Western Mediterranean Sea	Tyrrhenian Sea	Tuscany	Piemonte	Marseilles										
+Heligoland	Denmark	Kiel	Holland	North Sea												
+Holland	Heligoland	Kiel	Ruhr	Belgium	North Sea											
+Ionian Sea	Apula	Adriatic Sea	Albania	Greece	Aegean Sea	Eastern Mediterranean Sea	Napoli	Tyrrhenian Sea	Tunisia							
+Irish Sea	North Atlantic Ocean	Liverpool	Wales	English Channel	Mid Atlantic Ocean											
+Kiel	Heligoland	Denmark	Baltic Sea	Berlin	Munich	Ruhr	Holland									
+Livonia	Gulf of Bothnia	St. Petersburg	Moscow	Warsaw	Prussia	Baltic Sea										
+Liverpool	Irish Sea	North Atlantic Ocean	Clyde	Edinburgh	York	Wales										
+London	Wales	York	North Sea	English Channel												
+Marseilles	Gascony	Burgundy	Piemonte	Gulf of Lyon	Spain											
+Mid Atlantic Ocean	North Atlantic Ocean	Irish Sea	English Channel	Brest	Gascony	Spain	Portugal	Western Mediterranean Sea	North Africa							
+Moscow	Livonia	Warsaw	Ukraine	Sevastopol	St. Petersburg											
+Munich	Ruhr	Burgundy	Tyrol	Bohemia	Silesia	Berlin	Kiel									
+North Africa	Western Mediterranean Sea	Mid Atlantic Ocean	Tunisia													
+Napoli	Rome	Apula	Ionian Sea	Tyrrhenian Sea												
+North Atlantic Ocean	Liverpool	Clyde	Norwegian Sea	Irish Sea	Mid Atlantic Ocean											
+North Sea	Norwegian Sea	Edinburgh	York	London	English Channel	Holland	Heligoland	Skaggerak	Denmark	Norway						
+Norway	Norwegian Sea	Barent's Sea	Sweden	Skaggerak	North Sea											
+Norwegian Sea	North Atlantic Ocean	Clyde	Edinburgh	North Sea	Norway	Barent's Sea										
+Paris	Picardy	Brest	Gascony	Burgundy												
+Picardy	English Channel	Belgium	Burgundy	Paris	Brest											
+Piemonte	Gulf of Lyon	Marseilles	Tyrol	Venice	Tuscany											
+Portugal	Mid Atlantic Ocean	Spain														
+Prussia	Baltic Sea	Berlin	Silesia	Warsaw	Livonia											
+Rome	Tuscany	Venice	Apula	Napoli	Tyrrhenian Sea											
+Ruhr	Belgium	Holland	Kiel	Munich	Burgundy											
+Rumania	Budapest	Serbia	Bulgaria	Black Sea	Ukraine	Galicia										
+Serbia	Albania	Trieste	Budapest	Rumania	Bulgaria	Greece										
+Sevastopol	Moscow	Ukraine	Black Sea	Ankara	Armenia											
+Silesia	Berlin	Prussia	Warsaw	Galicia	Bohemia	Munich										
+Skaggerak	North Sea	Norway	Sweden	Baltic Sea	Denmark											
+Smyrna	Aegean Sea	Constantinople	Ankara	Armenia	Syria	Eastern Mediterranean Sea										
+Spain	Portugal	Mid Atlantic Ocean	Western Mediterranean Sea	Gulf of Lyon	Gascony	Marseilles	southCoast	Western Mediterranean Sea	Gulf of Lyon	Marseilles	Portugal	Mid Atlantic Ocean	northCoast	Gascony	Mid Atlantic Ocean	Portugal
+St. Petersburg	Barent's Sea	Finland	Gulf of Bothnia	Livonia	Moscow	Norway	southCoast	Livonia	Gulf of Bothnia	Finland	northCoast	Norway	Barent's Sea			
+Sweden	Norway	Finland	Gulf of Bothnia	Baltic Sea	Skaggerak											
+Syria	Smyrna	Armenia	Eastern Mediterranean Sea													
+Trieste	Venice	Tyrol	Vienna	Budapest	Serbia	Albania	Adriatic Sea									
+Tunisia	North Africa	Western Mediterranean Sea	Tyrrhenian Sea	Ionian Sea												
+Tuscany	Gulf of Lyon	Piemonte	Venice	Rome	Tyrrhenian Sea											
+Tyrol	Munich	Bohemia	Vienna	Trieste	Venice	Piemonte										
+Tyrrhenian Sea	Western Mediterranean Sea	Gulf of Lyon	Tuscany	Rome	Napoli	Ionian Sea	Tunisia									
+Ukraine	Galicia	Warsaw	Moscow	Sevastopol	Rumania	Black Sea										
+Venice	Tuscany	Piemonte	Tyrol	Trieste	Adriatic Sea	Apula	Rome									
+Vienna	Bohemia	Galicia	Budapest	Trieste	Tyrol											
+Wales	Irish Sea	Liverpool	London	English Channel												
+Warsaw	Prussia	Livonia	Moscow	Ukraine	Galicia	Silesia										
+Western Mediterranean Sea	Spain	Gulf of Lyon	Tyrrhenian Sea	Tunisia	North Africa											
+York	Edinburgh	Liverpool	London	North Sea												

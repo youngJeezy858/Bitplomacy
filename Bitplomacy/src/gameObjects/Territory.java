@@ -38,6 +38,10 @@ public class Territory extends ImageEntity {
 	/** The list of Territories that are adjacent to this one. */
 	private ArrayList<String> adjacentTerritories;
 	
+	private ArrayList<String> adjacentSCTerritories;
+	
+	private ArrayList<String> adjacentNCTerritories;
+	
 	/** The current owner (Player) . */
 	private int owner;
 
@@ -47,6 +51,18 @@ public class Territory extends ImageEntity {
 	private int unitX;
 
 	private int unitY;
+
+	private int scUnitX;
+
+	private int scUnitY;
+
+	private int ncUnitX;
+
+	private int ncUnitY;
+	
+	private boolean isInSC;
+	
+	private boolean isInNC;
 	
 	/** To set the owner as NEUTRAL. */
 	public static final int NEUTRAL = 0;
@@ -95,6 +111,8 @@ public class Territory extends ImageEntity {
 		unit = null;
 		adjacentTerritories = new ArrayList<String>();
 		homeCity = 0;
+		isInNC = false;
+		isInSC = false;
 	}
 	
 	/**
@@ -189,12 +207,41 @@ public class Territory extends ImageEntity {
 	 * @return true, if it is adjacent
 	 */
 	public boolean isAdjacent(Territory t){
-		for (String s : adjacentTerritories){
+		if (isInNC)
+			return isAdjacentNC(t);
+		else if (isInSC)
+			return isAdjacentSC(t);
+		
+		else {
+			for (String s : adjacentTerritories) {
+				if (t.getName().equals(s)) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	public boolean isAdjacentNC(Territory t) {
+		if (adjacentNCTerritories == null)
+			return false;
+		for (String s : adjacentNCTerritories){
 			if (t.getName().equals(s)){
 		 		return true;
 			}
 		 }
-		 return false;
+		return false;
+	}
+
+	public boolean isAdjacentSC(Territory t) {
+		if (adjacentSCTerritories == null)
+			return false;
+		for (String s : adjacentSCTerritories){
+			if (t.getName().equals(s)){
+		 		return true;
+			}
+		 }
+		return false;
 	}
 
 	/**
@@ -262,14 +309,22 @@ public class Territory extends ImageEntity {
 		if (!hasSupplyCenter)
 			setOwner(NEUTRAL);
 		unit = null;
+		isInNC = false;
+		isInSC = false;
 	}
 
 	/**
 	 * Draws the occupying Unit if there is one.
 	 */
 	public void uDraw(){
-		if (unit != null)
-			unit.draw(this.getX()+unitX, this.getY()+unitY);
+		if (unit != null){
+			if (isInNC)
+				unit.draw(this.getX()+ncUnitX, this.getY()+ncUnitY);
+			else if (isInSC)
+				unit.draw(this.getX()+scUnitX, this.getY()+scUnitY);
+			else
+				unit.draw(this.getX()+unitX, this.getY()+unitY);
+		}
 	}
 
 	/**
@@ -307,4 +362,43 @@ public class Territory extends ImageEntity {
 		unitY = i;
 	}
 
+	public void addSCAdjacent(String s) {
+		if (adjacentSCTerritories == null)
+			adjacentSCTerritories = new ArrayList<String>();
+		adjacentSCTerritories.add(s);
+	}
+	
+	public void addNCAdjacent(String s) {
+		if (adjacentNCTerritories == null)
+			adjacentNCTerritories = new ArrayList<String>();
+		adjacentNCTerritories.add(s);
+	}
+
+	public void setSCX(int i) {
+		scUnitX = i;
+	}
+
+	public void setSCY(int i) {
+		scUnitY = i;
+	}
+
+	public void setNCX(int i) {
+		ncUnitX = i;
+	}
+	
+	public void setNCY(int i) {
+		ncUnitY = i;
+	}
+
+	public boolean hasCoasts() {
+		return adjacentNCTerritories != null;
+	}
+
+	public void setSC(boolean b) {
+		isInSC = b;
+	}
+	
+	public void setNC(boolean b) {
+		isInNC = b;
+	}
 }

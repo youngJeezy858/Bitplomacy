@@ -150,7 +150,16 @@ public class GameCanvas extends ECanvas{
 			territories[i].setX(new Integer(s2[4]));
 			territories[i].setY(new Integer(s2[5]));
 			territories[i].setUnitX(new Integer(s2[7]));
-			territories[i].setUnitY(new Integer(s2[8]));			
+			territories[i].setUnitY(new Integer(s2[8]));
+			try{
+				territories[i].setSCX(new Integer(s2[9]));
+				territories[i].setSCY(new Integer(s2[10]));
+				territories[i].setNCX(new Integer(s2[11]));
+				territories[i].setNCY(new Integer(s2[12]));
+			}
+			catch (ArrayIndexOutOfBoundsException e){
+				System.out.println("no Coasts for " + s2[0]);
+			}
 			i++;
 		}
 		sc.close();
@@ -161,8 +170,19 @@ public class GameCanvas extends ECanvas{
 		while (sc.hasNextLine()){
 			String s[] = sc.nextLine().split("\t");
 			Territory t = getTerritory(s[0]);
-			for (i = 1; i < s.length; i++)
+			for (i = 1; i < s.length; i++){
+				if (s[i].equals("southCoast"))
+					break;
 				t.addAdjacent(s[i]);
+			}
+			for (i = i + 1; i < s.length; i++){
+				if (s[i].equals("northCoast"))
+					break;
+				t.addSCAdjacent(s[i]);
+			}
+			for (i = i + 1; i < s.length; i++){
+				t.addNCAdjacent(s[i]);
+			}
 		}	
 		sc.close();
 		
@@ -197,6 +217,7 @@ public class GameCanvas extends ECanvas{
 		createStartingUnit(getTerritory("Napoli"), waterUnit, false, players[Territory.ITALY-1]);
 
 		createStartingUnit(getTerritory("St. Petersburg"), waterUnit, false, players[Territory.RUSSIA-1]);
+		getTerritory("St. Petersburg").setSC(true);
 		createStartingUnit(getTerritory("Moscow"), landUnit, true, players[Territory.RUSSIA-1]);
 		createStartingUnit(getTerritory("Sevastopol"), waterUnit, false, players[Territory.RUSSIA-1]);
 		createStartingUnit(getTerritory("Warsaw"), landUnit, true, players[Territory.RUSSIA-1]);
@@ -233,6 +254,10 @@ public class GameCanvas extends ECanvas{
 		Unit temp = null;
 		if (isLand)
 			temp = new Unit(landUnit, p.getOwnerKey() - 1, isLand, t);
+		else if (t.hasCoasts()){
+			t.setSC(true);
+			temp = new Unit(waterUnit, p.getOwnerKey() - 1, isLand, t);
+		}
 		else
 			temp = new Unit(waterUnit, p.getOwnerKey() - 1, isLand, t);
 		t.setUnit(temp);
