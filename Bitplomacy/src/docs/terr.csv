@@ -1,76 +1,76 @@
-Territory Name	is it land?	supply center?	has Port?	X position	Y Position	Image Location
-Adriatic Sea	 false	 false	 false	364	514	/images/AdriaticSea_updated.png
-Aegean Sea	 false	 false	 false	509	604	/images/AegeanSea_updated.png
-Albania	 true	 false	 true	457	567	/images/Albania_updated.png
-Ankara	 true	 true	 true	622	560	/images/Ankara_updated.png
-Apula	 true	 false	 true	375	579	/images/Apula_updated.png
-Armenia	 true	 false	 false	731	561	/images/Armenia_updated.png
-Baltic Sea	 false	 false	 false	369	266	/images/BalticSea_updated.png
-Barent's Sea	 false	 false	 false	492	0	/images/BarentsSea_updated.png
-Belgium	 true	 true	 true	250	380	/images/Belgium_updated.png
-Berlin	 true	 true	 true	358	339	/images/Berlin_updated.png
-Black Sea	 false	 false	 false	582	454	/images/BlackSea_updated.png
-Bohemia	 true	 false	 false	371	411	/images/Bohemia_updated.png
-Brest	 true	 true	 true	160	400	/images/Brest_updated.png
-Budapest	 true	 true	 true	425	461	/images/Budapest_updated.png
-Bulgaria	 true	 true	 true	500	547	/images/Bulgaria_updated.png
-Burgundy	 true	 false	 false	231	413	/images/Burgundy_updated.png
-Clyde	 true	 false	 true	203	222	/images/Clyde_updated.png
-Constantinople	 true	 true	 true	552	574	/images/Constantinople_updated.png
-Denmark	 true	 true	 true	352	269	/images/Denmark_updated.png
-Eastern Mediterranean Sea	 false	 false	 false	513	664	/images/EastMediterranean_updated.png
-Edinburgh	 true	 true	 true	225	218	/images/Edinburgh_updated.png
-English Channel	 false	 false	 false	142	365	/images/EnglishChannel_updated.png
-Finland	 true	 false	 true	472	49	/images/Finland_updated.png
-Galicia	 true	 false	 false	451	414	/images/Galicia_updated.png
-Gascony	 true	 false	 true	175	470	/images/Gascony_updated.png
-Greece	 true	 true	 true	464	586	/images/Greece_updated.png
-Gulf of Bothnia	 false	 false	 false	436	132	/images/GulfofBothnia_updated.png
-Gulf of Lyon	 false	 false	 false	180	532	/images/GulfofLyon_updated.png
-Heligoland	 false	 false	 false	314	300	/images/Heligoland_updated.png
-Holland	 true	 true	 true	279	351	/images/Holland_updated.png
-Ionian Sea	 false	 false	 false	332	610	/images/IonianSea_updated.png
-Irish Sea	 false	 false	 false	105	275	/images/IrishSea_updated.png
-Kiel	 true	 true	 true	312	314	/images/Kiel_updated.png
-Livonia	 true	 false	 true	474	270	/images/Livonia_updated.png
-Liverpool	 true	 true	 true	205	265	/images/Liverpool_updated.png
-London	 true	 true	 true	219	333	/images/London_updated.png
-Marseilles	 true	 true	 true	210	484	/images/Marseilles_updated.png
-Mid Atlantic Ocean	 false	 false	 false	1	392	/images/MidAtlanticOcean_updated.png
-Moscow	 true	 true	 false	532	261	/images/Moscow_updated.png
-Munich	 true	 true	 false	298	390	/images/Munich_updated.png
-North Africa	 true	 false	 true	2	632	/images/NorthAfrica_updated.png
-Napoli	 true	 true	 true	383	605	/images/Napoli_updated.png
-North Atlantic Ocean	 false	 false	 false	0	0	/images/NorthAtlanticOcean_updated.png
-North Sea	 false	 false	 false	248	192	/images/NorthSea_updated.png
-Norway	 true	 true	 true	325	28	/images/Norway_updated.png
-Norwegian Sea	 false	 false	 false	91	0	/images/NorwegianSea_updated.png
-Paris	 true	 true	 false	217	430	/images/Paris_updated.png
-Picardy	 true	 false	 true	223	398	/images/Picardy_updated.png
-Piemonte	 true	 false	 true	293	498	/images/Piemonte_updated.png
-Portugal	 true	 true	 true	36	514	/images/Portugal_updated.png
-Prussia	 true	 false	 true	406	314	/images/Prussia_updated.png
-Rome	 true	 true	 true	352	567	/images/Rome_updated.png
-Ruhr	 true	 false	 false	297	375	/images/Ruhr_updated.png
-Rumania	 true	 true	 true	511	464	/images/Rumania_updated.png
-Serbia	 true	 true	 false	459	524	/images/Serbia_updated.png
-Sevastopol	 true	 true	 true	589	358	/images/Sevastopol_updated.png
-Silesia	 true	 false	 false	369	381	/images/Silesia_updated.png
-Skaggerak	 false	 false	 false	340	257	/images/Skagerrak_updated.png
-Smyrna	 true	 true	 true	561	605	/images/Smyrna_updated.png
-Spain	 true	 true	 true	57	485	/images/Spain_updated.png
-St. Petersburg	 true	 true	 true	496	2	/images/StPetersburg_updated.png
-Sweden	 true	 true	 true	382	67	/images/Sweden_updated.png
-Syria	 true	 false	 true	680	650	/images/Syria_updated.png
-Trieste	 true	 true	 true	380	487	/images/Trieste_updated.png
-Tunisia	 true	 true	 true	291	662	/images/Tunisia_updated.png
-Tuscany	 true	 false	 true	330	538	/images/Tuscany_updated.png
-Tyrol	 true	 false	 false	335	459	/images/Tyrol_updated.png
-Tyrrhenian Sea	 false	 false	 false	311	568	/images/TyrrhenianSea_updated.png
-Ukraine	 true	 false	 true	533	370	/images/Ukraine_updated.png
-Venice	 true	 true	 true	339	495	/images/Venice_updated.png
-Vienna	 true	 true	 false	397	448	/images/Vienna_updated.png
-Wales	 true	 false	 true	162	320	/images/Wales_updated.png
-Warsaw	 true	 true	 false	455	366	/images/Warsaw_updated.png
-Western Mediterranean Sea	 false	 false	 false	81	586	/images/WestMediterranean_updated.png
-York	 true	 false	 true	233	276	/images/York_updated.png
+Territory Name	is it land?	supply center?	has Port?	X position	Y Position	Image Location	x Coord	y Coord
+Adriatic Sea	 false	 false	 false	364	514	/images/AdriaticSea_updated.png	41	50
+Aegean Sea	 false	 false	 false	509	604	/images/AegeanSea_updated.png	23	67
+Albania	 true	 false	 true	457	567	/images/Albania_updated.png	0	15
+Ankara	 true	 true	 true	622	560	/images/Ankara_updated.png	76	12
+Apula	 true	 false	 true	375	579	/images/Apula_updated.png	25	12
+Armenia	 true	 false	 false	731	561	/images/Armenia_updated.png	33	61
+Baltic Sea	 false	 false	 false	369	266	/images/BalticSea_updated.png	69	33
+Barent's Sea	 false	 false	 false	492	0	/images/BarentsSea_updated.png	68	27
+Belgium	 true	 true	 true	250	380	/images/Belgium_updated.png	24	13
+Berlin	 true	 true	 true	358	339	/images/Berlin_updated.png	29	23
+Black Sea	 false	 false	 false	582	454	/images/BlackSea_updated.png	58	61
+Bohemia	 true	 false	 false	371	411	/images/Bohemia_updated.png	20	4
+Brest	 true	 true	 true	160	400	/images/Brest_updated.png	32	44
+Budapest	 true	 true	 true	425	461	/images/Budapest_updated.png	49	10
+Bulgaria	 true	 true	 true	500	547	/images/Bulgaria_updated.png	13	16
+Burgundy	 true	 false	 false	231	413	/images/Burgundy_updated.png	41	27
+Clyde	 true	 false	 true	203	222	/images/Clyde_updated.png	0	14
+Constantinople	 true	 true	 true	552	574	/images/Constantinople_updated.png	53	22
+Denmark	 true	 true	 true	352	269	/images/Denmark_updated.png	2	7
+Eastern Mediterranean Sea	 false	 false	 false	513	664	/images/EastMediterranean_updated.png	129	26
+Edinburgh	 true	 true	 true	225	218	/images/Edinburgh_updated.png	3	31
+English Channel	 false	 false	 false	142	365	/images/EnglishChannel_updated.png	16	19
+Finland	 true	 false	 true	472	49	/images/Finland_updated.png	29	124
+Galicia	 true	 false	 false	451	414	/images/Galicia_updated.png	69	36
+Gascony	 true	 false	 true	175	470	/images/Gascony_updated.png	11	11
+Greece	 true	 true	 true	464	586	/images/Greece_updated.png	29	61
+Gulf of Bothnia	 false	 false	 false	436	132	/images/GulfofBothnia_updated.png	25	111
+Gulf of Lyon	 false	 false	 false	180	532	/images/GulfofLyon_updated.png	71	43
+Heligoland	 false	 false	 false	314	300	/images/Heligoland_updated.png	8	18
+Holland	 true	 true	 true	279	351	/images/Holland_updated.png	13	1
+Ionian Sea	 false	 false	 false	332	610	/images/IonianSea_updated.png	104	52
+Irish Sea	 false	 false	 false	105	275	/images/IrishSea_updated.png	15	77
+Kiel	 true	 true	 true	312	314	/images/Kiel_updated.png	24	31
+Livonia	 true	 false	 true	474	270	/images/Livonia_updated.png	37	40
+Liverpool	 true	 true	 true	205	265	/images/Liverpool_updated.png	0	35
+London	 true	 true	 true	219	333	/images/London_updated.png	6	18
+Marseilles	 true	 true	 true	210	484	/images/Marseilles_updated.png	55	11
+Mid Atlantic Ocean	 false	 false	 false	1	392	/images/MidAtlanticOcean_updated.png	105	55
+Moscow	 true	 true	 false	532	261	/images/Moscow_updated.png	123	73
+Munich	 true	 true	 false	298	390	/images/Munich_updated.png	39	28
+North Africa	 true	 false	 true	2	632	/images/NorthAfrica_updated.png	53	48
+Napoli	 true	 true	 true	383	605	/images/Napoli_updated.png	16	16
+North Atlantic Ocean	 false	 false	 false	0	0	/images/NorthAtlanticOcean_updated.png	34	238
+North Sea	 false	 false	 false	248	192	/images/NorthSea_updated.png	29	52
+Norway	 true	 true	 true	325	28	/images/Norway_updated.png	40	161
+Norwegian Sea	 false	 false	 false	91	0	/images/NorwegianSea_updated.png	154	101
+Paris	 true	 true	 false	217	430	/images/Paris_updated.png	21	8
+Picardy	 true	 false	 true	223	398	/images/Picardy_updated.png	11	11
+Piemonte	 true	 false	 true	293	498	/images/Piemonte_updated.png	9	3
+Portugal	 true	 true	 true	36	514	/images/Portugal_updated.png	4	51
+Prussia	 true	 false	 true	406	314	/images/Prussia_updated.png	65	32
+Rome	 true	 true	 true	352	567	/images/Rome_updated.png	15	24
+Ruhr	 true	 false	 false	297	375	/images/Ruhr_updated.png	3	35
+Rumania	 true	 true	 true	511	464	/images/Rumania_updated.png	20	49
+Serbia	 true	 true	 false	459	524	/images/Serbia_updated.png	4	4
+Sevastopol	 true	 true	 true	589	358	/images/Sevastopol_updated.png	129	94
+Silesia	 true	 false	 false	369	381	/images/Silesia_updated.png	57	21
+Skaggerak	 false	 false	 false	340	257	/images/Skagerrak_updated.png	0	3
+Smyrna	 true	 true	 true	561	605	/images/Smyrna_updated.png	93	35
+Spain	 true	 true	 true	57	485	/images/Spain_updated.png	36	87
+St. Petersburg	 true	 true	 true	496	2	/images/StPetersburg_updated.png	155	228
+Sweden	 true	 true	 true	382	67	/images/Sweden_updated.png	29	144
+Syria	 true	 false	 true	680	650	/images/Syria_updated.png	71	25
+Trieste	 true	 true	 true	380	487	/images/Trieste_updated.png	45	47
+Tunisia	 true	 true	 true	291	662	/images/Tunisia_updated.png	8	1
+Tuscany	 true	 false	 true	330	538	/images/Tuscany_updated.png	10	15
+Tyrol	 true	 false	 false	335	459	/images/Tyrol_updated.png	3	23
+Tyrrhenian Sea	 false	 false	 false	311	568	/images/TyrrhenianSea_updated.png	41	66
+Ukraine	 true	 false	 true	533	370	/images/Ukraine_updated.png	32	55
+Venice	 true	 true	 true	339	495	/images/Venice_updated.png	1	18
+Vienna	 true	 true	 false	397	448	/images/Vienna_updated.png	44	2
+Wales	 true	 false	 true	162	320	/images/Wales_updated.png	33	30
+Warsaw	 true	 true	 false	455	366	/images/Warsaw_updated.png	56	21
+Western Mediterranean Sea	 false	 false	 false	81	586	/images/WestMediterranean_updated.png	106	18
+York	 true	 false	 true	233	276	/images/York_updated.png	1	23

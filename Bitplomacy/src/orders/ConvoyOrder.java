@@ -17,7 +17,7 @@ public class ConvoyOrder extends Order{
 		if (destinationTerritory == null || convoyDestination == null)
 			return false;
 		
-		else if (!unit.isArmy() || currentTerritory.isLand())
+		else if (!unit.isArmy() && currentTerritory.isLand())
 			return false;
 		
 		else if (destinationTerritory.getUnit() == null)

@@ -43,6 +43,10 @@ public class Territory extends ImageEntity {
 
 	/** The owner value of this Territory. Player's can only build Units in their home cities. */
 	private int homeCity;
+
+	private int unitX;
+
+	private int unitY;
 	
 	/** To set the owner as NEUTRAL. */
 	public static final int NEUTRAL = 0;
@@ -264,12 +268,8 @@ public class Territory extends ImageEntity {
 	 * Draws the occupying Unit if there is one.
 	 */
 	public void uDraw(){
-		if (unit != null){
-			if (isLand)
-				unit.draw(this.getX()+(this.getWidth()/16)-16, this.getY()+(this.getHeight()/2)-24);
-			else 
-				unit.draw(this.getX()+(this.getWidth()/2)-16, this.getY()+(this.getHeight()/2)-24);
-		}
+		if (unit != null)
+			unit.draw(this.getX()+unitX, this.getY()+unitY);
 	}
 
 	/**
@@ -297,6 +297,14 @@ public class Territory extends ImageEntity {
 	 */
 	public boolean isHomeCity(int owner) {
 		return owner == homeCity;
+	}
+
+	public void setUnitX(int i) {
+		unitX = i;
+	}
+
+	public void setUnitY(int i) {
+		unitY = i;
 	}
 
 }

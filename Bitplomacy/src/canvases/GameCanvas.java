@@ -121,9 +121,9 @@ public class GameCanvas extends ECanvas{
 		players[5] = new Player("Russia");
 		players[6] = new Player("Germany");
 		
-		Image temp = EAnimation.loadImage("/images/ArmyUnit.png");
+		Image temp = EAnimation.loadImage("/images/ArmyUnit_updated.png");
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
-		temp = EAnimation.loadImage("/images/NavyUnit.png");
+		temp = EAnimation.loadImage("/images/NavyUnit_updated.png");
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		
 		currPhase = new PlanningPhase("Spring/Summer", 1900);
@@ -149,6 +149,8 @@ public class GameCanvas extends ECanvas{
 					new Boolean(s2[2].trim()), new Boolean(s2[3].trim()));
 			territories[i].setX(new Integer(s2[4]));
 			territories[i].setY(new Integer(s2[5]));
+			territories[i].setUnitX(new Integer(s2[7]));
+			territories[i].setUnitY(new Integer(s2[8]));			
 			i++;
 		}
 		sc.close();
