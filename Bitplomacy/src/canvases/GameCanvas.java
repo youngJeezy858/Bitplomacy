@@ -25,7 +25,8 @@ import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
 
 import commands.ChooseAlly;
-import commands.Commands;
+import commands.CommandGUI;
+import commands.SubmitCommand;
 
 
 /**
@@ -42,9 +43,6 @@ public class GameCanvas extends ECanvas{
 	/** The teams as  - 7 total. */
 	private Player[] players;
 	
-	/** Used to draw the individual commands and has abstract methods to execute commands. */
-	private Commands[] commands;
-
 	/** The Territory currently selected */
 	private Territory currTerritory;
 	
@@ -55,7 +53,9 @@ public class GameCanvas extends ECanvas{
 	private Phase currPhase;
 	
 	/** The font. */
-	private TrueTypeFont font;
+	private TrueTypeFont mediumFont;
+	private TrueTypeFont smallFont;
+	private TrueTypeFont bigFont;
 	
 	/** The state. */
 	private int state;
@@ -81,6 +81,8 @@ public class GameCanvas extends ECanvas{
 	public static final int WINNER = 6;
 
 	public static final int ADJUDICATE_ALLIES = 7;
+
+	public static final int SELECT_COMM = 8;
 			
 	/** SpriteSheets for Units. */
 	private SpriteSheet landUnit;
@@ -96,6 +98,10 @@ public class GameCanvas extends ECanvas{
 	private EAnimation overlay;
 
 	private EAnimation sidebar;
+	
+	private SubmitCommand adjudicateButton;
+
+	private CommandGUI commandGUI;
 
 	/**
 	 * Instantiates a new canvas.
@@ -111,7 +117,9 @@ public class GameCanvas extends ECanvas{
 	@Override
 	public void eInit(GameContainer gc, EGame eg) {		
 
-	    font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true);
+		smallFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 10), true);
+	    mediumFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true);
+		bigFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
 		
 		players = new Player[7];
 		players[0] = new Player("England");
@@ -142,9 +150,12 @@ public class GameCanvas extends ECanvas{
 		allySelector.setX((gc.getWidth() - temp.getWidth()) / 2);
 		
 		currPhase = new PlanningPhase("Spring/Summer", 1900);
+		commandGUI = new CommandGUI();
 		
 		overlay = new EAnimation(EAnimation.loadImage("/images/overlay.png"));
 		sidebar = new EAnimation(EAnimation.loadImage("/images/sidebar.png"));
+		adjudicateButton = new SubmitCommand(810, 640);
+		adjudicateButton.setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
 		
 		//define territories
 		Scanner sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/terr.csv"));
@@ -301,8 +312,6 @@ public class GameCanvas extends ECanvas{
 		
 		if (state != WINNER) {
 
-			for (Commands c : commands)
-				c.draw();
 			for (Territory t : territories)
 				t.eDraw();
 			overlay.draw(0, 0);
@@ -310,25 +319,42 @@ public class GameCanvas extends ECanvas{
 				t.uDraw();
 
 			g.setColor(Color.black);
-			g.setFont(font);
+			g.setFont(mediumFont);
 			g.drawString(currPhase.toString(), 10, 10);
 			sidebar.draw(806, 0);
-			int y = 400;
+			int ySC = 400;
+			int[] orderCoord = {815, 110};
 			for (Player p : players) {
-				g.drawString(p.getNumArmies()+"", 877, y);
-				g.drawString(p.getNumNavies()+"", 980, y);
-				g.drawString(p.getSupplyCenterCount()+"", 1070, y);
-				y += 33;
+				g.setFont(smallFont);
+				if (orderCoord[1] > 390){
+					orderCoord[0] += 165;
+					orderCoord[1] = 110;
+				}
+				orderCoord = p.draw(g, orderCoord[0], orderCoord[1]);
+				g.setFont(mediumFont);
+				g.drawString(p.getNumArmies()+"", 877, ySC);
+				g.drawString(p.getNumNavies()+"", 980, ySC);
+				g.drawString(p.getSupplyCenterCount()+"", 1070, ySC);
+				ySC += 33;
+				orderCoord[1] += 5;
 			}
+			g.setFont(smallFont);
+			if (currOrder != null){
+				currOrder.draw(g, 865, 35);
+				commandGUI.drawSetDiscard();
+			}
+			adjudicateButton.draw();
 			
 			if (state == CHOOSE_ALLIES)
 				allySelector.draw();
+			else if (state == SELECT_COMM)
+				commandGUI.draw();
 		}
 		else{
 			g.setColor(Color.green);
 			g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
 			g.setColor(Color.black);
-			g.setFont(font);
+			g.setFont(bigFont);
 			g.drawString(winningPlayer, gc.getWidth()/2-300, gc.getHeight()/2-100);
 		}
 
@@ -343,7 +369,7 @@ public class GameCanvas extends ECanvas{
 		if (state == ADJUDICATE_ALLIES){
 			winningPlayer = allySelector.adjucate();
 			if (winningPlayer != null){
-				font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
+				mediumFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
 				state = WINNER;
 			}
 			else
@@ -353,9 +379,13 @@ public class GameCanvas extends ECanvas{
 		else if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			
 			int mx = Mouse.getX();
-			int my = Math.abs(Mouse.getY() - 831);
+			int my = Math.abs(Mouse.getY() - gc.getHeight());
 			
-			if (state != CHOOSE_ALLIES) {
+			if (state == CHOOSE_ALLIES) 
+				allySelector.update(mx, my);
+			else if (state == SELECT_COMM)
+				commandGUI.update(mx, my);
+			else {
 				for (Territory t : territories) {
 					if (mx >= t.getX()
 							&& ((t.isLand() && mx <= t.getWidth() / 8
@@ -363,21 +393,20 @@ public class GameCanvas extends ECanvas{
 									.getWidth() + t.getX())) && my >= t.getY()
 							&& my <= t.getHeight() + t.getY()
 							&& t.isMouseOver(mx, my)) {
-						updateTerritory(t);
+						updateTerritory(t, mx, my);
 						return;
 					}
 				}
 
-				for (Commands c : commands) {
-					if (mx >= c.getX() && mx <= c.getWidth() + c.getX()
-							&& my >= c.getY() && my <= c.getHeight() + c.getY()) {
-						c.update(mx, my);
-						return;
-					}
+				if (mx >= adjudicateButton.getX() && mx <= adjudicateButton.getWidth() + adjudicateButton.getX()
+						&& my >= adjudicateButton.getY() && my <= adjudicateButton.getHeight() + adjudicateButton.getY()) {
+					adjudicateButton.update(mx, my);
+					return;
 				}
-			}
-			else
-				allySelector.update(mx, my);	
+				
+				if (currOrder != null)
+					commandGUI.updateSetDiscard(mx, my);
+			}					
 		}
 	}
 
@@ -440,7 +469,7 @@ public class GameCanvas extends ECanvas{
 					if (p.getSupplyCenterCount() >= 24){
 						state = WINNER;
 						winningPlayer = p.getName() + " WINS!!!";
-						font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
+						mediumFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
 						break;
 					}
 					if (p.getSupplyCenterCount() > highest)
@@ -461,7 +490,7 @@ public class GameCanvas extends ECanvas{
 				if (p.getSupplyCenterCount() >= 24){
 					state = WINNER;
 					winningPlayer = p.getName() + " WINS!!!";
-					font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
+					mediumFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
 					break;
 				}
 				if (p.getSupplyCenterCount() > highest)
@@ -565,12 +594,17 @@ public class GameCanvas extends ECanvas{
 	 * Update territory.
 	 *
 	 * @param t the t
+	 * @param my 
+	 * @param mx 
 	 */
-	public void updateTerritory(Territory t) {
+	public void updateTerritory(Territory t, int mx, int my) {
 		
 		if (state == NORM){
-			if (t.getUnit() != null || currPhase.getSeason().equals("Build/Remove"))
+			if (t.getUnit() != null || currPhase.getSeason().equals("Build/Remove")){
 				currTerritory = t;
+				commandGUI.setCoord(mx, my);
+				state = SELECT_COMM;				
+			}
 		}
 		
 		else if (state == COMM_SELECTED){			
@@ -640,10 +674,6 @@ public class GameCanvas extends ECanvas{
 
 	public Territory getCurrentTerritory() {
 		return currTerritory;
-	}
-
-	public void setCommands(Commands[] planningCommands) {
-		commands = planningCommands;
 	}
 
 	public Phase getPhase() {

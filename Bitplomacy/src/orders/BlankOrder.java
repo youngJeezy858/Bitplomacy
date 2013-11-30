@@ -1,5 +1,7 @@
 package orders;
 
+import org.newdawn.slick.Graphics;
+
 import gameObjects.Territory;
 
 public class BlankOrder extends Order{
@@ -17,6 +19,17 @@ public class BlankOrder extends Order{
 	@Override
 	public void addAdditionalTerritory(Territory t) {
 		//do nothing
+	}
+
+	@Override
+	public String toShortString() {
+		return "idle";
+	}
+
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		// do nothing
+		
 	}
 
 }

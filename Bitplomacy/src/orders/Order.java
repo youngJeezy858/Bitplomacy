@@ -1,5 +1,7 @@
 package orders;
 
+import org.newdawn.slick.Graphics;
+
 import canvases.GameCanvas;
 import gameObjects.Territory;
 import gameObjects.Unit;
@@ -192,6 +194,10 @@ public abstract class Order {
 	
 	public abstract void addAdditionalTerritory(Territory t);
 
+	public abstract String toShortString();
+	
+	public abstract void draw(Graphics g, int x, int y);
+	
 	public void setUnitOrder() {
 		currentTerritory.getUnit().setOrder(this);
 	}
@@ -199,5 +205,5 @@ public abstract class Order {
 	public Unit getUnit() {
 		return unit;
 	}
-	
+
 }

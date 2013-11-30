@@ -24,8 +24,10 @@ public class BuildArmyCommand extends Commands {
 	 */
 	@Override
 	public void execute() {
-		if (GameCanvas.getC().getCurrentTerritory() != null)
+		if (GameCanvas.getC().getCurrentTerritory() != null){
 			GameCanvas.getC().setOrder(new BuildArmyOrder(GameCanvas.getC().getCurrentTerritory()));
+			GameCanvas.getC().setState(GameCanvas.NORM);
+		}
 	}
 
 }

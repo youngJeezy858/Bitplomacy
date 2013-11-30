@@ -2,6 +2,8 @@ package orders;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Graphics;
+
 import canvases.GameCanvas;
 import gameObjects.Territory;
 
@@ -35,9 +37,17 @@ public class DisbandOrder extends Order {
 	}
 	
 	public String toString() {
-		String s = currentTerritory.getName() + "\n";
-		s += command;
-		return s;
+		return currentTerritory.getName() + " owned by " + currentTerritory.getOwnerName() + " " + command;
+	}
+
+	@Override
+	public String toShortString() {
+		return " to disband";
+	}
+
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		g.drawString(currentTerritory.getName() + " disbanding", x, y);
 	}
 
 }

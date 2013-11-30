@@ -1,10 +1,12 @@
 package orders;
 
+import org.newdawn.slick.Graphics;
+
 import gameObjects.Territory;
 
 public class SupportOrder extends Order {
 
-	Territory supported;
+	private Territory supported;
 	
 	public SupportOrder(Territory t) {
 		super(t);
@@ -64,4 +66,38 @@ public class SupportOrder extends Order {
 		return s;
 	}
 
+	@Override
+	public String toShortString() {
+		String s = " Sup ";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName().substring(0, 4);
+		if (supported != null){
+			if (supported.getUnit() != null){
+				if (supported.getUnit().isArmy())
+					s += " A";
+				else
+					s += " N";
+			}
+			s += " in "+ supported.getName().substring(0, 4);
+		}
+		return s;
+	}
+
+	
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		g.drawString(currentTerritory.getName() + " supporting", x, y);
+		y += 10;
+		if (destinationTerritory != null)
+			g.drawString(destinationTerritory.getName() + " to", x, y);
+		else{
+			g.drawString("[SELECT DESTINATION OF SUPPORT]", x, y);
+			return;
+		}
+		y += 10;
+		if (supported != null) 
+			g.drawString(supported.getName(), x, y);
+		else
+			g.drawString("[SELECT UNIT TO SUPPORT]", x, y);
+	}
 }

@@ -2,28 +2,13 @@ package phases;
 
 import java.util.ArrayList;
 
-import com.erebos.engine.graphics.EAnimation;
-
 import orders.AttackOrder;
 import orders.DisbandOrder;
 import orders.Order;
 import orders.RetreatOrder;
 import canvases.GameCanvas;
-import commands.Commands;
-import commands.DisbandCommand;
-import commands.DiscardOrderCommand;
-import commands.RetreatCommand;
-import commands.SetOrderCommand;
-import commands.SubmitCommand;
 
-public class RetreatPhase extends Phase{
-
-	/** The retreat disband commands. */
-	private Commands[] retreatDisbandCommands = { new DisbandCommand(1166, 635),
-			new RetreatCommand(1258, 635),
-			new SubmitCommand(1152, 546),
-			new SetOrderCommand(1152, 450),
-			new DiscardOrderCommand(1269, 450)};
+public class RetreatPhase extends Phase{	
 	
 	/** The retreat orders. */
 	private ArrayList<RetreatOrder> retreatOrders;
@@ -40,18 +25,11 @@ public class RetreatPhase extends Phase{
 	
 	public RetreatPhase(String season, int year, ArrayList<Order> retreatingUnits, ArrayList<AttackOrder> remainingAttacks) {
 		super(season, year);
-
 		retreatOrders = new ArrayList<RetreatOrder>();
 		disbandOrders = new ArrayList<DisbandOrder>();
 		this.retreatingUnits = retreatingUnits;
 		this.remainingAttacks = remainingAttacks;
-	
-		retreatDisbandCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
-		retreatDisbandCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/RetreatIcon.png")));
-		retreatDisbandCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
-		retreatDisbandCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
-		retreatDisbandCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
-		GameCanvas.getC().setCommands(retreatDisbandCommands);	}
+	}
 
 
 	@Override
@@ -123,6 +101,10 @@ public class RetreatPhase extends Phase{
 				return true;
 		}
 		return false;
+	}
+	
+	public ArrayList<Order> getRetreatingUnits(){
+		return retreatingUnits;
 	}
 	
 }

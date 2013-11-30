@@ -2,6 +2,8 @@ package orders;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Graphics;
+
 import gameObjects.Territory;
 
 public class RetreatOrder extends Order {
@@ -69,6 +71,24 @@ public class RetreatOrder extends Order {
 		else 
 			s += "[SELECT DESTINATION\n OF RETREAT]";
 		return s;
+	}
+
+	@Override
+	public String toShortString() {
+		String s = " Ret ";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName().substring(0, 4);
+		return s;
+	}
+
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		g.drawString(currentTerritory.getName() + " retreating", x, y);
+		y += 10;
+		if (destinationTerritory != null)
+			g.drawString("to " + destinationTerritory.getName(), x, y);
+		else
+			g.drawString("[SELECT DESTINATION OF RETREAT]", x, y);
 	}
 		
 }

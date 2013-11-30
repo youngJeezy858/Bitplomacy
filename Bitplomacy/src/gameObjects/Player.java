@@ -2,6 +2,11 @@ package gameObjects;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Graphics;
+import orders.Order;
+import phases.RetreatPhase;
+import canvases.GameCanvas;
+
 /**
  * The Class Player represents on of the 7 countries on the map.
  */
@@ -160,6 +165,83 @@ public class Player {
 				i++;
 		}
 		return i;
+	}
+	
+	public String toString(){
+		String s = name + ":\n";
+		
+		if (GameCanvas.getC().getPhase().getSeason().contains("Retreats")){
+			RetreatPhase rp = (RetreatPhase) GameCanvas.getC().getPhase();
+			ArrayList<Order> retreats = rp.getRetreatingUnits();
+			for (Order o : retreats){
+				for (Unit u : units){
+					if (o.getStartingTerritory().equals(u.getTerritory()))
+						s += u.toString();
+				}
+			}
+		}
+		
+		else {
+			for (Unit u : units)
+				s += u.toString() + "\n";
+		}
+		return s;
+	}
+
+	public int[] draw(Graphics g, int x, int y) {
+		if (y > 380){
+			x += 165;
+			y = 110;
+		}
+		g.drawString(name + ":", x, y);
+		y += 10;
+		
+		if (GameCanvas.getC().getPhase().getSeason().contains("Retreats")){
+			RetreatPhase rp = (RetreatPhase) GameCanvas.getC().getPhase();
+			ArrayList<Order> retreats = rp.getRetreatingUnits();
+			for (Order o : retreats){
+				for (Unit u : units){
+					if (o.getStartingTerritory().equals(u.getTerritory())){
+						if (y > 390){
+							x += 165;
+							y = 110;
+						} 
+						g.drawString(u.toString(), x, y);
+						y += 10;
+					}
+				}
+			}
+		}
+		
+		else if (GameCanvas.getC().getPhase().getSeason().equals("Build/Remove")){
+			int i = supplyCenterCount - units.size();
+			
+			if (y > 390){
+				x += 165;
+				y = 110;
+			} 
+			
+			if (i > 0)
+				g.drawString("Can build " + i + " units!", x, y);
+			else if (i < 0)
+				g.drawString("Must disband " + i + " units!", x, y);
+			else
+				g.drawString("Can't build or remove anything!", x, y); 
+			y += 10;
+		}
+		
+		else {
+			for (Unit u : units){
+				if (y > 390){
+					x += 165;
+					y = 110;
+				} 
+				g.drawString(u.toString(), x, y);
+				y += 10;
+			}
+		}
+		int[] out = {x, y};
+		return out;
 	}
 	
 }

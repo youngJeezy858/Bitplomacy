@@ -123,4 +123,19 @@ public class Unit extends ImageEntity{
 		return order;
 	}
 
+	public String toString(){
+		String s = "";
+		if (isArmy)
+			s += "A in ";
+		else
+			s += "N in ";
+		s += territory.getName().substring(0, 4);
+		if (order == null)
+			s += "    --    --";
+		else {
+			s += " " + order.toShortString();
+		}
+		return s;
+	}
+	
 }

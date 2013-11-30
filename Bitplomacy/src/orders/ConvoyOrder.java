@@ -1,10 +1,12 @@
 package orders;
 
+import org.newdawn.slick.Graphics;
+
 import gameObjects.Territory;
 
 public class ConvoyOrder extends Order{
 
-	Territory convoyDestination;
+	private Territory convoyDestination;
 	
 	public ConvoyOrder(Territory t) {
 		super(t);
@@ -50,6 +52,33 @@ public class ConvoyOrder extends Order{
 		else
 			s += "[SELECT DESTINATION\n OF CONVOY]";
 		return s;
+	}
+
+	@Override
+	public String toShortString() {
+		String s = "Con ";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName().substring(0, 4);
+		if (convoyDestination != null)
+			s += " to " + convoyDestination.getName().substring(0, 4);
+		return s;
+	}
+
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		g.drawString(currentTerritory.getName() + " convoying", x, y);
+		y += 10;
+		if (destinationTerritory != null)
+			g.drawString(destinationTerritory.getName() + " to", x, y);
+		else{
+			g.drawString("[SELECT UNIT TO CONVOY]", x, y);
+			return;
+		}
+		y += 10;
+		if (convoyDestination != null) 
+			g.drawString(convoyDestination.getName(), x, y);
+		else
+			g.drawString("[SELECT DESTINATION OF CONVOY]", x, y);
 	}
 
 	

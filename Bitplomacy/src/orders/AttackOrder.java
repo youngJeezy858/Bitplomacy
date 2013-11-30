@@ -2,6 +2,8 @@ package orders;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Graphics;
+
 import phases.PlanningPhase;
 import canvases.GameCanvas;
 import gameObjects.Territory;
@@ -193,6 +195,41 @@ public class AttackOrder extends Order {
 				s += "by way of " + t.getName() + "\n"; 
 		}
 		return s;
+	}
+
+	@Override
+	public String toShortString() {
+		String s = "Att ";
+		if (destinationTerritory != null)
+			s += destinationTerritory.getName().substring(0, 4) + " ";
+		if (convoyPath.size() != 0)
+			s += "C ";
+		for (Territory t : convoyPath)
+			s += t.getName().substring(0, 2) + " ";
+		return s;
+	}
+
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		g.drawString(currentTerritory.getName() + " attacking", x, y);
+		y += 10;
+		if (destinationTerritory != null){
+			if (convoyPath.size() != 0)
+				g.drawString(destinationTerritory.getName() + " by way of:", x, y);
+			else
+				g.drawString(destinationTerritory.getName(), x, y);
+		}
+		else{
+			g.drawString("[SELECT TERRITORY TO ATTACK]", x, y);
+			return;
+		}
+		y += 10;
+		if (convoyPath.size() != 0) {
+			for (Territory t : convoyPath){
+				g.drawString(t.getName(), x, y);
+				y += 10;
+			}
+		}		
 	}
 
 }

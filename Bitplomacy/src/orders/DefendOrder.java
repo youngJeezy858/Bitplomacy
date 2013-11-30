@@ -1,5 +1,7 @@
 package orders;
 
+import org.newdawn.slick.Graphics;
+
 import gameObjects.Territory;
 
 public class DefendOrder extends Order {
@@ -23,6 +25,16 @@ public class DefendOrder extends Order {
 		String s = currentTerritory.getName() + "\n";
 		s += command;
 		return s;
+	}
+
+	@Override
+	public String toShortString() {
+		return "defends";
+	}
+
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		g.drawString(currentTerritory.getName() + " defending", x, y);
 	}
 
 }

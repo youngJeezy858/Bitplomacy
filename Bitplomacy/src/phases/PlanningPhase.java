@@ -2,10 +2,6 @@ package phases;
 
 import java.util.ArrayList;
 
-import canvases.GameCanvas;
-
-import com.erebos.engine.graphics.EAnimation;
-
 import orders.AttackOrder;
 import orders.BlankOrder;
 import orders.ConvoyOrder;
@@ -13,27 +9,9 @@ import orders.DefendOrder;
 import orders.MoveOrder;
 import orders.Order;
 import orders.SupportOrder;
-import commands.AttackCommand;
-import commands.Commands;
-import commands.ConvoyCommand;
-import commands.DefendCommand;
-import commands.DiscardOrderCommand;
-import commands.MoveCommand;
-import commands.SetOrderCommand;
-import commands.SubmitCommand;
-import commands.SupportCommand;
 
 public class PlanningPhase extends Phase{
 
-	private Commands[] planningCommands = { new AttackCommand(1166, 635),
-			new DefendCommand(1126, 729),
-			new SupportCommand(1212, 729),
-			new ConvoyCommand(1296, 729),
-			new SubmitCommand(1152, 546),
-			new MoveCommand(1258, 635),
-			new SetOrderCommand(1152, 450),
-			new DiscardOrderCommand(1269, 450)};
-	
 	/** The support orders. */
 	private ArrayList<SupportOrder> supportOrders;
 	
@@ -57,25 +35,14 @@ public class PlanningPhase extends Phase{
 	
 	
 	public PlanningPhase(String season, int year) {
-		super(season, year);
-		
+		super(season, year);	
 		supportOrders = new ArrayList<SupportOrder>();
 		defendOrders = new ArrayList<DefendOrder>();
 		attackOrders = new ArrayList<AttackOrder>();
 		moveOrders = new ArrayList<MoveOrder>();
 		convoyOrders = new ArrayList<ConvoyOrder>();
 		blankOrders = new ArrayList<BlankOrder>();
-		retreatingUnits = new ArrayList<Order>();
-	
-		planningCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/AttackIcon.png")));
-		planningCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
-		planningCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
-		planningCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/ConvoyIcon.png")));
-		planningCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
-		planningCommands[5].setEA(new EAnimation(EAnimation.loadImage("/images/MoveIcon.png")));
-		planningCommands[6].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
-		planningCommands[7].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
-		GameCanvas.getC().setCommands(planningCommands);
+		retreatingUnits = new ArrayList<Order>();		
 	}
 
 	@Override

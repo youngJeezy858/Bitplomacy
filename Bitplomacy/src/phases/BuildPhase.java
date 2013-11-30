@@ -6,27 +6,11 @@ import java.util.ArrayList;
 
 import canvases.GameCanvas;
 
-import com.erebos.engine.graphics.EAnimation;
-
-import commands.BuildArmyCommand;
-import commands.BuildNavyCommand;
-import commands.Commands;
-import commands.DisbandCommand;
-import commands.DiscardOrderCommand;
-import commands.SetOrderCommand;
-import commands.SubmitCommand;
 import orders.DisbandOrder;
 import orders.Order;
 
 public class BuildPhase extends Phase{
 
-	/** commands used during the Build/Remove phase. */
-	private Commands[] buildRemoveCommands = { new BuildArmyCommand(1166, 635),
-			new BuildNavyCommand(1258, 635),
-			new DisbandCommand(1212, 729),
-			new SubmitCommand(1152, 546),
-			new SetOrderCommand(1152, 450),
-			new DiscardOrderCommand(1269, 450)};
 	
 	/** The disband orders. */
 	private ArrayList<DisbandOrder> disbandOrders;
@@ -39,14 +23,6 @@ public class BuildPhase extends Phase{
 		super(season, year);
 		buildOrders = new ArrayList<Order>();
 		disbandOrders = new ArrayList<DisbandOrder>();
-		
-		buildRemoveCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/BuildArmyIcon.png")));
-		buildRemoveCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/BuildNavyIcon.png")));
-		buildRemoveCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
-		buildRemoveCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
-		buildRemoveCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/SetOrderIcon.png")));
-		buildRemoveCommands[5].setEA(new EAnimation(EAnimation.loadImage("/images/DiscardOrderIcon.png")));
-		GameCanvas.getC().setCommands(buildRemoveCommands);
 	}
 
 	@Override
