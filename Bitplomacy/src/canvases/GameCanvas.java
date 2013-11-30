@@ -5,7 +5,6 @@ import java.util.Scanner;
 import gameObjects.Player;
 import gameObjects.Territory;
 import gameObjects.Unit;
-
 import orders.Order;
 
 import org.lwjgl.input.Mouse;
@@ -22,10 +21,10 @@ import phases.Phase;
 import phases.PlanningPhase;
 import phases.RetreatPhase;
 
-
 import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
 
+import commands.ChooseAlly;
 import commands.Commands;
 
 
@@ -81,9 +80,13 @@ public class GameCanvas extends ECanvas{
 	
 	/** The Constant FINISH_ADJUDICATION. */
 	public static final int FINISH_ADJUDICATION = 4;
+	
+	public static final int CHOOSE_ALLIES = 5;
 
 	/** The Constant WINNER. */
-	public static final int WINNER = 5;
+	public static final int WINNER = 6;
+
+	public static final int ADJUDICATE_ALLIES = 7;
 			
 	/** SpriteSheets for Units. */
 	private SpriteSheet landUnit;
@@ -92,7 +95,10 @@ public class GameCanvas extends ECanvas{
 	private SpriteSheet waterUnit;
 
 	/** The winning player. */
-	private Player winningPlayer;
+	private String winningPlayer;
+	
+	private ChooseAlly allySelector;
+
 	
 	/**
 	 * Instantiates a new canvas.
@@ -125,6 +131,20 @@ public class GameCanvas extends ECanvas{
 		landUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
 		temp = EAnimation.loadImage("/images/NavyUnit_updated.png");
 		waterUnit = new SpriteSheet(temp, temp.getWidth()/7, temp.getHeight());
+		
+		temp = EAnimation.loadImage("/images/AllyChoiceBackground.png");
+		Image[] flags = new Image[8];
+		flags[0] = EAnimation.loadImage("/images/EnglandChoice.png");
+		flags[1] = EAnimation.loadImage("/images/AustriaHungaryChoice.png");
+		flags[2] = EAnimation.loadImage("/images/ItalyChoice.png");
+		flags[3] = EAnimation.loadImage("/images/TurkeyChoice.png");
+		flags[4] = EAnimation.loadImage("/images/FranceChoice.png");
+		flags[5] = EAnimation.loadImage("/images/RussiaChoice.png");
+		flags[6] = EAnimation.loadImage("/images/GermanyChoice.png");
+		flags[7] = EAnimation.loadImage("/images/NobodyChoice.png");
+		allySelector = new ChooseAlly(flags, temp, gc);
+		allySelector.setY((gc.getHeight() - temp.getHeight()) / 2);
+		allySelector.setX((gc.getWidth() - temp.getWidth()) / 2);
 		
 		currPhase = new PlanningPhase("Spring/Summer", 1900);
 		
@@ -190,11 +210,6 @@ public class GameCanvas extends ECanvas{
 	    adjustNumSC();	
 	}
 
-	/**
-	 * Sets up the play area for a 7 teams.  Specifically it
-	 * sets ownership for territories and generate units for each 
-	 * team. 
-	 */
 	private void setBoard() {
 		createStartingUnit(getTerritory("Edinburgh"), waterUnit, false, players[Territory.ENGLAND-1]);
 		createStartingUnit(getTerritory("Liverpool"), landUnit, true, players[Territory.ENGLAND-1]);
@@ -319,14 +334,18 @@ public class GameCanvas extends ECanvas{
 
 			g.setFont(font);
 			g.drawString(currPhase.toString(), 10, 10);
+			
+			if (state == CHOOSE_ALLIES){
+				allySelector.draw();
+			}
+				
 		}
 		else{
 			g.setColor(Color.green);
 			g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
 			g.setColor(Color.black);
 			g.setFont(font);
-			g.drawString(winningPlayer.getName(), 30, 30);
-			g.drawString("WINS!!!", 100, 130);
+			g.drawString(winningPlayer, gc.getWidth()/2-300, gc.getHeight()/2-100);
 		}
 
 	}
@@ -337,28 +356,44 @@ public class GameCanvas extends ECanvas{
 	@Override
 	public void eUpdate(GameContainer gc, EGame eg, int delta) {			
 		
-		if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+		if (state == ADJUDICATE_ALLIES){
+			winningPlayer = allySelector.adjucate();
+			if (winningPlayer != null){
+				font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
+				state = WINNER;
+			}
+			else
+				state = NORM;
+		}
+		
+		else if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			
 			int mx = Mouse.getX();
 			int my = Math.abs(Mouse.getY() - 831);
 			
-			for (Territory t : territories) {
-				if (mx >= t.getX() && 
-						((t.isLand() && mx <= t.getWidth()/8 + t.getX()) || (!t.isLand() && mx <= t.getWidth() + t.getX()))
-						&& my >= t.getY() && my <= t.getHeight() + t.getY() &&
-						t.isMouseOver(mx, my)){
-					updateTerritory(t);
-					return;
+			if (state != CHOOSE_ALLIES) {
+				for (Territory t : territories) {
+					if (mx >= t.getX()
+							&& ((t.isLand() && mx <= t.getWidth() / 8
+									+ t.getX()) || (!t.isLand() && mx <= t
+									.getWidth() + t.getX())) && my >= t.getY()
+							&& my <= t.getHeight() + t.getY()
+							&& t.isMouseOver(mx, my)) {
+						updateTerritory(t);
+						return;
+					}
+				}
+
+				for (Commands c : commands) {
+					if (mx >= c.getX() && mx <= c.getWidth() + c.getX()
+							&& my >= c.getY() && my <= c.getHeight() + c.getY()) {
+						c.update(mx, my);
+						return;
+					}
 				}
 			}
-			
-			for (Commands c : commands) {
-				if (mx >= c.getX() && mx <= c.getWidth() + c.getX()
-						&& my >= c.getY() && my <= c.getHeight() + c.getY()){
-					c.update(mx, my);
-					return;
-				}
-			}
+			else
+				allySelector.update(mx, my);	
 		}
 	}
 
@@ -416,12 +451,20 @@ public class GameCanvas extends ECanvas{
 			else{
 				currPhase = new BuildPhase("Build/Remove", i);
 				adjustNumSC();
+				int highest = 0;
 				for (Player p : players){
 					if (p.getSupplyCenterCount() >= 24){
 						state = WINNER;
-						winningPlayer = p;
+						winningPlayer = p.getName() + " WINS!!!";
 						font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
+						break;
 					}
+					if (p.getSupplyCenterCount() > highest)
+						highest = p.getSupplyCenterCount();
+				}
+				if (state != WINNER && highest*2 >= 24){
+					winningPlayer = "";
+					state = CHOOSE_ALLIES;
 				}
 			}
 		}
@@ -429,12 +472,20 @@ public class GameCanvas extends ECanvas{
 		else if (s.equals("Winter Retreats")){
 			currPhase = new BuildPhase("Build/Remove", i);
 			adjustNumSC();
+			int highest = 0;
 			for (Player p : players){
 				if (p.getSupplyCenterCount() >= 24){
 					state = WINNER;
-					winningPlayer = p;
+					winningPlayer = p.getName() + " WINS!!!";
 					font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
+					break;
 				}
+				if (p.getSupplyCenterCount() > highest)
+					highest = p.getSupplyCenterCount();
+			}
+			if (state != WINNER && highest*2 >= 24){
+				winningPlayer = "";
+				state = CHOOSE_ALLIES;
 			}
 		}
 		

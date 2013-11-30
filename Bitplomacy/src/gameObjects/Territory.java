@@ -259,8 +259,8 @@ public class Territory extends ImageEntity {
 	 * @return true, if mouse is over this Territory
 	 */
 	public boolean isMouseOver(int mx, int my){
-		mx = (int) (mx - getX());
-		my = (int) (my - getY());
+		mx = (int) (mx - this.getX());
+		my = (int) (my - this.getY());
 		if (ss.getColor(mx, my).a == 0)
 			return false;
 		else
