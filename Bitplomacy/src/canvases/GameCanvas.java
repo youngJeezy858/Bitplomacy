@@ -99,6 +99,7 @@ public class GameCanvas extends ECanvas{
 	
 	private ChooseAlly allySelector;
 
+	private EAnimation overlay;
 	
 	/**
 	 * Instantiates a new canvas.
@@ -147,6 +148,8 @@ public class GameCanvas extends ECanvas{
 		allySelector.setX((gc.getWidth() - temp.getWidth()) / 2);
 		
 		currPhase = new PlanningPhase("Spring/Summer", 1900);
+		
+		overlay = new EAnimation(EAnimation.loadImage("/images/overlay.png"));
 		
 		//define territories
 		Scanner sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/terr.csv"));
@@ -329,6 +332,7 @@ public class GameCanvas extends ECanvas{
 				c.draw();
 			for (Territory t : territories)
 				t.eDraw();
+			overlay.draw(0, 0);
 			for (Territory t : territories)
 				t.uDraw();
 
