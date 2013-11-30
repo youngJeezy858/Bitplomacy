@@ -44,12 +44,6 @@ public class GameCanvas extends ECanvas{
 	
 	/** Used to draw the individual commands and has abstract methods to execute commands. */
 	private Commands[] commands;
-	
-	/** The Territory name that is currently selected. */
-	private String displayTerritoryName;
-	
-	/** The display territory owner. */
-	private String displayTerritoryOwner;
 
 	/** The Territory currently selected */
 	private Territory currTerritory;
@@ -100,7 +94,9 @@ public class GameCanvas extends ECanvas{
 	private ChooseAlly allySelector;
 
 	private EAnimation overlay;
-	
+
+	private EAnimation sidebar;
+
 	/**
 	 * Instantiates a new canvas.
 	 */
@@ -114,9 +110,7 @@ public class GameCanvas extends ECanvas{
 	 */
 	@Override
 	public void eInit(GameContainer gc, EGame eg) {		
-		
-		displayTerritoryName = "";
-		displayTerritoryOwner = "";
+
 	    font = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true);
 		
 		players = new Player[7];
@@ -150,6 +144,7 @@ public class GameCanvas extends ECanvas{
 		currPhase = new PlanningPhase("Spring/Summer", 1900);
 		
 		overlay = new EAnimation(EAnimation.loadImage("/images/overlay.png"));
+		sidebar = new EAnimation(EAnimation.loadImage("/images/sidebar.png"));
 		
 		//define territories
 		Scanner sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/terr.csv"));
@@ -306,28 +301,6 @@ public class GameCanvas extends ECanvas{
 		
 		if (state != WINNER) {
 
-			g.setColor(Color.gray);
-			g.fillRect(1106, 0, 1400 - 1126, gc.getHeight());
-
-			g.setColor(Color.black);
-			g.drawString("Country:", 1150, 20);
-			g.drawString("Owner:", 1150, 70);
-
-			g.drawString("SUPPLY CENTER TOTALS", 1145, 120);
-			int i = 140;
-			for (Player p : players) {
-				g.drawString(p.getName() + ": " + p.getSupplyCenterCount(), 1145, i);
-				i = i + 20;
-			}
-
-			g.setColor(Color.blue);
-			if (currOrder != null)
-				g.drawString(currOrder.toString(), 1130, 290);
-			g.setColor(Color.black);
-
-			g.drawString(displayTerritoryName, 1145, 40);
-			g.drawString(displayTerritoryOwner, 1145, 90);
-
 			for (Commands c : commands)
 				c.draw();
 			for (Territory t : territories)
@@ -336,13 +309,20 @@ public class GameCanvas extends ECanvas{
 			for (Territory t : territories)
 				t.uDraw();
 
+			g.setColor(Color.black);
 			g.setFont(font);
 			g.drawString(currPhase.toString(), 10, 10);
-			
-			if (state == CHOOSE_ALLIES){
-				allySelector.draw();
+			sidebar.draw(806, 0);
+			int y = 400;
+			for (Player p : players) {
+				g.drawString(p.getNumArmies()+"", 877, y);
+				g.drawString(p.getNumNavies()+"", 980, y);
+				g.drawString(p.getSupplyCenterCount()+"", 1070, y);
+				y += 33;
 			}
-				
+			
+			if (state == CHOOSE_ALLIES)
+				allySelector.draw();
 		}
 		else{
 			g.setColor(Color.green);
@@ -587,9 +567,6 @@ public class GameCanvas extends ECanvas{
 	 * @param t the t
 	 */
 	public void updateTerritory(Territory t) {
-
-		displayTerritoryName = t.getName();
-		displayTerritoryOwner = t.getOwnerName();
 		
 		if (state == NORM){
 			if (t.getUnit() != null || currPhase.getSeason().equals("Build/Remove"))

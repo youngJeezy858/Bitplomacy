@@ -43,7 +43,7 @@ public class Driver extends EGame
 		
 		Driver d = new Driver();
 		d.setTargetFPS(60);
-		d.start(d, 1380, 831, false);
+		d.start(d, 1106, 715, false);
 	}
 	
 	/**

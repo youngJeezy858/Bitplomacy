@@ -143,5 +143,23 @@ public class Player {
 			return null;
 		return units.get(0);
 	}
+
+	public int getNumArmies() {
+		int i = 0;
+		for (Unit u : units){
+			if (u.isArmy())
+				i++;
+		}
+		return i;
+	}
+	
+	public int getNumNavies() {
+		int i = 0;
+		for (Unit u : units){
+			if (!u.isArmy())
+				i++;
+		}
+		return i;
+	}
 	
 }
