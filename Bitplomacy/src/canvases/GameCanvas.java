@@ -154,8 +154,8 @@ public class GameCanvas extends ECanvas{
 		
 		overlay = new EAnimation(EAnimation.loadImage("/images/overlay.png"));
 		sidebar = new EAnimation(EAnimation.loadImage("/images/sidebar.png"));
-		adjudicateButton = new SubmitCommand(810, 640);
-		adjudicateButton.setEA(new EAnimation(EAnimation.loadImage("/images/SubmitIcon.png")));
+		adjudicateButton = new SubmitCommand(810, 635);
+		adjudicateButton.setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Adjudicate_updated.png")));
 		
 		//define territories
 		Scanner sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/terr.csv"));
