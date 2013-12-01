@@ -77,8 +77,10 @@ public class ConvoyOrder extends Order{
 		y += 10;
 		if (convoyDestination != null) 
 			g.drawString(convoyDestination.getName(), x, y);
-		else
-			g.drawString("[SELECT DESTINATION OF CONVOY]", x, y);
+		else{
+			g.drawString("[SELECT DESTINATION", x, y);
+			g.drawString(" OF CONVOY]", x, y+10);
+		}
 	}
 
 	

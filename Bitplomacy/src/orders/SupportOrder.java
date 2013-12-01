@@ -91,14 +91,17 @@ public class SupportOrder extends Order {
 		if (supported != null) 
 			g.drawString(supported.getName() + " to", x, y);
 		else if (destinationTerritory != null){
-			g.drawString("[SELECT UNIT TO SUPPORT]", x, y);	
+			g.drawString("[SELECT UNIT", x, y);	
+			y += 10;
+			g.drawString(" TO SUPPORT]", x, y);	
 		}
 		y += 10;
 		if (destinationTerritory != null)
 			g.drawString(destinationTerritory.getName(), x, y);
 		else{
-			g.drawString("[SELECT DESTINATION OF SUPPORT]", x, y);
-			return;
+			g.drawString("[SELECT DESTINATION", x, y);
+			y += 10;
+			g.drawString(" OF SUPPORT]", x, y);
 		}
 	}
 }

@@ -8,6 +8,7 @@ import java.util.zip.ZipInputStream;
 
 import canvases.GameCanvas;
 import canvases.TitleCanvas;
+import canvases.WinCanvas;
 
 import com.erebos.engine.core.*;
 
@@ -26,6 +27,7 @@ public class Driver extends EGame
 		super("Bitplomacy");
 		setShowFPS(false);
 		addCanvas(TitleCanvas.getTC());
+		addCanvas(WinCanvas.getWC());
 		addCanvas(GameCanvas.getC());
 	}
 

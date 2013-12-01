@@ -59,7 +59,6 @@ public class GameCanvas extends ECanvas{
 	/** The font. */
 	private TrueTypeFont mediumFont;
 	private TrueTypeFont smallFont;
-	private TrueTypeFont bigFont;
 	
 	/** The state. */
 	private int state;
@@ -135,7 +134,6 @@ public class GameCanvas extends ECanvas{
 
 		smallFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 10), true);
 	    mediumFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 20), true);
-		bigFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);
 		
 		players = new Player[7];
 		players[0] = new Player("England");
@@ -329,59 +327,48 @@ public class GameCanvas extends ECanvas{
 	 */
 	public void eRender(GameContainer gc, EGame eg, Graphics g) {
 		
-		if (state != WINNER) {
+		for (Territory t : territories)
+			t.eDraw();
+		overlay.draw(0, 0);
+		for (Territory t : territories)
+			t.uDraw();
 
-			for (Territory t : territories)
-				t.eDraw();
-			overlay.draw(0, 0);
-			for (Territory t : territories)
-				t.uDraw();
-
-			g.setColor(Color.black);
-			g.setFont(mediumFont);
-			g.drawString(currPhase.toString(), 65, 10);
-			sidebar.draw(806, 0);
-			int ySC = 400;
-			int[] orderCoord = {815, 110};
-			for (Player p : players) {
-				g.setFont(smallFont);
-				if (orderCoord[1] > 390){
-					orderCoord[0] += 165;
-					orderCoord[1] = 110;
-				}
-				orderCoord = p.draw(g, orderCoord[0], orderCoord[1]);
-				g.setFont(mediumFont);
-				g.drawString(p.getNumArmies()+"", 877, ySC);
-				g.drawString(p.getNumNavies()+"", 980, ySC);
-				g.drawString(p.getSupplyCenterCount()+"", 1070, ySC);
-				ySC += 33;
-				orderCoord[1] += 5;
-			}
+		g.setColor(Color.black);
+		g.setFont(mediumFont);
+		g.drawString(currPhase.toString(), 65, 10);
+		sidebar.draw(806, 0);
+		int ySC = 400;
+		int[] orderCoord = { 815, 110 };
+		for (Player p : players) {
 			g.setFont(smallFont);
-			if (currOrder != null){
-				currOrder.draw(g, 865, 35);
-				commandGUI.drawSetDiscard();
+			if (orderCoord[1] > 390) {
+				orderCoord[0] += 165;
+				orderCoord[1] = 110;
 			}
-			adjudicateButton.draw();
-			pauseButton.draw();
-			
-			if (state == CHOOSE_ALLIES)
-				allySelector.draw();
-			else if (state == SELECT_COMM)
-				commandGUI.draw();
-			else if (state == PAUSED_ADJUDICATE)
-				pauseMenuAdjudicate.draw();
-			else if (state == PAUSED)
-				pauseMenu.draw();
+			orderCoord = p.draw(g, orderCoord[0], orderCoord[1]);
+			g.setFont(mediumFont);
+			g.drawString(p.getNumArmies() + "", 877, ySC);
+			g.drawString(p.getNumNavies() + "", 980, ySC);
+			g.drawString(p.getSupplyCenterCount() + "", 1070, ySC);
+			ySC += 33;
+			orderCoord[1] += 5;
 		}
-		else{
-			g.setColor(Color.green);
-			g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
-			g.setColor(Color.black);
-			g.setFont(bigFont);
-			g.drawString(winningPlayer, gc.getWidth()/2-300, gc.getHeight()/2-100);
+		g.setFont(smallFont);
+		if (currOrder != null) {
+			currOrder.draw(g, 865, 35);
+			commandGUI.drawSetDiscard();
 		}
+		adjudicateButton.draw();
+		pauseButton.draw();
 
+		if (state == CHOOSE_ALLIES)
+			allySelector.draw();
+		else if (state == SELECT_COMM)
+			commandGUI.draw();
+		else if (state == PAUSED_ADJUDICATE)
+			pauseMenuAdjudicate.draw();
+		else if (state == PAUSED)
+			pauseMenu.draw();
 	}
 
 	/* (non-Javadoc)
@@ -390,7 +377,12 @@ public class GameCanvas extends ECanvas{
 	@Override
 	public void eUpdate(GameContainer gc, EGame eg, int delta) {			
 		
-		if (state == ADJUDICATE_ALLIES){
+		if (state == WINNER){
+			WinCanvas.getWC().setWinner(winningPlayer.toUpperCase());
+			eg.enterState(2);
+		}
+		
+		else if (state == ADJUDICATE_ALLIES){
 			winningPlayer = allySelector.adjucate();
 			if (winningPlayer != null){
 				mediumFont = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.BOLD, 40), true);

@@ -87,8 +87,10 @@ public class RetreatOrder extends Order {
 		y += 10;
 		if (destinationTerritory != null)
 			g.drawString("to " + destinationTerritory.getName(), x, y);
-		else
-			g.drawString("[SELECT DESTINATION OF RETREAT]", x, y);
+		else{
+			g.drawString("[SELECT DESTINATION", x, y);
+			g.drawString(" OF RETREAT]", x, y+10);
+		}
 	}
 		
 }
