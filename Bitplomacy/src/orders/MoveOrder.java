@@ -7,16 +7,28 @@ import org.newdawn.slick.Graphics;
 import gameObjects.Territory;
 import gameObjects.Unit;
 
+/**
+ * The Class MoveOrder.
+ */
 public class MoveOrder extends Order {
 
+	/** The convoy path. */
 	private ArrayList<Territory> convoyPath;
 	
+	/**
+	 * Instantiates a new move order.
+	 *
+	 * @param t the starting Territory
+	 */
 	public MoveOrder(Territory t) {
 		super(t);
 		command = "move";
 		convoyPath = new ArrayList<Territory>();
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#isValidOrder()
+	 */
 	@Override
 	public boolean isValidOrder() {
 		
@@ -36,11 +48,19 @@ public class MoveOrder extends Order {
 			return true;
 	}	
 
+	/* (non-Javadoc)
+	 * @see orders.Order#addAdditionalTerritory(gameObjects.Territory)
+	 */
 	@Override
 	public void addAdditionalTerritory(Territory t) {
 		convoyPath.add(t);
 	}
 
+	/**
+	 * Resolve this Order.
+	 *
+	 * @return the state of this Order
+	 */
 	public int resolveMove() {
 		
 		if (state == CHECKING)
@@ -86,6 +106,14 @@ public class MoveOrder extends Order {
 		return CHECKED_WAITING;
 	}
 
+	/**
+	 * Recursive method to find the path of this move Order by using the convoy path.
+	 *
+	 * @param currUnit the current unit
+	 * @param t the destination Territory of this attack
+	 * @param convoyPath the convoy path
+	 * @return true, if successful
+	 */
 	private boolean findConvoyPath(Unit currUnit, Territory t,
 			ArrayList<Territory> convoyPath) {
 		if (convoyPath.size() == 0){
@@ -117,6 +145,9 @@ public class MoveOrder extends Order {
 		}
 	}
 	
+	/**
+	 * Moves the Unit to its destination Territory.
+	 */
 	public void moveUnit() {
 		destinationTerritory.setUnit(unit);
 		if (!unit.isArmy()) {
@@ -131,6 +162,9 @@ public class MoveOrder extends Order {
 		state = Order.DONE;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		String s = currentTerritory.getName() + "\n";
 		s += command + "\n";
@@ -145,6 +179,9 @@ public class MoveOrder extends Order {
 		return s;
 	}
 	
+	/* (non-Javadoc)
+	 * @see orders.Order#draw(org.newdawn.slick.Graphics, int, int)
+	 */
 	public void draw(Graphics g, int x, int y){
 		g.drawString(currentTerritory.getName() + " move", x, y);
 		y += 10;
@@ -167,6 +204,9 @@ public class MoveOrder extends Order {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#toShortString()
+	 */
 	@Override
 	public String toShortString() {
 		String s = "M ";

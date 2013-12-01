@@ -32,6 +32,7 @@ public abstract class Order {
 	 * fields for descriptions of each. */
 	protected int state;
 	
+	/** The unit executing this Order. */
 	protected Unit unit;
 	
 	/** Initial state of all Orders. */
@@ -66,8 +67,9 @@ public abstract class Order {
 		
 	/**
 	 * Constructor for a new Order. Sets the unit to the input Territory's unit so potentially the unit could
-	 * be null. 
-	 * @param t 
+	 * be null.
+	 *
+	 * @param t the starting Territory
 	 */
 	public Order(Territory t){
 		currentTerritory = t;
@@ -138,7 +140,7 @@ public abstract class Order {
 	}
 
 	/**
-	 * Gets the state of the Order as an int
+	 * Gets the state of the Order as an int.
 	 *
 	 * @return the state
 	 */
@@ -186,22 +188,50 @@ public abstract class Order {
 		return currentTerritory.isAdjacent(destinationTerritory);
 	}
 	
-	public boolean equals(String command){
-		return this.command.equals(command);
-	}
-	
+	/**
+	 * Checks if this is a valid Order. Typically it will be through syntax but
+	 * there are special cases.
+	 *
+	 * @return true, if this is a valid order
+	 */
 	public abstract boolean isValidOrder();
 	
+	/**
+	 * Adds an additional Territory to the special case Orders. For others this
+	 * method will do nothing.
+	 *
+	 * @param t the Territory to be added.
+	 */
 	public abstract void addAdditionalTerritory(Territory t);
 
+	/**
+	 * For displaying the Order in few characters to display it on the sidebar.
+	 *
+	 * @return the Order as a short String
+	 */
 	public abstract String toShortString();
 	
+	/**
+	 * Used to draw this Order to the current Order section  of the sidebar.
+	 *
+	 * @param g the graphics to draw this order.
+	 * @param x the x coordinate of the location to draw this Order.
+	 * @param y the y coordinate of the location to draw this Order.
+	 */
 	public abstract void draw(Graphics g, int x, int y);
 	
+	/**
+	 * Sets the unit's order as this one.
+	 */
 	public void setUnitOrder() {
 		currentTerritory.getUnit().setOrder(this);
 	}
 
+	/**
+	 * Gets the unit.
+	 *
+	 * @return the unit
+	 */
 	public Unit getUnit() {
 		return unit;
 	}

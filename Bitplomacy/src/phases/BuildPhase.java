@@ -9,6 +9,9 @@ import canvases.GameCanvas;
 import orders.DisbandOrder;
 import orders.Order;
 
+/**
+ * The Phase for Building Armies and Fleets and also for disbanding Units.
+ */
 public class BuildPhase extends Phase{
 
 	
@@ -19,17 +22,29 @@ public class BuildPhase extends Phase{
 	private ArrayList<Order> buildOrders;
 	
 
+	/**
+	 * Instantiates a new builds the phase.
+	 *
+	 * @param season the season
+	 * @param year the year
+	 */
 	public BuildPhase(String season, int year) {
 		super(season, year);
 		buildOrders = new ArrayList<Order>();
 		disbandOrders = new ArrayList<DisbandOrder>();
 	}
 
+	/* (non-Javadoc)
+	 * @see phases.Phase#addOrder(orders.Order)
+	 */
 	@Override
 	public void addOrder(Order o) {
 		disbandOrders.add(new DisbandOrder(o.getStartingTerritory()));
 	}
 
+	/* (non-Javadoc)
+	 * @see phases.Phase#adjudicate()
+	 */
 	@Override
 	public void adjudicate() {
 		
@@ -79,27 +94,37 @@ public class BuildPhase extends Phase{
 	}
 
 	/**
-	 * Adds the build order.
+	 * Adds a build order.
 	 *
-	 * @param currOrder the curr order
+	 * @param order the build Order
 	 */
-	public void addBuildOrder(Order currOrder) {
+	public void addBuildOrder(Order order) {
 		int i;
 		for (i = 0; i < buildOrders.size(); i++){
 			Order o = buildOrders.get(i);
-			if (o.getStartingTerritory().equals(currOrder.getStartingTerritory()))
+			if (o.getStartingTerritory().equals(order.getStartingTerritory()))
 				break;
 		}
 		if (i != buildOrders.size())
-			buildOrders.set(i, currOrder);
+			buildOrders.set(i, order);
 		else 
-			buildOrders.add(currOrder);
+			buildOrders.add(order);
 	}
 
+	/**
+	 * Gets the build orders.
+	 *
+	 * @return the builds the orders
+	 */
 	public ArrayList<Order> getBuildOrders() {
 		return buildOrders;
 	}
 
+	/**
+	 * Gets the disband orders.
+	 *
+	 * @return the disband orders
+	 */
 	public ArrayList<DisbandOrder> getDisbandOrders() {
 		return disbandOrders;
 	}

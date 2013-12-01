@@ -7,21 +7,19 @@ import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
 
-//TODO: Need a better command GUI. One that pops up right at your button click.
 /**
  * The Class Commands.
  */
 public abstract class Commands extends ImageEntity{
 
-	/** The ea. */
+	/** Used to draw this Command. */
 	private EAnimation ea;
-	
-	
+
 	/**
 	 * Instantiates a new commands.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param x the x coordinate to draw this command
+	 * @param y the y coordinate to draw this command
 	 */
 	public Commands(float x, float y) {
 		setX(x);
@@ -36,9 +34,9 @@ public abstract class Commands extends ImageEntity{
 	}
 	
 	/**
-	 * Sets the ea.
+	 * Sets the EAnimation to draw this command.
 	 *
-	 * @param ea the new ea
+	 * @param ea the new EAnimation
 	 */
 	public void setEA(EAnimation ea){
 		setAnimation(ea);
@@ -46,7 +44,11 @@ public abstract class Commands extends ImageEntity{
 	}
 	
 	/**
-	 * Update.
+	 * Checks if this command was clicked on and executes it's command
+	 * if it was.
+	 *
+	 * @param mx the x coordinate of the Mouse cursor
+	 * @param my the y coordinate of the Mouse cursor
 	 */
 	public void update(int mx, int my){
 		mx = (int) (mx - getX());
@@ -57,7 +59,9 @@ public abstract class Commands extends ImageEntity{
 	}
 	
 	/**
-	 * Execute.
+	 * Executes this command. Typically it will simply set the 
+	 * command for the current Order of the GameCanvas but there
+	 * are some special cases.
 	 */
 	public abstract void execute();
 }

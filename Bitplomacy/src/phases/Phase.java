@@ -3,14 +3,14 @@ package phases;
 import orders.Order;
 
 /**
- * The Class Turn.
+ * Abstract class for defining different Phases of the game.
  */
 public abstract class Phase {
 
-	/** The season. */
+	/** The current season. */
 	private String season;
 	
-	/** The year. */
+	/** The current year. */
 	private int year;
 
 
@@ -62,9 +62,9 @@ public abstract class Phase {
 	}
 
 	/**
-	 * Move unit.
+	 * Moves the Unit in the input Order.
 	 *
-	 * @param o the o
+	 * @param o the Order containing the Unit to be moved
 	 */
 	protected void moveUnit(Order o) {
 		if (o.getState() == Order.PASSED || o.getState() == Order.FOLLOWING || o.getState() == Order.CHECKING){
@@ -85,7 +85,16 @@ public abstract class Phase {
 		}	
 	}
 	
+	/**
+	 * Adjudicates all orders for this Phase.
+	 */
 	public abstract void adjudicate();
+	
+	/**
+	 * Adds an Order to this Phase.
+	 *
+	 * @param o the Order to be added
+	 */
 	public abstract void addOrder(Order o);
 	
 }

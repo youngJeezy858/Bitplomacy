@@ -4,15 +4,27 @@ import org.newdawn.slick.Graphics;
 
 import gameObjects.Territory;
 
+/**
+ * The Class SupportOrder.
+ */
 public class SupportOrder extends Order {
 
+	/** The Territory containing the Unit being supported. */
 	private Territory supported;
 	
+	/**
+	 * Instantiates a new support order.
+	 *
+	 * @param t the starting Territory
+	 */
 	public SupportOrder(Territory t) {
 		super(t);
 		command = "support";
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#isValidOrder()
+	 */
 	@Override
 	public boolean isValidOrder() {
 		
@@ -39,15 +51,24 @@ public class SupportOrder extends Order {
 			return isAdjacent();
 	}	
 
+	/* (non-Javadoc)
+	 * @see orders.Order#addAdditionalTerritory(gameObjects.Territory)
+	 */
 	@Override
 	public void addAdditionalTerritory(Territory t) {
 		supported = t;
 	}
 
+	/**
+	 * Increments the supported Unit's strength.
+	 */
 	public void support() {
 		supported.getUnit().getOrder().incrementStrength();
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		String s = currentTerritory.getName() + "\n";
 		s += command + "\n";
@@ -66,6 +87,9 @@ public class SupportOrder extends Order {
 		return s;
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#toShortString()
+	 */
 	@Override
 	public String toShortString() {
 		String s = " Sup ";
@@ -84,6 +108,9 @@ public class SupportOrder extends Order {
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see orders.Order#draw(org.newdawn.slick.Graphics, int, int)
+	 */
 	@Override
 	public void draw(Graphics g, int x, int y) {
 		g.drawString(currentTerritory.getName() + " supporting", x, y);

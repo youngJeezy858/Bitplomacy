@@ -11,9 +11,8 @@ public class AttackCommand extends Commands{
 	/**
 	 * Instantiates a new attack command.
 	 *
-	 * @param x the x
-	 * @param y the y
-	 * @param color the color
+	 * @param x the x coordinate to draw this command
+	 * @param y the y coordinate to draw this command
 	 */
 	public AttackCommand(float x, float y) {
 		super(x, y);

@@ -6,23 +6,42 @@ import org.newdawn.slick.Graphics;
 
 import gameObjects.Territory;
 
+/**
+ * The Class RetreatOrder.
+ */
 public class RetreatOrder extends Order {
 
+	/**
+	 * Instantiates a new retreat order.
+	 *
+	 * @param t the starting Territory
+	 */
 	public RetreatOrder(Territory t) {
 		super(t);
 		command = "retreat";
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#isValidOrder()
+	 */
 	@Override
 	public boolean isValidOrder() {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#addAdditionalTerritory(gameObjects.Territory)
+	 */
 	@Override
 	public void addAdditionalTerritory(Territory t) {
 		//do nothing
 	}
 
+	/**
+	 * Checks if this Unit needs to retreat and resolves if it does.
+	 *
+	 * @param retreatingUnits the list of Units needing to retreat
+	 */
 	public void resolveRetreat(ArrayList<Order> retreatingUnits) {
 		int i;
 		for (i = 0; i < retreatingUnits.size(); i++){
@@ -63,6 +82,9 @@ public class RetreatOrder extends Order {
 			retreatingUnits.remove(i);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		String s = currentTerritory.getName() + "\n";
 		s += command + "\n";
@@ -73,6 +95,9 @@ public class RetreatOrder extends Order {
 		return s;
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#toShortString()
+	 */
 	@Override
 	public String toShortString() {
 		String s = " Ret ";
@@ -81,6 +106,9 @@ public class RetreatOrder extends Order {
 		return s;
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#draw(org.newdawn.slick.Graphics, int, int)
+	 */
 	@Override
 	public void draw(Graphics g, int x, int y) {
 		g.drawString(currentTerritory.getName() + " retreating", x, y);

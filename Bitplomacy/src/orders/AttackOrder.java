@@ -9,16 +9,28 @@ import canvases.GameCanvas;
 import gameObjects.Territory;
 import gameObjects.Unit;
 
+/**
+ * The Class AttackOrder.
+ */
 public class AttackOrder extends Order {
 
+	/** The convoy path. */
 	private ArrayList<Territory> convoyPath;
 	
+	/**
+	 * Instantiates a new attack order.
+	 *
+	 * @param t the starting Territory
+	 */
 	public AttackOrder(Territory t) {
 		super(t);
 		command = "attack";
 		convoyPath = new ArrayList<Territory>();
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#isValidOrder()
+	 */
 	@Override
 	public boolean isValidOrder() {
 		
@@ -38,16 +50,29 @@ public class AttackOrder extends Order {
 			return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#addAdditionalTerritory(gameObjects.Territory)
+	 */
 	@Override
 	public void addAdditionalTerritory(Territory t) {
 		convoyPath.add(t);
 	}
 	
+	/**
+	 * Gets the convoy path.
+	 *
+	 * @return the convoy path
+	 */
 	public ArrayList<Territory> getConvoyPath(){
 		return convoyPath;
 	}
 
 	
+	/**
+	 * Resolves this Order if it is a Fleet attacking another Fleet.
+	 *
+	 * @param attackedUnit the Unit being attacked
+	 */
 	public void resolveWaterAttack(Unit attackedUnit) {  
 		
 		if (attackedUnit != null && !destinationTerritory.isLand()
@@ -59,6 +84,11 @@ public class AttackOrder extends Order {
 		}		
 	}
 
+	/**
+	 * Resolve this attack Order
+	 *
+	 * @return the state of the Order
+	 */
 	public int resolveAttack() {
 		
 		if (state == CHECKING)
@@ -138,6 +168,14 @@ public class AttackOrder extends Order {
 		return CHECKED_WAITING;
 	}
 	
+	/**
+	 * Recursive method to find the path of this attack Order by using the convoy path.
+	 *
+	 * @param currUnit the current unit
+	 * @param t the destination Territory of this attack
+	 * @param convoyPath the convoy path
+	 * @return true, if successful
+	 */
 	private boolean findConvoyPath(Unit currUnit, Territory t,
 			ArrayList<Territory> convoyPath) {
 		if (convoyPath.size() == 0){
@@ -169,6 +207,9 @@ public class AttackOrder extends Order {
 		}
 	}
 	
+	/**
+	 * Moves the Unit to its destination Territory.
+	 */
 	public void moveUnit() {
 		destinationTerritory.setUnit(unit);
 		if (!unit.isArmy()) {
@@ -183,6 +224,9 @@ public class AttackOrder extends Order {
 		state = Order.DONE;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		String s = currentTerritory.getName() + "\n";
 		s += command + "\n";
@@ -197,6 +241,9 @@ public class AttackOrder extends Order {
 		return s;
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#toShortString()
+	 */
 	@Override
 	public String toShortString() {
 		String s = "Att ";
@@ -209,6 +256,9 @@ public class AttackOrder extends Order {
 		return s;
 	}
 
+	/* (non-Javadoc)
+	 * @see orders.Order#draw(org.newdawn.slick.Graphics, int, int)
+	 */
 	@Override
 	public void draw(Graphics g, int x, int y) {
 		g.drawString(currentTerritory.getName() + " attacking", x, y);

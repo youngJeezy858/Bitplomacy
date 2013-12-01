@@ -11,11 +11,23 @@ import buttons.SaveGameButton;
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
+/**
+ * GUI for when the game is paused.
+ */
 public class PauseMenuGUI extends ImageEntity{
 	
+	/** The buttons. */
 	private Button[] buttons;
+	
+	/** To draw the background of this GUI. */
 	private EAnimation ea;
 	
+	/**
+	 * Instantiates a new pause menu gui.
+	 *
+	 * @param gc the gc
+	 * @param image the background image
+	 */
 	public PauseMenuGUI(GameContainer gc, Image image){
 		super(image);
 		ea = new EAnimation(image);
@@ -28,12 +40,21 @@ public class PauseMenuGUI extends ImageEntity{
 		buttons[3] = new ResumeButton((int)this.getX() + 250, (int)this.getY() + 10, "/images/Button_CloseWindow.png");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.erebos.engine.entity.ImageEntity#draw()
+	 */
 	public void draw(){
 		ea.draw(this.getX(), this.getY());
 		for (Button b : buttons)
 			b.draw();
 	}
 	
+	/**
+	 * Checks if a button was selected and updates appropriately.
+	 *
+	 * @param mx the x coordinate of the Mouse cursor
+	 * @param my the y coordinate of the Mouse cursor
+	 */
 	public void update(int mx, int my){
 		for (Button b : buttons){
 			if (b.isMouseOver(mx, my))

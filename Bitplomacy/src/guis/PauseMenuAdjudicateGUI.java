@@ -8,15 +8,33 @@ import canvases.GameCanvas;
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
+/**
+ * GUI for the 'are you sure?' window when you adjudicate without giving
+ * all Units Orders.
+ */
 public class PauseMenuAdjudicateGUI extends ImageEntity {
 
+	/** The yes button. */
 	private ImageEntity yesButton;
+	
+	/** The no button. */
 	private ImageEntity noButton;
+	
+	/** to draw the background of this GUI. */
 	private EAnimation background;
+	
+	/** To draw the yes button. */
 	private EAnimation yes;
+	
+	/** To draw the no button. */
 	private EAnimation no;
 
 	
+	/**
+	 * Instantiates a new pause menu adjudicate gui.
+	 *
+	 * @param gc the gc
+	 */
 	public PauseMenuAdjudicateGUI(GameContainer gc){
 		super(EAnimation.loadImage("/images/Paused_Adjudicate.png"));
 		yesButton = new ImageEntity(EAnimation.loadImage("/images/YesButton.png"));
@@ -32,12 +50,21 @@ public class PauseMenuAdjudicateGUI extends ImageEntity {
 		noButton.setY(gc.getHeight()/2 + this.getHeight()/16);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.erebos.engine.entity.ImageEntity#draw()
+	 */
 	public void draw(){
 		background.draw(this.getX(), this.getY());
 		yes.draw(yesButton.getX(), yesButton.getY());
 		no.draw(noButton.getX(), noButton.getY());
 	}
 	
+	/**
+	 * Checks if yes or no was selected and updates appropriately.
+	 *
+	 * @param mx the x coordinate of the Mouse cursor
+	 * @param my the y coordinate of the Mouse cursor
+	 */
 	public void update(int mx, int my) {
 		int x = (int) (mx - yesButton.getX());
 		int y = (int) (my - yesButton.getY());

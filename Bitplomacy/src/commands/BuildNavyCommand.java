@@ -11,9 +11,8 @@ public class BuildNavyCommand extends Commands {
 	/**
 	 * Instantiates a new builds the navy command.
 	 *
-	 * @param x the x
-	 * @param y the y
-	 * @param color the color
+	 * @param x the x coordinate to draw this command
+	 * @param y the y coordinate to draw this command
 	 */
 	public BuildNavyCommand(float x, float y) {
 		super(x, y);

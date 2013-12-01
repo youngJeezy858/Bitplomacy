@@ -12,32 +12,34 @@ import com.erebos.engine.graphics.EAnimation;
  */
 public class Territory extends ImageEntity {
 
-	/** Used for drawing the Territory image */
+	/** Used for drawing the Territory image. */
 	private EAnimation territoryImage;
 	
-	/** The sprite sheet to display each country's ownership  */
+	/** The sprite sheet to display each country's ownership. */
 	private SpriteSheet ss;
 	
-	/** The name of the Territory */
+	/** The name of the Territory. */
 	private String name;
 	
-	/** Does this Territory have a supply center? */
+	/** Does this Territory have a supply center?. */
 	private boolean hasSupplyCenter;
 	
-	/** Is this a Land Territory (water otherwise) */
+	/** Is this a Land Territory (water otherwise). */
 	private boolean isLand;
 	
-	/** Does this Territory have a coast? */
+	/** Does this Territory have a coast?. */
 	private boolean hasCoast;
 	
-	/** The unit currently occupying this Territory */
+	/** The unit currently occupying this Territory. */
 	private Unit unit;
 	
 	/** The list of Territories that are adjacent to this one. */
 	private ArrayList<String> adjacentTerritories;
 	
+	/** The list of Territories that are adjacent the south coast of this one. */
 	private ArrayList<String> adjacentSCTerritories;
 	
+	/** The list of Territories that are adjacent the north coast of this one. */
 	private ArrayList<String> adjacentNCTerritories;
 	
 	/** The current owner (Player) . */
@@ -46,20 +48,28 @@ public class Territory extends ImageEntity {
 	/** The owner value of this Territory. Player's can only build Units in their home cities. */
 	private int homeCity;
 
+	/** The x coordinate to draw the Unit. */
 	private int unitX;
 
+	/** The y coordinate to draw the Unit. */
 	private int unitY;
 
+	/** The x coordinate to draw the Unit in the south coast. */
 	private int scUnitX;
 
+	/** The y coordinate to draw the Unit in the south coast. */
 	private int scUnitY;
 
+	/** The x coordinate to draw the Unit in the north coast. */
 	private int ncUnitX;
 
+	/** The y coordinate to draw the Unit in the north coast. */
 	private int ncUnitY;
 	
+	/** Is the Unit in the south coast? */
 	private boolean isInSC;
 	
+	/** Is the Unit in the north coast? */
 	private boolean isInNC;
 	
 	/** To set the owner as NEUTRAL. */
@@ -95,7 +105,6 @@ public class Territory extends ImageEntity {
 	 * @param isLand true, if land
 	 * @param hasSC true, if Territory has supply center
 	 * @param hasCoast true, if Territory has coast
-	 * @param color the color key
 	 */
 	public Territory(SpriteSheet ss, String name, boolean isLand, boolean hasSC, boolean hasCoast){
 		super(ss);
@@ -220,6 +229,12 @@ public class Territory extends ImageEntity {
 		}
 	}
 
+	/**
+	 * Checks if another Territory is adjacent to the north coast.
+	 *
+	 * @param t the Territory
+	 * @return true, if it is adjacent to the north coast
+	 */
 	public boolean isAdjacentNC(Territory t) {
 		if (adjacentNCTerritories == null)
 			return false;
@@ -231,6 +246,12 @@ public class Territory extends ImageEntity {
 		return false;
 	}
 
+	/**
+	 * Checks if another Territory is adjacent to the south coast.
+	 *
+	 * @param t the Territory
+	 * @return true, if it is adjacent to the south coast
+	 */
 	public boolean isAdjacentSC(Territory t) {
 		if (adjacentSCTerritories == null)
 			return false;
@@ -252,11 +273,10 @@ public class Territory extends ImageEntity {
 	}
 
 	/**
-	 * Checks if the input color matches the colorkey. Used to see if the mouse is over this Territory. 
-	 * @param my 
-	 * @param mx 
+	 * Checks if the mouse is over this Territory.
 	 *
-	 * @param c the color to be checked
+	 * @param mx the mx
+	 * @param my the my
 	 * @return true, if mouse is over this Territory
 	 */
 	public boolean isMouseOver(int mx, int my){
@@ -269,7 +289,7 @@ public class Territory extends ImageEntity {
 	}
 
 	/**
-	 * Checks is this Territory has a supply center
+	 * Checks if this Territory has a supply center.
 	 *
 	 * @return true, if successful
 	 */
@@ -278,7 +298,7 @@ public class Territory extends ImageEntity {
 	}
 	
 	/**
-	 * Sets the owner
+	 * Sets the owner.
 	 *
 	 * @param owner the new owner
 	 */
@@ -344,66 +364,132 @@ public class Territory extends ImageEntity {
 	}
 
 	/**
-	 * Checks if this Territory is a home city of the input owner's 
+	 * Checks if this Territory is a home city of the input owner's.
+	 *
 	 * @param owner the owner
-	 * @return true, if successful 
+	 * @return true, if successful
 	 */
 	public boolean isHomeCity(int owner) {
 		return owner == homeCity;
 	}
 
+	/**
+	 * Sets the unit's x coordinate for drawing it to the screen.
+	 *
+	 * @param i the new unit x coordinate
+	 */
 	public void setUnitX(int i) {
 		unitX = i;
 	}
 
+	/**
+	 * Sets the unit's y coordinate for drawing it to the screen.
+	 *
+	 * @param i the new unit y coordinate
+	 */
 	public void setUnitY(int i) {
 		unitY = i;
 	}
 
+	/**
+	 * Adds an adjacent south coast Territory.
+	 *
+	 * @param s the Territory name
+	 */
 	public void addSCAdjacent(String s) {
 		if (adjacentSCTerritories == null)
 			adjacentSCTerritories = new ArrayList<String>();
 		adjacentSCTerritories.add(s);
 	}
 	
+	/**
+	 * Adds an adjacent north coast Territory.
+	 *
+	 * @param s the Territory name
+	 */
 	public void addNCAdjacent(String s) {
 		if (adjacentNCTerritories == null)
 			adjacentNCTerritories = new ArrayList<String>();
 		adjacentNCTerritories.add(s);
 	}
 
+	/**
+	 * Sets the unit's x coordinate for drawing it to the south coast.
+	 *
+	 * @param i the new south coast x coordinate
+	 */
 	public void setSCX(int i) {
 		scUnitX = i;
 	}
 
+	/**
+	 * Sets the unit's y coordinate for drawing it to the south coast.
+	 *
+	 * @param i the new south coast y coordinate
+	 */
 	public void setSCY(int i) {
 		scUnitY = i;
 	}
 
+	/**
+	 * Sets the unit's x coordinate for drawing it to the north coast.
+	 *
+	 * @param i the new north coast x coordinate
+	 */
 	public void setNCX(int i) {
 		ncUnitX = i;
 	}
 	
+	/**
+	 * Sets the unit's y coordinate for drawing it to the north coast.
+	 *
+	 * @param i the new north coast y coordinate
+	 */
 	public void setNCY(int i) {
 		ncUnitY = i;
 	}
 
+	/**
+	 * Checks if this Territory has multiple coasts.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean hasCoasts() {
 		return adjacentNCTerritories != null;
 	}
 
+	/**
+	 * Places/removes the Unit in the south coast.
+	 *
+	 * @param b true, if placing
+	 */
 	public void setSC(boolean b) {
 		isInSC = b;
 	}
 	
+	/**
+	 * Places/removes the Unit in the north coast.
+	 *
+	 * @param b true, if placing
+	 */
 	public void setNC(boolean b) {
 		isInNC = b;
 	}
 
+	/**
+	 * Checks if the Unit is in the south coast.
+	 *
+	 * @return true, if is in the south coast
+	 */
 	public boolean isInSC() {
 		return isInSC;
 	}
 	
+	/**
+	 * Checks if the Unit is in the north coast.
+	 *
+	 * @return true, if is in the north coast
+	 */
 	public boolean isInNC() {
 		return isInNC;
 	}

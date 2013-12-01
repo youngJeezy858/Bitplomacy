@@ -10,6 +10,9 @@ import orders.MoveOrder;
 import orders.Order;
 import orders.SupportOrder;
 
+/**
+ * The Class PlanningPhase.
+ */
 public class PlanningPhase extends Phase{
 
 	/** The support orders. */
@@ -34,6 +37,12 @@ public class PlanningPhase extends Phase{
 	private ArrayList<Order> retreatingUnits;
 	
 	
+	/**
+	 * Instantiates a new planning phase.
+	 *
+	 * @param season the season
+	 * @param year the year
+	 */
 	public PlanningPhase(String season, int year) {
 		super(season, year);	
 		supportOrders = new ArrayList<SupportOrder>();
@@ -45,6 +54,9 @@ public class PlanningPhase extends Phase{
 		retreatingUnits = new ArrayList<Order>();		
 	}
 
+	/* (non-Javadoc)
+	 * @see phases.Phase#addOrder(orders.Order)
+	 */
 	@Override
 	public void addOrder(Order o) {
 		if (o.getCommand().equals("support"))
@@ -61,18 +73,36 @@ public class PlanningPhase extends Phase{
 			blankOrders.add((BlankOrder) o);
 	}
 	
+	/**
+	 * Adds an Order containing a Unit that needs to retreat.
+	 *
+	 * @param o the Order
+	 */
 	public void addRetreat(Order o){
 		retreatingUnits.add(o);
 	}
 	
+	/**
+	 * Gets the retreating units.
+	 *
+	 * @return the retreating units
+	 */
 	public ArrayList<Order> getRetreatingUnits(){
 		return retreatingUnits;
 	}
 
+	/**
+	 * Gets the attack orders.
+	 *
+	 * @return the attack orders
+	 */
 	public ArrayList<AttackOrder> getAttackOrders(){
 		return attackOrders;
 	}
 	
+	/* (non-Javadoc)
+	 * @see phases.Phase#adjudicate()
+	 */
 	@Override
 	public void adjudicate() {
 		checkSyntax();
@@ -133,6 +163,10 @@ public class PlanningPhase extends Phase{
 
 	}
 	
+	/**
+	 * Checks the syntax of each Order. Attack Orders are checked more thoroughly
+	 * to resolve fleet on fleet attacks.
+	 */
 	private void checkSyntax() {
 		
 		for (SupportOrder o : supportOrders){
@@ -158,6 +192,9 @@ public class PlanningPhase extends Phase{
 		}
 	}
 	
+	/**
+	 * Resolves the Support Orders.
+	 */
 	private void resolveSupport() {
 		for (SupportOrder so : supportOrders){
 			
@@ -174,6 +211,12 @@ public class PlanningPhase extends Phase{
 		}
 	}
 	
+	/**
+	 * Checks if a Support order was cut off by an attack.
+	 *
+	 * @param so the Support Order
+	 * @return true, if support is cut
+	 */
 	private boolean isSupportCut(Order so) {
 		for (AttackOrder ao : attackOrders) {
 			if (ao.getState() != Order.CHECKED_WAITING)
@@ -186,9 +229,9 @@ public class PlanningPhase extends Phase{
 	}
 
 	/**
-	 * Checks for conflict.
+	 * Checks for conflicting moves/attacks.
 	 *
-	 * @param o the o
+	 * @param o the Order
 	 * @return true, if successful
 	 */
 	private boolean hasConflict(Order o) {
@@ -218,7 +261,5 @@ public class PlanningPhase extends Phase{
 		}
 		return false;
 	}
-
-
 
 }

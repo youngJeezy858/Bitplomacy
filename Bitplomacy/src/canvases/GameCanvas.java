@@ -36,9 +36,8 @@ import com.erebos.engine.graphics.EAnimation;
 
 import commands.SubmitCommand;
 
-
 /**
- * Used to display and update the map and commands during an actual game. 
+ * Used to display and update the map and commands while playing the game. 
  */
 public class GameCanvas extends ECanvas{
 
@@ -48,78 +47,91 @@ public class GameCanvas extends ECanvas{
 	/** Used to draw images for territories and methods to manipulate a Territory. */
 	private Territory[] territories;
 	
-	/** The teams as  - 7 total. */
+	/** The teams - 7 total. */
 	private Player[] players;
 	
-	/** The Territory currently selected */
+	/** The Territory currently selected. */
 	private Territory currTerritory;
 	
-	/** The curr order. */
+	/** The current Order. */
 	private Order currOrder;
 	
-	/** The curr turn. */
+	/** The current Turn. */
 	private Phase currPhase;
 	
-	/** The font. */
+	/** The medium font. */
 	private TrueTypeFont mediumFont;
+	
+	/** The small font. */
 	private TrueTypeFont smallFont;
 	
-	/** The state. */
+	/** The current state of the Game. See static variables for descriptions of each. */
 	private int state;
 	
-	/** The Constant NORM. */
+	/** The normal state of the game. */
 	public static final int NORM = 0;
 	
-	/** The Constant COMM_SELECTED. */
+	/** The state for when a command is selected. */
 	public static final int COMM_SELECTED = 1;
 	
-	/** The Constant SELECT_SUPPORT. */
+	/** The state for selecting a Unit. */
 	public static final int SELECT_UNIT = 2;
 	
-	/** The Constant SELECT_CONVOY_DESTINATION. */
+	/** The state for selecting a Convoy Order's destination. */
 	public static final int SELECT_CONVOY_DESTINATION = 3;
 	
-	/** The Constant FINISH_ADJUDICATION. */
-	public static final int FINISH_ADJUDICATION = 4;
-	
-	public static final int CHOOSE_ALLIES = 5;
+	/** The state for choosing allies. */
+	public static final int CHOOSE_ALLIES = 4;
 
-	/** The Constant WINNER. */
-	public static final int WINNER = 6;
+	/** The state for when a winner has been determined. */
+	public static final int WINNER = 5;
 
-	public static final int ADJUDICATE_ALLIES = 7;
+	/** The state for determining a combination victory. */
+	public static final int ADJUDICATE_ALLIES = 6;
 
-	public static final int SELECT_COMM = 8;
+	/** The state for selecting a command. */
+	public static final int SELECT_COMM = 7;
 
-	private static final int PAUSED_ADJUDICATE = 9;
+	/** The state for when allies need to be adjudicated. */
+	private static final int PAUSED_ADJUDICATE = 8;
 
-	public static final int PAUSED = 10;
+	/** The state for when the game is paused. */
+	public static final int PAUSED = 9;
 
-	public static final int RETURN_TO_START = 11;
+	/** The state to return to the title screen. */
+	public static final int RETURN_TO_START = 10;
 			
-	/** SpriteSheets for Units. */
+	/** SpriteSheet for armies. */
 	private SpriteSheet landUnit;
 	
-	/** The water unit. */
+	/** SpriteSheet for fleets. */
 	private SpriteSheet waterUnit;
 
-	/** The winning player. */
+	/** The name(s) of the player(s) who won. */
 	private String winningPlayer;
 	
+	/** The GUI for choosing allies. */
 	private ChooseAllyGUI allySelector;
 
+	/** Used for drawing non-accessible territories and the bridge. */
 	private EAnimation overlay;
 
+	/** Used for drawing the side bar. */
 	private EAnimation sidebar;
 	
+	/** The button to adjudicate Orders. */
 	private SubmitCommand adjudicateButton;
 
+	/** The GUI for selecting a command. */
 	private CommandGUI commandGUI;
 
+	/** The GUI for making sure you wish to adjudicate. */
 	private PauseMenuAdjudicateGUI pauseMenuAdjudicate;
 	
+	/** The button for pausing the game. */
 	private Button pauseButton;
 
+	/** The pause menu GUI. */
 	private PauseMenuGUI pauseMenu;
 
 	/**
@@ -240,6 +252,9 @@ public class GameCanvas extends ECanvas{
 	    adjustNumSC();	
 	}
 
+	/**
+	 * Places units for each team in their starting locations.
+	 */
 	private void setBoard() {
 		createStartingUnit(getTerritory("Edinburgh"), waterUnit, false, players[Territory.ENGLAND-1]);
 		createStartingUnit(getTerritory("Liverpool"), landUnit, true, players[Territory.ENGLAND-1]);
@@ -273,53 +288,54 @@ public class GameCanvas extends ECanvas{
 	}
 	
 	/**
-	 * Creates the unit.
+	 * Creates a Unit at the beginning of the game. Sets the Territory as a home city
+	 * for the Player.
 	 *
-	 * @param t the t
-	 * @param ss the ss
-	 * @param isLand the is land
-	 * @param p the p
+	 * @param t the location of the Unit
+	 * @param ss the Spritesheet of this Unit
+	 * @param isArmy true, if the Unit is an army
+	 * @param p the the Player who owns the Unit
 	 */
-	private void createStartingUnit(Territory t, SpriteSheet ss, boolean isLand, Player p){
+	private void createStartingUnit(Territory t, SpriteSheet ss, boolean isArmy, Player p){
 		t.setOwner(p.getOwnerKey());
 		t.setHomeCity(p.getOwnerKey());
-		Unit temp = new Unit(ss, p.getOwnerKey() - 1, isLand, t);
+		Unit temp = new Unit(ss, p.getOwnerKey() - 1, isArmy, t);
 		t.setUnit(temp);
 		p.addUnit(t.getUnit());
 	}
 	
 	/**
-	 * Creates the unit.
+	 * Creates a Unit.
 	 *
-	 * @param t the t
-	 * @param isLand the is land
-	 * @param p the p
+	 * @param t the location of the Unit
+	 * @param isArmy true, if the Unit is an army
+	 * @param p the the Player who owns this Unit
 	 */
-	public void createUnit(Territory t, boolean isLand, Player p){
+	public void createUnit(Territory t, boolean isArmy, Player p){
 		Unit temp = null;
-		if (isLand)
-			temp = new Unit(landUnit, p.getOwnerKey() - 1, isLand, t);
+		if (isArmy)
+			temp = new Unit(landUnit, p.getOwnerKey() - 1, isArmy, t);
 		else if (t.hasCoasts()){
 			t.setSC(true);
-			temp = new Unit(waterUnit, p.getOwnerKey() - 1, isLand, t);
+			temp = new Unit(waterUnit, p.getOwnerKey() - 1, isArmy, t);
 		}
 		else
-			temp = new Unit(waterUnit, p.getOwnerKey() - 1, isLand, t);
+			temp = new Unit(waterUnit, p.getOwnerKey() - 1, isArmy, t);
 		t.setUnit(temp);
 		p.addUnit(t.getUnit());
 	}
 
 	/**
 	 * Used to generate a SpriteSheet of a territory.  Assumes that your SpriteSheet has 8 sprites.
-	 * 
-	 * @param location the location
-	 * @param boolean1 
+	 *
+	 * @param location the file path of the SpriteSheet
+	 * @param isArmy true, if the Unit is an army
 	 * @return the sprite sheet
 	 */
-	private SpriteSheet SSFactory(String location, Boolean isLand){
+	private SpriteSheet SSFactory(String location, Boolean isArmy){
 		Image temp = EAnimation.loadImage(location);
 		SpriteSheet ss;
-		if (isLand)
+		if (isArmy)
 			ss = new SpriteSheet(temp, temp.getWidth()/8, temp.getHeight());
 		else
 			ss = new SpriteSheet(temp, temp.getWidth(), temp.getHeight());		
@@ -443,16 +459,16 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Adds the order.
+	 * Adds an Order to the current Phase.
 	 *
-	 * @param o the o
+	 * @param o the Order to be added
 	 */
 	public void addOrder(Order o){
 		currPhase.addOrder(o);
 	}
 
 	/**
-	 * Adjust num sc.
+	 * Adjusts the number of supply centers each team currently has.
 	 */
 	public void adjustNumSC() {
 		int i;
@@ -471,7 +487,7 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Adjust turn.
+	 * Moves the current Phase on to the next one.
 	 */
 	private void adjustTurn() {
 		
@@ -543,9 +559,9 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Gets the c.
+	 * Singleton getter method to get this Canvas.
 	 *
-	 * @return the c
+	 * @return this GameCanvas
 	 */
 	public static GameCanvas getC() {
 		if (c == null)
@@ -554,7 +570,7 @@ public class GameCanvas extends ECanvas{
 	}	
 	
 	/**
-	 * Gets the order.
+	 * Gets the current Order.
 	 *
 	 * @return the order
 	 */
@@ -563,7 +579,7 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Gets the state.
+	 * Gets the current state of the game.
 	 *
 	 * @return the state
 	 */
@@ -572,10 +588,10 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Gets the t.
+	 * Gets a Territory from the territories array.
 	 *
-	 * @param name the name
-	 * @return the t
+	 * @param name the name of the Territory
+	 * @return the Territory, null if not found
 	 */
 	private Territory getTerritory(String name){
 		for (Territory t : territories){
@@ -586,9 +602,9 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Sets the command.
+	 * Sets the command for the current Order
 	 *
-	 * @param s the new command
+	 * @param s the command
 	 */
 	public void setCommand(String s){		
 		if (currOrder != null){
@@ -601,7 +617,8 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Submit.
+	 * Submits all Orders to the current Phase. Will ask 'are you sure?' 
+	 * if a unit does not have an Order.
 	 */
 	public void submit() {
 		currOrder = null;
@@ -617,6 +634,9 @@ public class GameCanvas extends ECanvas{
 			adjudicate();
 	}
 
+	/**
+	 * Adjudicates all Orders for this Phase.
+	 */
 	public void adjudicate() {
 		for (Player p : players)
 			p.executeOrders();
@@ -629,7 +649,7 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Sets the state.
+	 * Sets the current state of this game.
 	 *
 	 * @param s the new state
 	 */
@@ -638,11 +658,13 @@ public class GameCanvas extends ECanvas{
 	}
 	
 	/**
-	 * Update territory.
+	 * Updates a Territory depending on the state of the game.
+	 * Only fires when a Territory is clicked on and if the current
+	 * state deems updating a Territory is necessary.
 	 *
-	 * @param t the t
-	 * @param my 
-	 * @param mx 
+	 * @param t the Territory to be updated
+	 * @param mx the x coordinate of the Mouse cursor to display the command GUI
+	 * @param my the y coordinate of the Mouse cursor to display the command GUI
 	 */
 	public void updateTerritory(Territory t, int mx, int my) {
 		
@@ -673,7 +695,8 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Finalize order.
+	 * Sets the current Order for the Unit or if it is the Build Phase
+	 * the Order is sent straight to the Phase.
 	 */
 	public void finalizeOrder() {
 		if (currOrder != null){
@@ -687,7 +710,7 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Discard order.
+	 * Sets the current Order value to null.
 	 */
 	public void discardOrder() {
 		currOrder = null;
@@ -695,9 +718,9 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Removes the unit.
+	 * Removes a Unit from the board and from the Player's unit list.
 	 *
-	 * @param unit the unit
+	 * @param unit the Unit to be removed
 	 */
 	public void removeUnit(Unit unit) {
 		players[unit.getOwner()-1].removeUnit(unit.getTerritory());
@@ -707,7 +730,7 @@ public class GameCanvas extends ECanvas{
 	}
 
 	/**
-	 * Gets the players.
+	 * Gets the list of players.
 	 *
 	 * @return the players
 	 */
@@ -715,18 +738,37 @@ public class GameCanvas extends ECanvas{
 		return players;
 	}
 
+	/**
+	 * Sets the current Order.
+	 *
+	 * @param o the new order
+	 */
 	public void setOrder(Order o) {
 		currOrder = o;
 	}
 
+	/**
+	 * Gets the current territory.
+	 *
+	 * @return the current territory
+	 */
 	public Territory getCurrentTerritory() {
 		return currTerritory;
 	}
 
+	/**
+	 * Gets the current Phase.
+	 *
+	 * @return the current Phase
+	 */
 	public Phase getPhase() {
 		return currPhase;
 	}
 	
+	/**
+	 * Saves the game. Pretty static method right now. Only
+	 * one save is allowed currently.
+	 */
 	public void save(){
 		if (currPhase.getSeason().contains("Retreats"))
 			return;
@@ -752,6 +794,12 @@ public class GameCanvas extends ECanvas{
 		
 	}
 	
+	/**
+	 * Loads the game. Pretty static right now. The jar must be in the same directory
+	 * as the BITPLOMACY_SAVES directory for it to work.
+	 *
+	 * @throws FileNotFoundException the file not found exception
+	 */
 	public void load() throws FileNotFoundException{
 		File dir = new File ("BITPLOMACY_SAVES");
 		File file = new File (dir, "Save1.dat");

@@ -8,6 +8,9 @@ import orders.Order;
 import orders.RetreatOrder;
 import canvases.GameCanvas;
 
+/**
+ * The Class RetreatPhase.
+ */
 public class RetreatPhase extends Phase{	
 	
 	/** The retreat orders. */
@@ -23,6 +26,14 @@ public class RetreatPhase extends Phase{
 	private ArrayList<AttackOrder> remainingAttacks;
 	
 	
+	/**
+	 * Instantiates a new retreat phase.
+	 *
+	 * @param season the season
+	 * @param year the year
+	 * @param retreatingUnits the list of Units needing to retreat
+	 * @param remainingAttacks the list of Units waiting on a Unit to retreat
+	 */
 	public RetreatPhase(String season, int year, ArrayList<Order> retreatingUnits, ArrayList<AttackOrder> remainingAttacks) {
 		super(season, year);
 		retreatOrders = new ArrayList<RetreatOrder>();
@@ -32,6 +43,9 @@ public class RetreatPhase extends Phase{
 	}
 
 
+	/* (non-Javadoc)
+	 * @see phases.Phase#addOrder(orders.Order)
+	 */
 	@Override
 	public void addOrder(Order o) {
 		for (Order ro : retreatingUnits){
@@ -44,6 +58,9 @@ public class RetreatPhase extends Phase{
 		}	
 	}
 
+	/* (non-Javadoc)
+	 * @see phases.Phase#adjudicate()
+	 */
 	@Override
 	public void adjudicate() {
 
@@ -86,9 +103,9 @@ public class RetreatPhase extends Phase{
 	}
 
 	/**
-	 * Checks for retreat conflict.
+	 * Checks conflicting retreat orders.
 	 *
-	 * @param o the o
+	 * @param o the Order
 	 * @return true, if successful
 	 */
 	private boolean hasRetreatConflict(Order o){
@@ -103,6 +120,11 @@ public class RetreatPhase extends Phase{
 		return false;
 	}
 	
+	/**
+	 * Gets the retreating units.
+	 *
+	 * @return the retreating units
+	 */
 	public ArrayList<Order> getRetreatingUnits(){
 		return retreatingUnits;
 	}

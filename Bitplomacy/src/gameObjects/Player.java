@@ -11,20 +11,20 @@ import phases.RetreatPhase;
 import canvases.GameCanvas;
 
 /**
- * The Class Player represents on of the 7 countries on the map.
+ * The Class Player represents one of the 7 countries on the map.
  */
 public class Player {
 
-	/** The list of Units a Player controls */
+	/** The list of Units a Player controls. */
 	private ArrayList<Unit> units;
 	
-	/** The name of the Player's country */
+	/** The name of the Player's country. */
 	private String name;
 	
 	/** The supply center count. */
 	private int supplyCenterCount;
 	
-	/** */
+	/** The owner key. */
 	private int ownerKey;
 	
 	/**
@@ -53,7 +53,7 @@ public class Player {
 	}
 	
 	/**
-	 * Adds a Unit to the Player's Unit list
+	 * Adds a Unit to the Player's Unit list.
 	 *
 	 * @param u the Unit to be added
 	 */
@@ -71,7 +71,7 @@ public class Player {
 	}
 	
 	/**
-	 * Gets the name of the Player's country
+	 * Gets the name of the Player's country.
 	 *
 	 * @return the country name
 	 */
@@ -133,7 +133,7 @@ public class Player {
 	}
 
 	/**
-	 * Gets the total count of Units the Player has currently 
+	 * Gets the total count of Units the Player has currently.
 	 *
 	 * @return the unit count
 	 */
@@ -152,6 +152,11 @@ public class Player {
 		return units.get(0);
 	}
 
+	/**
+	 * Gets the number of armies owned by this Player.
+	 *
+	 * @return the number of armies
+	 */
 	public int getNumArmies() {
 		int i = 0;
 		for (Unit u : units){
@@ -161,6 +166,11 @@ public class Player {
 		return i;
 	}
 	
+	/**
+	 * Gets the number of navies owned by this Player.
+	 *
+	 * @return the number of navies
+	 */
 	public int getNumNavies() {
 		int i = 0;
 		for (Unit u : units){
@@ -170,6 +180,9 @@ public class Player {
 		return i;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		String s = name + ":\n";
 		
@@ -191,6 +204,14 @@ public class Player {
 		return s;
 	}
 
+	/**
+	 * Draw all of this Player's Units' Orders to the sidebar.
+	 *
+	 * @param g the graphics to draw Strings with
+	 * @param x the x coordinate to draw the order at
+	 * @param y the y coordinate to draw the order at
+	 * @return the x and y coordinates as an int[]
+	 */
 	public int[] draw(Graphics g, int x, int y) {
 		if (y > 380){
 			x += 165;
@@ -247,6 +268,11 @@ public class Player {
 		return out;
 	}
 
+	/**
+	 * Checks if all of this Player's Units have orders.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean allHaveOrders() {
 		if (GameCanvas.getC().getPhase().getSeason().contains("Retreats")){
 			RetreatPhase rp = (RetreatPhase) GameCanvas.getC().getPhase();
@@ -297,6 +323,12 @@ public class Player {
 		return true;
 	}
 
+	/**
+	 * Save this Player's Units' locations and if it is an Army or Fleet.
+	 * Used for saving the game.
+	 *
+	 * @return the Players Units represented as Strings
+	 */
 	public String saveUnits() {
 		String s = "";
 		for (Unit u : units)
