@@ -1,11 +1,14 @@
-package canvases;
+package guis;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
+
+import canvases.GameCanvas;
+
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
-public class PauseMenuAdjudicate extends ImageEntity {
+public class PauseMenuAdjudicateGUI extends ImageEntity {
 
 	private ImageEntity yesButton;
 	private ImageEntity noButton;
@@ -14,7 +17,7 @@ public class PauseMenuAdjudicate extends ImageEntity {
 	private EAnimation no;
 
 	
-	public PauseMenuAdjudicate(GameContainer gc){
+	public PauseMenuAdjudicateGUI(GameContainer gc){
 		super(EAnimation.loadImage("/images/Paused_Adjudicate.png"));
 		yesButton = new ImageEntity(EAnimation.loadImage("/images/YesButton.png"));
 		yes = new EAnimation(EAnimation.loadImage("/images/YesButton.png"));

@@ -88,16 +88,17 @@ public class SupportOrder extends Order {
 	public void draw(Graphics g, int x, int y) {
 		g.drawString(currentTerritory.getName() + " supporting", x, y);
 		y += 10;
+		if (supported != null) 
+			g.drawString(supported.getName() + " to", x, y);
+		else if (destinationTerritory != null){
+			g.drawString("[SELECT UNIT TO SUPPORT]", x, y);	
+		}
+		y += 10;
 		if (destinationTerritory != null)
-			g.drawString(destinationTerritory.getName() + " to", x, y);
+			g.drawString(destinationTerritory.getName(), x, y);
 		else{
 			g.drawString("[SELECT DESTINATION OF SUPPORT]", x, y);
 			return;
 		}
-		y += 10;
-		if (supported != null) 
-			g.drawString(supported.getName(), x, y);
-		else
-			g.drawString("[SELECT UNIT TO SUPPORT]", x, y);
 	}
 }

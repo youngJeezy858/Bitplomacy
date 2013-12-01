@@ -1,8 +1,20 @@
-package commands;
+package guis;
 
 import canvases.GameCanvas;
 
 import com.erebos.engine.graphics.EAnimation;
+import commands.AttackCommand;
+import commands.BuildArmyCommand;
+import commands.BuildNavyCommand;
+import commands.Commands;
+import commands.ConvoyCommand;
+import commands.DefendCommand;
+import commands.DisbandCommand;
+import commands.DiscardOrderCommand;
+import commands.MoveCommand;
+import commands.RetreatCommand;
+import commands.SetOrderCommand;
+import commands.SupportCommand;
 
 public class CommandGUI {
 
@@ -25,9 +37,9 @@ public class CommandGUI {
 	private Commands[] currCommands;
 	
 	public CommandGUI(){
-		buildRemoveCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/BuildArmyIcon.png")));
-		buildRemoveCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/BuildNavyIcon.png")));
-		buildRemoveCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
+		buildRemoveCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_BuildArmy_updated.png")));
+		buildRemoveCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_BuildFleet_updated.png")));
+		buildRemoveCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Disband_updated.png")));
 		
 		planningCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Attack_updated.png")));
 		planningCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Defend_updated.png")));
@@ -35,8 +47,8 @@ public class CommandGUI {
 		planningCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Convoy_updated.png")));
 		planningCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Move_updated.png")));
 		
-		retreatDisbandCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
-		retreatDisbandCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/RetreatIcon.png")));
+		retreatDisbandCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Disband_updated.png")));
+		retreatDisbandCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Retreat_updated.png")));
 
 		setDiscardCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_SetOrder_updated.png")));
 		setDiscardCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_DiscardOrder_updated.png")));

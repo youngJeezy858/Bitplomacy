@@ -53,8 +53,10 @@ public class TitleCanvas extends ECanvas{
 
 	@Override
 	public void eUpdate(GameContainer gc, EGame eg, int arg2) {
-		if (state == START_NEWGAME)
+		if (state == START_NEWGAME){
+			state = NORM;
 			eg.enterState(1);
+		}
 		
 		for (Button b : buttons){
 			if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){

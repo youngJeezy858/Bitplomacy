@@ -128,7 +128,7 @@ public class Unit extends ImageEntity{
 		if (isArmy)
 			s += "A in ";
 		else
-			s += "N in ";
+			s += "F in ";
 		s += territory.getName().substring(0, 4);
 		if (order == null)
 			s += "    --    --";

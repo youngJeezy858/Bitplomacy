@@ -1,4 +1,4 @@
-package commands;
+package buttons;
 
 import org.newdawn.slick.Image;
 

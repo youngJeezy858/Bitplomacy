@@ -5,6 +5,10 @@ import java.util.Scanner;
 import gameObjects.Player;
 import gameObjects.Territory;
 import gameObjects.Unit;
+import guis.ChooseAllyGUI;
+import guis.CommandGUI;
+import guis.PauseMenuAdjudicateGUI;
+import guis.PauseMenuGUI;
 import orders.Order;
 
 import org.lwjgl.input.Mouse;
@@ -20,12 +24,12 @@ import phases.BuildPhase;
 import phases.Phase;
 import phases.PlanningPhase;
 import phases.RetreatPhase;
+import buttons.Button;
+import buttons.PauseButton;
 
 import com.erebos.engine.core.*;
 import com.erebos.engine.graphics.EAnimation;
 
-import commands.ChooseAlly;
-import commands.CommandGUI;
 import commands.SubmitCommand;
 
 
@@ -85,6 +89,10 @@ public class GameCanvas extends ECanvas{
 	public static final int SELECT_COMM = 8;
 
 	private static final int PAUSED_ADJUDICATE = 9;
+
+	public static final int PAUSED = 10;
+
+	public static final int RETURN_TO_START = 11;
 			
 	/** SpriteSheets for Units. */
 	private SpriteSheet landUnit;
@@ -95,7 +103,7 @@ public class GameCanvas extends ECanvas{
 	/** The winning player. */
 	private String winningPlayer;
 	
-	private ChooseAlly allySelector;
+	private ChooseAllyGUI allySelector;
 
 	private EAnimation overlay;
 
@@ -105,7 +113,11 @@ public class GameCanvas extends ECanvas{
 
 	private CommandGUI commandGUI;
 
-	private PauseMenuAdjudicate pauseMenuAdjudicate;
+	private PauseMenuAdjudicateGUI pauseMenuAdjudicate;
+	
+	private Button pauseButton;
+
+	private PauseMenuGUI pauseMenu;
 
 	/**
 	 * Instantiates a new canvas.
@@ -149,7 +161,7 @@ public class GameCanvas extends ECanvas{
 		flags[5] = EAnimation.loadImage("/images/RussiaChoice.png");
 		flags[6] = EAnimation.loadImage("/images/GermanyChoice.png");
 		flags[7] = EAnimation.loadImage("/images/NobodyChoice.png");
-		allySelector = new ChooseAlly(flags, temp, gc);
+		allySelector = new ChooseAllyGUI(flags, temp, gc);
 		allySelector.setY((gc.getHeight() - temp.getHeight()) / 2);
 		allySelector.setX((gc.getWidth() - temp.getWidth()) / 2);
 		
@@ -160,7 +172,9 @@ public class GameCanvas extends ECanvas{
 		sidebar = new EAnimation(EAnimation.loadImage("/images/sidebar.png"));
 		adjudicateButton = new SubmitCommand(805, 630);
 		adjudicateButton.setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Adjudicate_updated.png")));
-		pauseMenuAdjudicate = new PauseMenuAdjudicate(gc);
+		pauseMenuAdjudicate = new PauseMenuAdjudicateGUI(gc);
+		pauseMenu = new PauseMenuGUI(gc, EAnimation.loadImage("/images/pauseMenu.png"));
+		pauseButton = new PauseButton(5, 5, "/images/Button_Pause.png");
 		
 		//define territories
 		Scanner sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/terr.csv"));
@@ -325,7 +339,7 @@ public class GameCanvas extends ECanvas{
 
 			g.setColor(Color.black);
 			g.setFont(mediumFont);
-			g.drawString(currPhase.toString(), 10, 10);
+			g.drawString(currPhase.toString(), 65, 10);
 			sidebar.draw(806, 0);
 			int ySC = 400;
 			int[] orderCoord = {815, 110};
@@ -349,6 +363,7 @@ public class GameCanvas extends ECanvas{
 				commandGUI.drawSetDiscard();
 			}
 			adjudicateButton.draw();
+			pauseButton.draw();
 			
 			if (state == CHOOSE_ALLIES)
 				allySelector.draw();
@@ -356,6 +371,8 @@ public class GameCanvas extends ECanvas{
 				commandGUI.draw();
 			else if (state == PAUSED_ADJUDICATE)
 				pauseMenuAdjudicate.draw();
+			else if (state == PAUSED)
+				pauseMenu.draw();
 		}
 		else{
 			g.setColor(Color.green);
@@ -382,6 +399,11 @@ public class GameCanvas extends ECanvas{
 			else
 				state = NORM;
 		}
+		else if (state == RETURN_TO_START){
+			state = NORM;
+			eg.enterState(0);
+			eInit(gc, eg);
+		}
 		
 		else if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			
@@ -390,11 +412,16 @@ public class GameCanvas extends ECanvas{
 			
 			if (state == PAUSED_ADJUDICATE)
 				pauseMenuAdjudicate.update(mx, my);
+			else if (state == PAUSED)
+				pauseMenu.update(mx, my);
 			else if (state == CHOOSE_ALLIES) 
 				allySelector.update(mx, my);
 			else if (state == SELECT_COMM)
 				commandGUI.update(mx, my);
 			else {
+				if (pauseButton.isMouseOver(mx, my))
+					pauseButton.update();
+				
 				for (Territory t : territories) {
 					if (mx >= t.getX()
 							&& ((t.isLand() && mx <= t.getWidth() / 8

@@ -1,16 +1,17 @@
-package commands;
+package guis;
 
 import gameObjects.Player;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 
+import buttons.AllyChoice;
 import canvases.GameCanvas;
 
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 
-public class ChooseAlly extends ImageEntity{
+public class ChooseAllyGUI extends ImageEntity{
 
 	private int currentTeam;
 	private AllyChoice[] flags;
@@ -18,7 +19,7 @@ public class ChooseAlly extends ImageEntity{
 	private int[] allies;
 	private static final int NOBODY = 7;
 	
-	public ChooseAlly(Image[] flags, Image background, GameContainer gc){
+	public ChooseAllyGUI(Image[] flags, Image background, GameContainer gc){
 		super(background);
 		this.background = new EAnimation(background);
 		currentTeam = 0;
