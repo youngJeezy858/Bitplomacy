@@ -1,5 +1,9 @@
 package canvases;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 import gameObjects.Player;
@@ -231,8 +235,8 @@ public class GameCanvas extends ECanvas{
 			}
 		}	
 		sc.close();
-		
-	    setBoard();
+
+		setBoard();
 	    adjustNumSC();	
 	}
 
@@ -534,6 +538,8 @@ public class GameCanvas extends ECanvas{
 			i++;
 			currPhase = new PlanningPhase("Spring/Summer", i);
 		}
+		
+		save();
 	}
 
 	/**
@@ -719,6 +725,63 @@ public class GameCanvas extends ECanvas{
 
 	public Phase getPhase() {
 		return currPhase;
+	}
+	
+	public void save(){
+		if (currPhase.getSeason().contains("Retreats"))
+			return;
+		
+		File dir = new File("BITPLOMACY_SAVES");
+		if (!dir.exists())
+			dir.mkdir();
+		File file = new File(dir, "Save1.dat");
+		try {
+			if (file.exists())
+				file.createNewFile();
+			PrintWriter pw = new PrintWriter(file);
+			pw.print(currPhase.getSeason() + "\t" + currPhase.getYear() + "\n");
+			for (Player p : players) {
+				pw.write(p.getOwnerKey() + "\t");
+				pw.write(p.saveUnits());
+				pw.write("\n");
+			}
+			pw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void load() throws FileNotFoundException{
+		File dir = new File ("BITPLOMACY_SAVES");
+		File file = new File (dir, "Save1.dat");
+		Scanner sc = new Scanner(file);
+
+		for (Territory t : territories) {
+			if (t.getUnit() != null)
+				removeUnit(t.getUnit());
+		}
+
+		String temp = sc.nextLine();
+		String[] currLine = temp.split("\t");
+
+		if (currLine[0].equals("Build/Remove"))
+			currPhase = new BuildPhase(currLine[0], new Integer(currLine[1]));
+		else
+			currPhase = new PlanningPhase(currLine[0], new Integer(currLine[1]));
+
+		while (sc.hasNextLine()) {
+			currLine = sc.nextLine().split("\t");
+			Player p = players[new Integer(currLine[0]) - 1];
+			for (int i = 1; i < currLine.length; i++) {
+				createUnit(getTerritory(currLine[i]), new Boolean(
+						currLine[i + 1]), p);
+				i++;
+			}
+		}
+		sc.close();
+		adjustNumSC();
+		
 	}
 
 }

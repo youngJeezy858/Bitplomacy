@@ -1,5 +1,10 @@
 package buttons;
 
+import java.io.FileNotFoundException;
+
+import canvases.GameCanvas;
+import canvases.TitleCanvas;
+
 public class LoadAutosaveButton extends Button {
 
 	public LoadAutosaveButton(int x, int y, String s) {
@@ -8,8 +13,13 @@ public class LoadAutosaveButton extends Button {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		try {
+			GameCanvas.getC().load();
+			TitleCanvas.getTC().setState(TitleCanvas.START_GAME);
+		} catch (FileNotFoundException e) {
+			TitleCanvas.getTC().output("No Save File Found!");
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package gameObjects;
 import java.util.ArrayList;
 
 import org.newdawn.slick.SpriteSheet;
+
 import com.erebos.engine.entity.ImageEntity;
 import com.erebos.engine.graphics.EAnimation;
 

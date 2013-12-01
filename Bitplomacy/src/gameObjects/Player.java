@@ -296,5 +296,12 @@ public class Player {
 		
 		return true;
 	}
+
+	public String saveUnits() {
+		String s = "";
+		for (Unit u : units)
+			s += u.getTerritory().getName() + "\t" + u.isArmy() + "\t";
+		return s;
+	}
 	
 }

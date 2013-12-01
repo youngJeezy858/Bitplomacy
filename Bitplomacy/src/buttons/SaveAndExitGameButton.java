@@ -1,5 +1,7 @@
 package buttons;
 
+import canvases.GameCanvas;
+
 public class SaveAndExitGameButton extends Button {
 
 	public SaveAndExitGameButton(int x, int y, String s) {
@@ -8,8 +10,8 @@ public class SaveAndExitGameButton extends Button {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		GameCanvas.getC().save();
+		GameCanvas.getC().setState(GameCanvas.RETURN_TO_START);
 	}
 
 }

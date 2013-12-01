@@ -10,7 +10,7 @@ public class NewGameButton extends Button {
 
 	@Override
 	public void update() {
-		TitleCanvas.getTC().setState(TitleCanvas.START_NEWGAME);
+		TitleCanvas.getTC().setState(TitleCanvas.START_GAME);
 	}
 
 }
