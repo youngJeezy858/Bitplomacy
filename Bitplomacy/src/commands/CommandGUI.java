@@ -29,11 +29,11 @@ public class CommandGUI {
 		buildRemoveCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/BuildNavyIcon.png")));
 		buildRemoveCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
 		
-		planningCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/AttackIcon.png")));
-		planningCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/DefendIcon.png")));
-		planningCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/SupportIcon.png")));
-		planningCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/ConvoyIcon.png")));
-		planningCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/MoveIcon.png")));
+		planningCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Attack_updated.png")));
+		planningCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Defend_updated.png")));
+		planningCommands[2].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Support_updated.png")));
+		planningCommands[3].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Convoy_updated.png")));
+		planningCommands[4].setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Move_updated.png")));
 		
 		retreatDisbandCommands[0].setEA(new EAnimation(EAnimation.loadImage("/images/RemoveUnitIcon.png")));
 		retreatDisbandCommands[1].setEA(new EAnimation(EAnimation.loadImage("/images/RetreatIcon.png")));

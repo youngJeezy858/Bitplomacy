@@ -96,4 +96,12 @@ public class BuildPhase extends Phase{
 			buildOrders.add(currOrder);
 	}
 
+	public ArrayList<Order> getBuildOrders() {
+		return buildOrders;
+	}
+
+	public ArrayList<DisbandOrder> getDisbandOrders() {
+		return disbandOrders;
+	}
+
 }

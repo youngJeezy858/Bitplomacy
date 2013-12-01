@@ -3,7 +3,10 @@ package gameObjects;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
+
+import orders.DisbandOrder;
 import orders.Order;
+import phases.BuildPhase;
 import phases.RetreatPhase;
 import canvases.GameCanvas;
 
@@ -224,7 +227,7 @@ public class Player {
 			if (i > 0)
 				g.drawString("Can build " + i + " units!", x, y);
 			else if (i < 0)
-				g.drawString("Must disband " + i + " units!", x, y);
+				g.drawString("Must disband " + Math.abs(i) + " units!", x, y);
 			else
 				g.drawString("Can't build or remove anything!", x, y); 
 			y += 10;
@@ -242,6 +245,56 @@ public class Player {
 		}
 		int[] out = {x, y};
 		return out;
+	}
+
+	public boolean allHaveOrders() {
+		if (GameCanvas.getC().getPhase().getSeason().contains("Retreats")){
+			RetreatPhase rp = (RetreatPhase) GameCanvas.getC().getPhase();
+			ArrayList<Order> retreats = rp.getRetreatingUnits();
+			for (Order o : retreats){
+				for (Unit u : units){
+					if (o.getStartingTerritory().equals(u.getTerritory()) && u.getOrder() == null){
+						return false;
+					}
+				}
+			}
+		}
+		
+		else if (GameCanvas.getC().getPhase().getSeason().equals("Build/Remove")){
+			int i = supplyCenterCount - units.size();
+			BuildPhase bp = (BuildPhase) GameCanvas.getC().getPhase();
+			if (i > 0){
+				int count = 0;
+				ArrayList<Order> orders = bp.getBuildOrders();
+				for (Order o : orders){
+					if (o.getStartingTerritory().isHomeCity(ownerKey))
+						count++;
+				}
+				if (count < i || (ownerKey == Territory.RUSSIA && count == 4) || (ownerKey != Territory.RUSSIA && count == 3))
+					return false;
+			}
+			else if (i < 0){
+				int count = 0;
+				ArrayList<DisbandOrder> orders = bp.getDisbandOrders();
+				for (DisbandOrder o : orders){
+					for (Unit u : units){
+						if (o.getStartingTerritory().equals(u.getTerritory()))
+							count++;
+					}
+				}
+				if (count < Math.abs(i))
+					return false;
+			}
+		}
+		
+		else {
+			for (Unit u : units) {
+				if (u.getOrder() == null)
+					return false;
+			}
+		}
+		
+		return true;
 	}
 	
 }

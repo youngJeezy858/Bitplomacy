@@ -83,6 +83,8 @@ public class GameCanvas extends ECanvas{
 	public static final int ADJUDICATE_ALLIES = 7;
 
 	public static final int SELECT_COMM = 8;
+
+	private static final int PAUSED_ADJUDICATE = 9;
 			
 	/** SpriteSheets for Units. */
 	private SpriteSheet landUnit;
@@ -102,6 +104,8 @@ public class GameCanvas extends ECanvas{
 	private SubmitCommand adjudicateButton;
 
 	private CommandGUI commandGUI;
+
+	private PauseMenuAdjudicate pauseMenuAdjudicate;
 
 	/**
 	 * Instantiates a new canvas.
@@ -154,8 +158,9 @@ public class GameCanvas extends ECanvas{
 		
 		overlay = new EAnimation(EAnimation.loadImage("/images/overlay.png"));
 		sidebar = new EAnimation(EAnimation.loadImage("/images/sidebar.png"));
-		adjudicateButton = new SubmitCommand(810, 635);
+		adjudicateButton = new SubmitCommand(805, 630);
 		adjudicateButton.setEA(new EAnimation(EAnimation.loadImage("/images/Icon_Adjudicate_updated.png")));
+		pauseMenuAdjudicate = new PauseMenuAdjudicate(gc);
 		
 		//define territories
 		Scanner sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/terr.csv"));
@@ -349,6 +354,8 @@ public class GameCanvas extends ECanvas{
 				allySelector.draw();
 			else if (state == SELECT_COMM)
 				commandGUI.draw();
+			else if (state == PAUSED_ADJUDICATE)
+				pauseMenuAdjudicate.draw();
 		}
 		else{
 			g.setColor(Color.green);
@@ -381,7 +388,9 @@ public class GameCanvas extends ECanvas{
 			int mx = Mouse.getX();
 			int my = Math.abs(Mouse.getY() - gc.getHeight());
 			
-			if (state == CHOOSE_ALLIES) 
+			if (state == PAUSED_ADJUDICATE)
+				pauseMenuAdjudicate.update(mx, my);
+			else if (state == CHOOSE_ALLIES) 
 				allySelector.update(mx, my);
 			else if (state == SELECT_COMM)
 				commandGUI.update(mx, my);
@@ -571,6 +580,19 @@ public class GameCanvas extends ECanvas{
 	 */
 	public void submit() {
 		currOrder = null;
+		for (Player p: players){
+			if (!p.allHaveOrders()){
+				state = PAUSED_ADJUDICATE;
+				break;
+			}
+		}
+		if (state == PAUSED_ADJUDICATE)
+			return;
+		else
+			adjudicate();
+	}
+
+	public void adjudicate() {
 		for (Player p : players)
 			p.executeOrders();
 		currPhase.adjudicate();
