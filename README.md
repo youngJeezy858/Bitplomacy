@@ -11,9 +11,7 @@ Contributors:
 
 Wisam Al-malack  
 Kyle Frank  
-Anthony Glitzner  
 Travis Moore  
-Joe Perks  
 
 Sponser:
 Llyod Hoffman
