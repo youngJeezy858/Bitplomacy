@@ -230,7 +230,7 @@ public class GameCanvas extends ECanvas{
 		sc = new Scanner(GameCanvas.class.getResourceAsStream("/docs/adjacentTerr.csv"));
 		sc.nextLine();
 		while (sc.hasNextLine()){
-			String s[] = sc.nextLine().split("\t");
+			String s[] = sc.nextLine().split(",");
 			Territory t = getTerritory(s[0]);
 			for (i = 1; i < s.length; i++){
 				if (s[i].equals("southCoast"))
