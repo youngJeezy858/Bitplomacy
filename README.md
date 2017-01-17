@@ -3,7 +3,7 @@ Bitplomacy
 
 This is our Senior Design project for EE/CS/CPE 481.  It is a slightly different version of the game "Diplomacy".  
 For the engine we use Erebos - an open source project that uses openGL with C based wrappers so that java developement
-is simple and easy to use.  For questions about the game engine please contact bobb.mrtn@gmail.com.
+is simple and easy to use.
 
 For a full listing of the API and a download of the game please go to:
 
